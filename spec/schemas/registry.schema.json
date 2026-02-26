@@ -1,0 +1,18 @@
+{
+    "registry_version": "0.1.0",
+    "published_at":     uint64,
+    "anchors": {
+      "authority_high":       string,   // canonical description
+      "authority_neutral":    string,
+      "authority_low":        string,
+      "sensitivity_high":     string,
+      "sensitivity_neutral":  string,
+      "sensitivity_low":      string
+    },
+    "policy_defaults": {
+      "authority_deny_below":    float,  // e.g. -0.5
+      "sensitivity_deny_above":  float   // e.g.  0.8
+    },
+    "root_key_id":    string,            // identifies which signing key to use
+    "registry_hash":  string             // SHA-256 of this document (self-ref)
+}
