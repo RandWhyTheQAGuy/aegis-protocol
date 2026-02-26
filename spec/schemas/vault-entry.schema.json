@@ -1,0 +1,15 @@
+{
+    "entry_id":      string,   // SHA-256(prev_hash + payload)
+    "prev_hash":     string,   // hash of previous entry; "GENESIS" for first
+    "sequence":      uint64,   // monotonically increasing
+    "timestamp":     uint64,
+    "event_type":    string,   // "POLICY_DECISION" | "SESSION_EVENT" |
+                               // "QUARANTINE" | "FLUSH" | "PASSPORT_ISSUE" |
+                               // "CONSENSUS"
+    "session_id":    string,
+    "agent_id":      string,
+    "payload_hash":  string,   // hash of the message payload; never the payload
+    "detail":        object,   // event-specific structured data
+    "entry_hash":    string    // SHA-256(canonical serialization of this entry
+                               //         excluding entry_hash field)
+  }
