@@ -1,0 +1,11 @@
+{
+    "rule_id":             string,
+    "description":         string,
+    "authority_below":     float|null,    // match if authority < this value
+    "authority_above":     float|null,    // match if authority > this value
+    "sensitivity_above":   float|null,    // match if sensitivity > this value
+    "sensitivity_below":   float|null,    // match if sensitivity < this value
+    "min_confidence":      float,         // skip rule if confidence below this
+    "action":              "ALLOW"|"DENY"|"FLAG",
+    "log_level":           "INFO"|"WARN"|"ALERT"
+  }
