@@ -214,8 +214,7 @@
 
     /*
     Build command:
-        g++ -std=c++17 -O2 -o uml001_example main.cpp \
-            -lssl -lcrypto
+        g++ -std=c++17 -O2 -o e2e-example.cpp -lssl -lcrypto
 
     Expected output:
         [Passport] Both passports valid.
