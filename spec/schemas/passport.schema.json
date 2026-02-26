@@ -16,4 +16,4 @@
     "recovery_token":   string|null,  // non-null after Entropy Flush recovery
     "signature":        string        // HMAC-SHA256(canonical_body, registry_key)
                                       // hex-encoded
-  }
+}
