@@ -9,7 +9,7 @@
       "required": ["type", "passport", "session_nonce", "proposed_schema"],
       "additionalProperties": false,
       "properties": {
-        "type": { "type": "string", "const": "UML002_HELLO" },
+        "type": { "type": "string", "const": "UML001_HELLO" },
         "passport": { "$ref": "passport.schema.json" },
         "session_nonce": {
           "type": "string",
@@ -28,7 +28,7 @@
       "required": ["type", "passport", "session_nonce", "accepted_schema", "session_id"],
       "additionalProperties": false,
       "properties": {
-        "type": { "type": "string", "const": "UML002_HELLO_ACK" },
+        "type": { "type": "string", "const": "UML001_HELLO_ACK" },
         "passport": { "$ref": "passport.schema.json" },
         "session_nonce": {
           "type": "string",
@@ -52,7 +52,7 @@
       "required": ["type", "session_id", "signature"],
       "additionalProperties": false,
       "properties": {
-        "type": { "type": "string", "const": "UML002_HELLO_CONFIRM" },
+        "type": { "type": "string", "const": "UML001_HELLO_CONFIRM" },
         "session_id": {
           "type": "string",
           "pattern": "^[a-f0-9]{64}$",
@@ -70,7 +70,7 @@
       "required": ["type", "reason"],
       "additionalProperties": false,
       "properties": {
-        "type": { "type": "string", "const": "UML002_HELLO_REJECT" },
+        "type": { "type": "string", "const": "UML001_HELLO_REJECT" },
         "reason": {
           "type": "string",
           "enum": [

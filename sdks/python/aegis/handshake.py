@@ -49,7 +49,7 @@ class HelloMessage:
 
     def to_dict(self) -> dict:
         return {
-            "type": "UML002_HELLO",
+            "type": "UML001_HELLO",
             "passport": self.passport.to_dict(),
             "session_nonce": self.session_nonce,
             "proposed_schema": self.proposed_schema,
@@ -66,7 +66,7 @@ class HelloAckMessage:
 
     def to_dict(self) -> dict:
         return {
-            "type": "UML002_HELLO_ACK",
+            "type": "UML001_HELLO_ACK",
             "passport": self.passport.to_dict(),
             "session_nonce": self.session_nonce,
             "accepted_schema": self.accepted_schema,
@@ -82,7 +82,7 @@ class HelloConfirmMessage:
 
     def to_dict(self) -> dict:
         return {
-            "type": "UML002_HELLO_CONFIRM",
+            "type": "UML001_HELLO_CONFIRM",
             "session_id": self.session_id,
             "signature": self.signature,
         }
@@ -96,7 +96,7 @@ class HelloRejectMessage:
 
     def to_dict(self) -> dict:
         return {
-            "type": "UML002_HELLO_REJECT",
+            "type": "UML001_HELLO_REJECT",
             "reason": self.reason,
             "detail": self.detail,
         }

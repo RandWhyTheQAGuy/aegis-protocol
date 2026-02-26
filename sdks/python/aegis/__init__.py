@@ -3,7 +3,7 @@ aegis — The Aegis Protocol Python SDK
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A security protocol for autonomous AI agent communication.
-UML-001 Rev 0.1 — Apache 2.0 — https://github.com/latent-security/aegis-protocol
+UML-001 Rev 1.0 — Apache 2.0 — https://github.com/RandWhyTheQAGuy/aegis-protocol
 
 Quick start::
 
