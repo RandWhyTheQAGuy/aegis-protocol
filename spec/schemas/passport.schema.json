@@ -1,0 +1,19 @@
+{
+    "passport_version": "0.1",
+    "model_id":         string,       // unique identifier for this agent
+    "model_version":    string,       // semver or commit hash
+    "protocol":         "UML-002",
+    "registry_version": string,       // version of Registry anchors in use
+    "capabilities": {
+      "classifier_authority":    bool,
+      "classifier_sensitivity":  bool,
+      "bft_consensus":           bool,
+      "entropy_flush":           bool
+    },
+    "policy_hash":      string,       // SHA-256 of active policy rule set
+    "issued_at":        uint64,       // Unix timestamp
+    "expires_at":       uint64,       // Unix timestamp
+    "recovery_token":   string|null,  // non-null after Entropy Flush recovery
+    "signature":        string        // HMAC-SHA256(canonical_body, registry_key)
+                                      // hex-encoded
+  }
