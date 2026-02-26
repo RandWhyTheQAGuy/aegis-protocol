@@ -1,0 +1,9 @@
+ {
+    "payload_hash":        string,   // SHA-256 of the classified payload
+    "authority":           float,    // [-1.0, 1.0]; 1.0 = maximum authority
+    "sensitivity":         float,    // [ 0.0, 1.0]; 1.0 = maximum sensitivity
+    "authority_confidence": float,   // [0.0, 1.0]
+    "sensitivity_confidence": float, // [0.0, 1.0]
+    "classifier_version":  string,
+    "scored_at":           uint64
+  }
