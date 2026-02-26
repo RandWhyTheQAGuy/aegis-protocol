@@ -1,4 +1,4 @@
-This project delivers the following AI/agentic Security and Governance capabilities:
+This project delivers the following AI/agentic Identity, Security, and Governance capabilities:
 
 
 Semantic Passport - Verified agent identity, policy compliance state
