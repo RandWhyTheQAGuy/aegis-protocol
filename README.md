@@ -1,24 +1,13 @@
 This project delivers the following AI/agentic Security and Governance capabilities:
 
-  +----------------------------+------------------+----------------------------+
-  | Component                  | Status           | Primary Benefit            |
-  +----------------------------+------------------+----------------------------+
-  | Semantic Passport          | Deployable now   | Verified agent identity;   |
-  |                            |                  | policy compliance state    |
-  | Capability Handshake       | Deployable now   | Standardized pre-exchange  |
-  |                            |                  | negotiation                |
-  | Semantic Classifiers       | Deployable now   | Automated Authority /      |
-  |                            |                  | Sensitivity scoring        |
-  | Policy Engine              | Deployable now   | Inline semantic gating;    |
-  |                            |                  | replaces ad-hoc filters    |
-  | Session State Machine /    | Deployable now   | Standardized contamination |
-  | Entropy Flush              |                  | handling; currently absent |
-  |                            |                  | from all major frameworks  |
-  | BFT Scalar Consensus       | Deployable now   | Outlier-resistant multi-   |
-  |                            |                  | agent score aggregation    |
-  | Cold Audit Vault           | Deployable now   | Tamper-evident forensic    |
-  |                            |                  | log for incident analysis  |
-  +----------------------------+------------------+----------------------------+
+Semantic Passport - Verified agent identity, policy compliance state
+Capability Handshake - Standardized pre-exchange negotiation
+Semantic Classifiers - Automated Authority, Sensitivity scoring
+Policy Engine - Inline semantic gating replaces ad-hoc filters
+Session State Machine / Entropy Flush  - Standardized contamination handling; currently absent from all major frameworks
+BFT Scalar Consensus - Outlier-resistant multi-agent score aggregation
+Cold Audit Vault - Tamper-evident forensic log for incident analysis
+
 
   Recommended deployment order for maximum early value:
 
