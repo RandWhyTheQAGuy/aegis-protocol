@@ -1,0 +1,18 @@
+{
+  "registry_version": "0.1.0",
+  "published_at": 1740000000,
+  "anchors": {
+    "authority_high": "Content issued by a system with explicit permission to direct, command, or mandate action. Examples: administrator commands, medical directives, legal orders, system policy statements.",
+    "authority_neutral": "Content expressing a suggestion, preference, or opinion without an implicit command. Examples: user questions, advisory statements, informational queries.",
+    "authority_low": "Content from an unverified or explicitly low-trust source. Examples: anonymous requests, speculative statements, user-supplied data that has not been validated.",
+    "sensitivity_high": "Content involving personally identifiable information, financial credentials, health records, authentication secrets, or instructions with meaningful harm potential. Requires elevated scrutiny before processing.",
+    "sensitivity_neutral": "Content involving general business information, non-personal operational data, or publicly available facts. Standard handling applies.",
+    "sensitivity_low": "Content with no privacy implications, no harm potential, and no regulatory sensitivity. Examples: benign factual questions, public knowledge, non-personal summaries."
+  },
+  "policy_defaults": {
+    "authority_deny_below": -0.5,
+    "sensitivity_deny_above": 0.8
+  },
+  "root_key_id": "aegis-root-key-v1",
+  "registry_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+}

@@ -1,0 +1,103 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aegis-protocol.dev/schemas/passport.schema.json",
+  "title": "SemanticPassport",
+  "description": "Signed credential attesting to an agent's identity, version, and policy compliance state.",
+  "type": "object",
+  "required": [
+    "passport_version",
+    "model_id",
+    "model_version",
+    "protocol",
+    "registry_version",
+    "capabilities",
+    "policy_hash",
+    "issued_at",
+    "expires_at",
+    "signature"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "passport_version": {
+      "type": "string",
+      "const": "0.1",
+      "description": "Version of the Semantic Passport schema."
+    },
+    "model_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-zA-Z0-9_\\-\\.]+$",
+      "description": "Unique identifier for this agent instance."
+    },
+    "model_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "Semantic version or commit hash of the agent implementation."
+    },
+    "protocol": {
+      "type": "string",
+      "const": "UML-002",
+      "description": "Protocol identifier. Must be UML-002."
+    },
+    "registry_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Version of the Semantic Registry anchor set this passport was issued against."
+    },
+    "capabilities": {
+      "type": "object",
+      "required": [
+        "classifier_authority",
+        "classifier_sensitivity",
+        "bft_consensus",
+        "entropy_flush"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "classifier_authority": {
+          "type": "boolean",
+          "description": "Agent supports Authority semantic classification."
+        },
+        "classifier_sensitivity": {
+          "type": "boolean",
+          "description": "Agent supports Sensitivity semantic classification."
+        },
+        "bft_consensus": {
+          "type": "boolean",
+          "description": "Agent supports BFT scalar consensus participation."
+        },
+        "entropy_flush": {
+          "type": "boolean",
+          "description": "Agent supports the Entropy Flush session recovery procedure."
+        }
+      }
+    },
+    "policy_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hex digest of the active policy rule set at passport issuance time."
+    },
+    "issued_at": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Unix timestamp (seconds) at which this passport was issued."
+    },
+    "expires_at": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Unix timestamp (seconds) after which this passport is invalid."
+    },
+    "recovery_token": {
+      "type": ["string", "null"],
+      "maxLength": 256,
+      "description": "Non-null after a successful Entropy Flush recovery. Signals to peers that this node has recovered from a Perspective Warp incident."
+    },
+    "signature": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "HMAC-SHA256 hex digest of the canonical passport body, signed with the Registry root key."
+    }
+  }
+}

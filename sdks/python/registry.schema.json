@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aegis-protocol.dev/schemas/registry.schema.json",
+  "title": "SemanticRegistry",
+  "description": "Versioned, cryptographically signed store of canonical semantic anchor definitions shared across all agents in a cluster.",
+  "type": "object",
+  "required": [
+    "registry_version",
+    "published_at",
+    "anchors",
+    "policy_defaults",
+    "root_key_id",
+    "registry_hash"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "registry_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semver version of this registry file."
+    },
+    "published_at": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Unix timestamp at which this version was published."
+    },
+    "anchors": {
+      "type": "object",
+      "required": [
+        "authority_high",
+        "authority_neutral",
+        "authority_low",
+        "sensitivity_high",
+        "sensitivity_neutral",
+        "sensitivity_low"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "authority_high": {
+          "type": "string",
+          "description": "Canonical natural-language description of high-authority context."
+        },
+        "authority_neutral": {
+          "type": "string",
+          "description": "Canonical description of neutral-authority context."
+        },
+        "authority_low": {
+          "type": "string",
+          "description": "Canonical description of low-authority context."
+        },
+        "sensitivity_high": {
+          "type": "string",
+          "description": "Canonical description of high-sensitivity content."
+        },
+        "sensitivity_neutral": {
+          "type": "string",
+          "description": "Canonical description of neutral-sensitivity content."
+        },
+        "sensitivity_low": {
+          "type": "string",
+          "description": "Canonical description of low-sensitivity content."
+        }
+      }
+    },
+    "policy_defaults": {
+      "type": "object",
+      "required": ["authority_deny_below", "sensitivity_deny_above"],
+      "additionalProperties": false,
+      "properties": {
+        "authority_deny_below": {
+          "type": "number",
+          "minimum": -1.0,
+          "maximum": 1.0,
+          "description": "Default policy threshold: DENY if authority < this value (used in conjunction with sensitivity_deny_above)."
+        },
+        "sensitivity_deny_above": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Default policy threshold: DENY if sensitivity > this value (used in conjunction with authority_deny_below)."
+        }
+      }
+    },
+    "root_key_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identifier for the signing key used to sign Passports against this registry version."
+    },
+    "registry_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 of the canonical serialization of this registry document (excluding registry_hash). Self-referential integrity check."
+    }
+  }
+}
