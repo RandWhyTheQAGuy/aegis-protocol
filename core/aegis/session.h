@@ -5,7 +5,7 @@
     #include <functional>
     #include <stdexcept>
 
-    namespace uml002 {
+    namespace uml001 {
 
     enum class SessionState {
         INIT, ACTIVE, SUSPECT, QUARANTINE, FLUSHING, RESYNC, CLOSED
@@ -175,4 +175,4 @@
         }
     };
 
-    } // namespace uml002
+    } // namespace uml001

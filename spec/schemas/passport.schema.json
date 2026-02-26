@@ -2,7 +2,7 @@
     "passport_version": "0.1",
     "model_id":         string,       // unique identifier for this agent
     "model_version":    string,       // semver or commit hash
-    "protocol":         "UML-002",
+    "protocol":         "UML-001",
     "registry_version": string,       // version of Registry anchors in use
     "capabilities": {
       "classifier_authority":    bool,

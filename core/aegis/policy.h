@@ -6,7 +6,7 @@
     #include <optional>
     #include <iostream>
 
-    namespace uml002 {
+    namespace uml001 {
 
     enum class PolicyAction { ALLOW, DENY, FLAG };
 
@@ -114,4 +114,4 @@
         PolicyAction            default_action_;
     };
 
-    } // namespace uml002
+    } // namespace uml001

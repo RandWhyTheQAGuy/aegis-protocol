@@ -6,7 +6,7 @@
     #include <sstream>
     #include <stdexcept>
 
-    namespace uml002 {
+    namespace uml001 {
 
     struct VaultEntry {
         std::string entry_id;
@@ -99,4 +99,4 @@
         uint64_t                sequence_;
     };
 
-    } // namespace uml002
+    } // namespace uml001

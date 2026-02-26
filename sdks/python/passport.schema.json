@@ -38,8 +38,8 @@
     },
     "protocol": {
       "type": "string",
-      "const": "UML-002",
-      "description": "Protocol identifier. Must be UML-002."
+      "const": "UML-001",
+      "description": "Protocol identifier. Must be UML-001."
     },
     "registry_version": {
       "type": "string",

@@ -9,7 +9,7 @@
     #include <iostream>
     #include <cassert>
 
-    using namespace uml002;
+    using namespace uml001;
 
     int main() {
         // -----------------------------------------------------------------------
@@ -46,7 +46,7 @@
         // Handshake
         // -----------------------------------------------------------------------
         std::string nonce_a       = generate_nonce();
-        std::string schema        = "uml002-payload-v0.1";
+        std::string schema        = "uml001-payload-v0.1";
 
         HandshakeValidator validator(registry, agent_b_passport, schema,
                                      now, false);
@@ -214,7 +214,7 @@
 
     /*
     Build command:
-        g++ -std=c++17 -O2 -o uml002_example main.cpp \
+        g++ -std=c++17 -O2 -o uml001_example main.cpp \
             -lssl -lcrypto
 
     Expected output:

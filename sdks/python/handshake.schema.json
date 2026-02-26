@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://aegis-protocol.dev/schemas/handshake.schema.json",
   "title": "HandshakeMessages",
-  "description": "Schema definitions for all three messages in the UML-002 capability negotiation handshake.",
+  "description": "Schema definitions for all three messages in the UML-001 capability negotiation handshake.",
   "definitions": {
     "Hello": {
       "type": "object",

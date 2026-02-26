@@ -6,7 +6,7 @@ SemanticScore dataclass and SemanticClassifier.
 The classifier is the pluggable scoring layer that feeds the Policy Engine.
 The backend is intentionally abstract: swap between a rule-based heuristic,
 a fine-tuned DistilBERT model, a hosted API call, or (eventually) an
-activation-level projection from UML-001 without changing any downstream code.
+activation-level projection from UML-002 without changing any downstream code.
 """
 
 from __future__ import annotations

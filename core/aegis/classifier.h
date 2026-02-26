@@ -4,7 +4,7 @@
     #include <functional>
     #include <stdexcept>
 
-    namespace uml002 {
+    namespace uml001 {
 
     struct SemanticScore {
         std::string payload_hash;
@@ -91,4 +91,4 @@
         };
     }
 
-    } // namespace uml002
+    } // namespace uml001

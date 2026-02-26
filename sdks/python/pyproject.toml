@@ -5,14 +5,14 @@ build-backend = "setuptools.backends.legacy:build"
 [project]
 name        = "aegis-protocol"
 version     = "0.1.0"
-description = "UML-002: A security protocol for autonomous AI agent communication"
+description = "UML-001: A security protocol for autonomous AI agent communication"
 readme      = "README.md"
 license     = { text = "Apache-2.0" }
 requires-python = ">=3.10"
 
 keywords = [
     "ai-agents", "multi-agent", "security", "semantic",
-    "policy-engine", "audit", "uml-002",
+    "policy-engine", "audit", "UML-001",
 ]
 
 classifiers = [

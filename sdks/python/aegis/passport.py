@@ -3,7 +3,7 @@ aegis.passport
 ~~~~~~~~~~~~~~
 SemanticPassport dataclass, Capabilities, and PassportRegistry.
 
-The Passport is the identity and credential layer for all UML-002 agent
+The Passport is the identity and credential layer for all UML-001 agent
 communication. Every agent MUST present a valid, verified Passport before
 any payload exchange begins.
 """
@@ -23,12 +23,12 @@ from .exceptions import (
 
 
 PASSPORT_VERSION = "0.1"
-PROTOCOL = "UML-002"
+PROTOCOL = "UML-001"
 
 
 @dataclass
 class Capabilities:
-    """Flags declaring which UML-002 features an agent supports."""
+    """Flags declaring which UML-001 features an agent supports."""
 
     classifier_authority: bool = False
     classifier_sensitivity: bool = False
@@ -188,7 +188,7 @@ class SemanticPassport:
 class PassportRegistry:
     """Issues and verifies Semantic Passports.
 
-    Acts as the cryptographic root of trust for a UML-002 agent cluster.
+    Acts as the cryptographic root of trust for a UML-001 agent cluster.
     In production, the ``registry_key`` is rotated on schedule and after
     any Perspective Warp incident.
 
@@ -223,7 +223,7 @@ class PassportRegistry:
         Args:
             model_id:      Unique agent identifier.
             model_version: Agent implementation version.
-            capabilities:  Supported UML-002 features.
+            capabilities:  Supported UML-001 features.
             policy_hash:   SHA-256 of the active policy rule set.
             now:           Issue timestamp. Defaults to current time.
             ttl_seconds:   Validity window in seconds. Default 24 hours.

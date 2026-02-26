@@ -123,7 +123,7 @@ class HandshakeResult:
 # ---------------------------------------------------------------------------
 
 class HandshakeInitiator:
-    """The initiating side of the UML-002 handshake.
+    """The initiating side of the UML-001 handshake.
 
     Sends HELLO, validates HELLO_ACK, sends HELLO_CONFIRM.
 
@@ -139,7 +139,7 @@ class HandshakeInitiator:
         initiator = HandshakeInitiator(
             local_passport=my_passport,
             registry=registry,
-            schema_version="uml002-payload-v0.1",
+            schema_version="uml001-payload-v0.1",
             registry_key=REGISTRY_KEY,
         )
 
@@ -239,7 +239,7 @@ class HandshakeInitiator:
 # ---------------------------------------------------------------------------
 
 class HandshakeResponder:
-    """The responding side of the UML-002 handshake.
+    """The responding side of the UML-001 handshake.
 
     Receives HELLO, sends HELLO_ACK, validates HELLO_CONFIRM.
 
@@ -256,7 +256,7 @@ class HandshakeResponder:
         responder = HandshakeResponder(
             local_passport=my_passport,
             registry=registry,
-            schema_version="uml002-payload-v0.1",
+            schema_version="uml001-payload-v0.1",
             registry_key=REGISTRY_KEY,
         )
 

@@ -7,7 +7,7 @@
     #include <cmath>
     #include <stdexcept>
 
-    namespace uml002 {
+    namespace uml001 {
 
     struct AgentScore {
         std::string agent_id;
@@ -112,4 +112,4 @@
         float outlier_threshold_;
     };
 
-    } // namespace uml002
+    } // namespace uml001

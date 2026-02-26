@@ -22,7 +22,7 @@ from .exceptions import SessionStateError, SessionTaintError, SessionQuarantineE
 
 
 class SessionState(Enum):
-    """All valid states in the UML-002 session state machine."""
+    """All valid states in the UML-001 session state machine."""
 
     INIT       = "INIT"       # handshake in progress
     ACTIVE     = "ACTIVE"     # normal operation

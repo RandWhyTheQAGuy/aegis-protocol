@@ -1,7 +1,7 @@
 """
 tests/test_integration.py
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-End-to-end integration tests covering the complete UML-002 request lifecycle.
+End-to-end integration tests covering the complete UML-001 request lifecycle.
 Mirrors the C++ integration example from spec Section 11.2.
 
 Run with:  pytest sdks/python/tests/test_integration.py -v
@@ -45,7 +45,7 @@ from aegis.exceptions import (
 
 REGISTRY_KEY      = "test-registry-key-32-bytes-long!!"
 REGISTRY_VERSION  = "0.1.0"
-SCHEMA_VERSION    = "uml002-payload-v0.1"
+SCHEMA_VERSION    = "uml001-payload-v0.1"
 NOW               = 1_740_000_000  # fixed timestamp for deterministic tests
 
 
@@ -735,7 +735,7 @@ class TestHandshake:
 class TestFullLifecycle:
     """
     End-to-end test covering the complete request lifecycle from Section 11.1
-    of UML-002 Rev 0.1.
+    of UML-001 Rev 0.1.
     """
 
     def test_normal_session_lifecycle(self):

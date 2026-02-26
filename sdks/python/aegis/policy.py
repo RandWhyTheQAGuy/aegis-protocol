@@ -5,7 +5,7 @@ PolicyRule, PolicyDecision, and PolicyEngine.
 
 The Policy Engine evaluates every message payload against an ordered list of
 rules before it is processed. It is the primary enforcement point for semantic
-access control in a UML-002 agent cluster.
+access control in a UML-001 agent cluster.
 """
 
 from __future__ import annotations
@@ -141,7 +141,7 @@ class PolicyDecision:
 
 
 # ---------------------------------------------------------------------------
-# Default rule set (mirrors UML-002 spec defaults)
+# Default rule set (mirrors UML-001 spec defaults)
 # ---------------------------------------------------------------------------
 
 DEFAULT_RULES: List[PolicyRule] = [
@@ -200,7 +200,7 @@ class PolicyEngine:
 
     @classmethod
     def from_defaults(cls) -> "PolicyEngine":
-        """Return a PolicyEngine loaded with the default UML-002 rule set."""
+        """Return a PolicyEngine loaded with the default UML-001 rule set."""
         return cls(rules=list(DEFAULT_RULES), flag_low_confidence=True)
 
     @classmethod

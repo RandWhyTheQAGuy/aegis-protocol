@@ -4,7 +4,7 @@
     #include <random>
     #include <algorithm>
 
-    namespace uml002 {
+    namespace uml001 {
 
     // ---------------------------------------------------------------------------
     // Generate a cryptographically random hex nonce (simplified; use
@@ -120,4 +120,4 @@
         std::string             local_nonce_;
     };
 
-    } // namespace uml002
+    } // namespace uml001

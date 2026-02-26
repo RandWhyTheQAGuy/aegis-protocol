@@ -9,7 +9,7 @@
     #include <openssl/hmac.h>
     #include <openssl/sha.h>
 
-    namespace uml002 {
+    namespace uml001 {
 
     // ---------------------------------------------------------------------------
     // SHA-256 utility
@@ -60,7 +60,7 @@
         std::string  passport_version  = "0.1";
         std::string  model_id;
         std::string  model_version;
-        std::string  protocol          = "UML-002";
+        std::string  protocol          = "UML-001";
         std::string  registry_version;
         Capabilities capabilities;
         std::string  policy_hash;
@@ -171,4 +171,4 @@
         std::string registry_version_;
     };
 
-    } // namespace uml002
+    } // namespace uml001

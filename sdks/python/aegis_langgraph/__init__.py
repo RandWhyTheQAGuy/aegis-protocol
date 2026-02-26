@@ -3,7 +3,7 @@ aegis_langgraph
 ~~~~~~~~~~~~~~~
 Aegis Protocol integration for LangGraph.
 
-Wraps LangGraph nodes and graphs with UML-002 Semantic Passport verification,
+Wraps LangGraph nodes and graphs with UML-001 Semantic Passport verification,
 Policy Engine evaluation, and Session State Machine tracking.
 
 Install:  pip install aegis-langgraph
@@ -84,7 +84,7 @@ class AegisConfig:
     )
     vault:          Optional[ColdAuditVault] = None
     warp_threshold: float = 3.0
-    schema_version: str   = "uml002-payload-v0.1"
+    schema_version: str   = "uml001-payload-v0.1"
     raise_on_deny:  bool  = False
 
 
