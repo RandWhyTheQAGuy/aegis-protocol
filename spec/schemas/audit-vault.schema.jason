@@ -1,0 +1,10 @@
+{
+  "timestamp":             uint64,   // Unix timestamp of event
+  "session_id":            string,   // Handshake-derived session ID
+  "agent_id":              string,   // model_id of the acting agent
+  "action":                string,   // Action taken (ALLOW/DENY/FLAG)
+  "payload_hash":          string,   // SHA-256 hash of the content
+  "warp_score":            float,    // Current cumulative session entropy
+  "previous_hash":         string,   // SHA-256 of the preceding vault entry
+  "current_hash":          string    // Chain-linked hash of this entry
+}

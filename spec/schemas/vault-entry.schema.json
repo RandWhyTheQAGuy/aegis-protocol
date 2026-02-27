@@ -1,15 +1,12 @@
 {
-    "entry_id":      string,   // SHA-256(prev_hash + payload)
-    "prev_hash":     string,   // hash of previous entry; "GENESIS" for first
-    "sequence":      uint64,   // monotonically increasing
-    "timestamp":     uint64,
-    "event_type":    string,   // "POLICY_DECISION" | "SESSION_EVENT" |
-                               // "QUARANTINE" | "FLUSH" | "PASSPORT_ISSUE" |
-                               // "CONSENSUS"
-    "session_id":    string,
-    "agent_id":      string,
-    "payload_hash":  string,   // hash of the message payload; never the payload
-    "detail":        object,   // event-specific structured data
-    "entry_hash":    string    // SHA-256(canonical serialization of this entry
-                               //         excluding entry_hash field)
-  }
+  "entry_id":             string,   // Unique identifier for this entry (hash of sequence)
+  "prev_hash":            string,   // SHA-256 hash of the preceding entry ("GENESIS" for entry 0)
+  "sequence":             uint64,   // Monotonic counter (0-indexed)
+  "timestamp":            uint64,   // Unix timestamp of the event
+  "event_type":           string,   // Type of event (e.g., "PAYLOAD", "STATE_CHANGE")
+  "session_id":           string,   // ID of the session this event belongs to
+  "agent_id":             string,   // ID of the agent performing the action
+  "payload_hash":         string,   // SHA-256 of the data associated with this event
+  "detail":               string,   // JSON-encoded string containing event-specific metadata
+  "entry_hash":           string    // SHA-256 hash of all fields (canonicalized)
+}

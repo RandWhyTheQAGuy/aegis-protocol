@@ -1,11 +1,14 @@
 {
-    "rule_id":             string,
-    "description":         string,
-    "authority_below":     float|null,    // match if authority < this value
-    "authority_above":     float|null,    // match if authority > this value
-    "sensitivity_above":   float|null,    // match if sensitivity > this value
-    "sensitivity_below":   float|null,    // match if sensitivity < this value
-    "min_confidence":      float,         // skip rule if confidence below this
-    "action":              "ALLOW"|"DENY"|"FLAG",
-    "log_level":           "INFO"|"WARN"|"ALERT"
-  }
+  "rule_id":               string,   // Human-readable ID
+  "description":           string,   // Detailed purpose of the rule
+  "trust": {
+    "min_authority_confidence":   float, // Threshold to consider score valid
+    "min_sensitivity_confidence": float  // Threshold to consider score valid
+  },
+  "scope": {
+    "min_authority":       float?,   // Optional: Required authority level
+    "max_sensitivity":     float?    // Optional: Maximum allowed sensitivity
+  },
+  "action":                string,   // Enum: ["ALLOW", "DENY", "FLAG"]
+  "log_level":             string    // Enum: ["INFO", "WARN", "ALERT"]
+}
