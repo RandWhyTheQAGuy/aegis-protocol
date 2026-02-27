@@ -445,7 +445,7 @@ public:
         }
 
         // 2. Passport verification (includes revocation if registry wired up)
-        if (!registry_.verify(msg.passport, now_)) {
+        if (!registry_.verify(msg.passport, now_).ok()) {
             result.reject_reason = msg.passport.is_valid(now_)
                 ? reject_reason_str(HandshakeRejectReason::PASSPORT_INVALID)
                 : reject_reason_str(HandshakeRejectReason::PASSPORT_EXPIRED);
@@ -620,7 +620,7 @@ public:
         }
 
         // Verify responder's passport
-        if (!registry_.verify(ack.passport, now_)) {
+        if (!registry_.verify(ack.passport, now_).ok()) {
             result.reject_reason = ack.passport.is_valid(now_)
                 ? reject_reason_str(HandshakeRejectReason::PASSPORT_INVALID)
                 : reject_reason_str(HandshakeRejectReason::PASSPORT_EXPIRED);
