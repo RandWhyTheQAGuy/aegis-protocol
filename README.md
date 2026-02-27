@@ -1,5 +1,13 @@
-UML-001 (Universal Meaning Layer) is a deployable security and governance protocol for multi-agent AI systems. It provides a zero-trust communication layer where every agent interaction carries a signed identity credential (Semantic Passport), machine-evaluable semantic risk metadata (SemanticScore), and deterministic policy enforcement outcomes. The protocol enables interoperable control across heterogeneous models and runtimes by standardizing how agents declare capabilities, negotiate trust, and attach verifiable risk signals to outputs before they are consumed by downstream systems.
+**UML-001** is a high-performance C++ security framework designed to establish identity, trust, and accountability in decentralized AI agent ecosystems. By combining cryptographic "Semantic Passports" with a zero-trust communication protocol, it ensures that autonomous models interact within strictly defined safety bounds and leave a tamper-evident audit trail.
 
-The core implementation includes a software-attested identity framework, output-layer semantic classifiers, a deterministic policy engine, and an append-only audit vault for forensic traceability. Together these components allow organizations to enforce automated controls such as sensitivity gating, human-review thresholds, and policy-based routing while maintaining verifiable records of decisions and system state. UML-001 is designed to be incrementally deployable: each component delivers standalone value but composes into a unified governance layer for high-assurance agent pipelines.
+### Core Capabilities
 
-This repository contains a reference C++17 implementation with minimal dependencies and clear extension points for integrating external model inference services. UML-001 is intended for enterprise AI platforms, regulated environments, and safety-critical automation where identity, policy enforcement, and auditability must operate consistently across agent boundaries. The project is released under the Apache 2.0 License and welcomes contributions, evaluations, and interoperability experiments.
+* **Semantic Identity:** Implements **Semantic Passports** (v0.2) that encode model capabilities and policy hashes into a cryptographically signed identity.
+* **Zero-Trust Handshaking:** A robust three-way handshake (Rev 1.2) featuring transport-identity binding, ephemeral session keys, and forward secrecy to prevent replay and impersonation attacks.
+* **Context-Aware Policy Engine:** A real-time engine that evaluates **Semantic Scores** (Authority vs. Sensitivity) against trust criteria to permit, flag, or deny agent actions.
+* **Tamper-Evident Accountability:** Uses hash-chained **Audit Vaults** and **Transparency Logs** to create an immutable record of every decision, session state change, and key rotation.
+* **Collective Resilience:** Includes a **BFT Consensus Engine** to aggregate multi-agent scores and filter outliers using geometric median-based fault tolerance.
+
+### Intended Use
+
+This framework is intended for developers building multi-agent systems, AI orchestrators, or "Agentic" platforms where safety, verifiable identity, and post-incident forensic auditability are mission-critical. It serves as the "security layer" that sits between raw model inference and external action execution.
