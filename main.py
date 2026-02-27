@@ -1,8 +1,29 @@
 import ctypes
-import time
-from typing import List, Optional
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
+from dataclasses import dataclass
+
+# Define the C-compatible struct for Python
+class C_SemanticScore(ctypes.Structure):
+    _fields_ = [
+        ("authority", ctypes.c_float),
+        ("sensitivity", ctypes.c_float),
+        ("auth_conf", ctypes.c_float),
+        ("sens_conf", ctypes.c_float),
+    ]
+
+# Load the compiled C++ library
+lib = ctypes.CDLL("./libuml_classifier.so")
+lib.score_payload.restype = C_SemanticScore
+lib.score_payload.argtypes = [ctypes.c_char_p, ctypes.c_uint64]
+
+def get_fast_score(payload: str):
+    now = int(time.time())
+    # Call the C++ engine
+    result = lib.score_payload(payload.encode('utf-8'), now)
+    return {
+        "authority": result.authority,
+        "sensitivity": result.sensitivity,
+        "confidence": (result.auth_conf + result.sens_conf) / 2
+    }
 
 # --- 1. Mapping the Hardened C++ Structures ---
 
@@ -25,7 +46,7 @@ class PolicyRule(BaseModel):
 
 # --- 2. Sidecar Logic & Engine ---
 
-app = FastAPI(title="UML-001 Hardened Sidecar")
+# app = FastAPI(title="UML-001 Hardened Sidecar")
 
 # Global Configuration (The Compatibility Pillar)
 REGISTRY_VERSION = "v2.0.26-ALPHA"

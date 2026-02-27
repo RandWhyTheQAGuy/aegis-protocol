@@ -118,58 +118,72 @@ struct SemanticPassport {
     }
 };
 
-// ---------------------------------------------------------------------------
-// VerifyResult: structured result from PassportRegistry::verify()
-// Provides the caller with enough context to log and act on failures.
-// ---------------------------------------------------------------------------
-enum class VerifyStatus {
-    OK,
-    REVOKED,
-    EXPIRED,
-    INVALID_SIGNATURE,
-    REGISTRY_VERSION_MISMATCH,
-    KEY_NOT_FOUND,
-};
+    // ---------------------------------------------------------------------------
+    // VerifyResult: structured result from PassportRegistry::verify()
+    // Provides the caller with enough context to log and act on failures.
+    // ---------------------------------------------------------------------------
+    enum class VerifyStatus {
+        OK,
+        REVOKED,
+        EXPIRED,
+        INVALID_SIGNATURE,
+        REGISTRY_VERSION_MISMATCH,
+        KEY_NOT_FOUND,
+    };
 
-inline std::string verify_status_str(VerifyStatus s) {
-    switch (s) {
-        case VerifyStatus::OK:                        return "OK";
-        case VerifyStatus::REVOKED:                   return "REVOKED";
-        case VerifyStatus::EXPIRED:                   return "EXPIRED";
-        case VerifyStatus::INVALID_SIGNATURE:         return "INVALID_SIGNATURE";
-        case VerifyStatus::REGISTRY_VERSION_MISMATCH: return "REGISTRY_VERSION_MISMATCH";
-        case VerifyStatus::KEY_NOT_FOUND:             return "KEY_NOT_FOUND";
+    class IClock {
+    public:
+        virtual ~IClock() = default;
+        virtual uint64_t now() const = 0;
+    };
+
+    class RealWorldClock : public IClock {
+    public:
+        uint64_t now() const override {
+            return std::chrono::duration_cast<std::chrono::seconds>(
+                std::chrono::system_clock::now().time_since_epoch()).count();
+        }
+    };
+
+    inline std::string verify_status_str(VerifyStatus s) {
+        switch (s) {
+            case VerifyStatus::OK:                        return "OK";
+            case VerifyStatus::REVOKED:                   return "REVOKED";
+            case VerifyStatus::EXPIRED:                   return "EXPIRED";
+            case VerifyStatus::INVALID_SIGNATURE:         return "INVALID_SIGNATURE";
+            case VerifyStatus::REGISTRY_VERSION_MISMATCH: return "REGISTRY_VERSION_MISMATCH";
+            case VerifyStatus::KEY_NOT_FOUND:             return "KEY_NOT_FOUND";
+        }
+        return "UNKNOWN";
     }
-    return "UNKNOWN";
-}
 
-struct VerifyResult {
-    VerifyStatus status           = VerifyStatus::INVALID_SIGNATURE;
-    uint32_t     verified_key_id  = 0;   // which key verified; 0 if failed
-    std::string  revocation_detail;      // populated if REVOKED
+    struct VerifyResult {
+        VerifyStatus status           = VerifyStatus::INVALID_SIGNATURE;
+        uint32_t     verified_key_id  = 0;   // which key verified; 0 if failed
+        std::string  revocation_detail;      // populated if REVOKED
 
-    bool ok() const { return status == VerifyStatus::OK; }
-};
+        bool ok() const { return status == VerifyStatus::OK; }
+    };
 
-// ---------------------------------------------------------------------------
-// PassportRegistry (v0.2)
-//
-// Now owns:
-//   - KeyStore         (key rotation)
-//   - TransparencyLog  (audit of all issuance/revocation events)
-//   - RevocationList   (immediate revocation checks)
-//
-// MultiPartyIssuer is NOT owned here — it is a separate object that the
-// caller constructs and passes passports into/out of independently.
-// PassportRegistry::verify() accepts quorum-signed passports by recognizing
-// the quorum_signed flag and delegating signature verification to the
-// KeyStore's composite path.
-// ---------------------------------------------------------------------------
-class PassportRegistry {
-public:
-    // Construct with initial root key material.
-    // The PassportRegistry takes ownership of the TransparencyLog.
-    PassportRegistry(const std::string& initial_key_material,
+    // ---------------------------------------------------------------------------
+    // PassportRegistry (v0.2)
+    //
+    // Now owns:
+    //   - KeyStore         (key rotation)
+    //   - TransparencyLog  (audit of all issuance/revocation events)
+    //   - RevocationList   (immediate revocation checks)
+    //
+    // MultiPartyIssuer is NOT owned here — it is a separate object that the
+    // caller constructs and passes passports into/out of independently.
+    // PassportRegistry::verify() accepts quorum-signed passports by recognizing
+    // the quorum_signed flag and delegating signature verification to the
+    // KeyStore's composite path.
+    // ---------------------------------------------------------------------------
+    class PassportRegistry {
+    public:
+        // Construct with initial root key material.
+        // The PassportRegistry takes ownership of the TransparencyLog.
+        PassportRegistry(const std::string& initial_key_material,
                      std::string        registry_version,
                      uint64_t           now,
                      uint64_t           key_overlap_window_seconds = 3600)
