@@ -1,5 +1,4 @@
 ### `CMakeLists.txt`
-
 ```cmake
 cmake_minimum_required(VERSION 3.12)
 project(Aegis_Protocol LANGUAGES CXX)
