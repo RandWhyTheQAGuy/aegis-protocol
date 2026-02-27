@@ -1,4 +1,4 @@
-**UML-001** is a high-performance C++ security framework designed to establish identity, trust, and accountability in decentralized AI agent ecosystems. By combining cryptographic "Semantic Passports" with a zero-trust communication protocol, it ensures that autonomous models interact within strictly defined safety bounds and leave a tamper-evident audit trail.
+**Aegis Protocol** is a high-performance C++ security framework designed to establish identity, trust, and accountability in decentralized AI agent ecosystems. By combining cryptographic "Semantic Passports" with a zero-trust communication protocol, it ensures that autonomous models interact within strictly defined safety bounds and leave a tamper-evident audit trail.
 
 ### Core Capabilities
 
