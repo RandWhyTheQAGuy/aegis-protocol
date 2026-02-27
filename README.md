@@ -1,16 +1,5 @@
-This project delivers the following AI/agentic Identity, Security, and Governance capabilities:
+UML-001 (Universal Meaning Layer) is a deployable security and governance protocol for multi-agent AI systems. It provides a zero-trust communication layer where every agent interaction carries a signed identity credential (Semantic Passport), machine-evaluable semantic risk metadata (SemanticScore), and deterministic policy enforcement outcomes. The protocol enables interoperable control across heterogeneous models and runtimes by standardizing how agents declare capabilities, negotiate trust, and attach verifiable risk signals to outputs before they are consumed by downstream systems.
 
+The core implementation includes a software-attested identity framework, output-layer semantic classifiers, a deterministic policy engine, and an append-only audit vault for forensic traceability. Together these components allow organizations to enforce automated controls such as sensitivity gating, human-review thresholds, and policy-based routing while maintaining verifiable records of decisions and system state. UML-001 is designed to be incrementally deployable: each component delivers standalone value but composes into a unified governance layer for high-assurance agent pipelines.
 
-Semantic Passport - Verified agent identity, policy compliance state
-
-Capability Handshake - Standardized pre-exchange negotiation
-
-Semantic Classifiers - Automated Authority and Sensitivity scoring
-
-Policy Engine - Inline semantic gating replaces ad-hoc filters
-
-Session State Machine / Entropy Flush  - Standardized contamination handling
-
-BFT Scalar Consensus - Outlier-resistant multi-agent score aggregation
-
-Cold Audit Vault - Tamper-evident forensic log for incident analysis
+This repository contains a reference C++17 implementation with minimal dependencies and clear extension points for integrating external model inference services. UML-001 is intended for enterprise AI platforms, regulated environments, and safety-critical automation where identity, policy enforcement, and auditability must operate consistently across agent boundaries. The project is released under the Apache 2.0 License and welcomes contributions, evaluations, and interoperability experiments.
