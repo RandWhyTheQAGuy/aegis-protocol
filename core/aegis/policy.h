@@ -1,117 +1,153 @@
-// policy.h
-    #pragma once
-    #include "classifier.h"
-    #include <vector>
-    #include <string>
-    #include <optional>
-    #include <iostream>
+#pragma once
+#include "classifier.h"
+#include <vector>
+#include <string>
+#include <optional>
+#include <iostream>
+#include <cmath>
+#include <stdexcept>
 
-    namespace uml001 {
+namespace uml001 {
 
-    enum class PolicyAction { ALLOW, DENY, FLAG };
+enum class PolicyAction { ALLOW, DENY, FLAG };
 
-    inline std::string action_str(PolicyAction a) {
-        switch (a) {
-            case PolicyAction::ALLOW: return "ALLOW";
-            case PolicyAction::DENY:  return "DENY";
-            case PolicyAction::FLAG:  return "FLAG";
-        }
-        return "UNKNOWN";
+inline std::string action_str(PolicyAction a) {
+    switch (a) {
+        case PolicyAction::ALLOW: return "ALLOW";
+        case PolicyAction::DENY:  return "DENY";
+        case PolicyAction::FLAG:  return "FLAG";
     }
+    return "UNKNOWN";
+}
 
-    enum class LogLevel { INFO, WARN, ALERT };
+enum class LogLevel { INFO, WARN, ALERT };
 
-    inline std::string loglevel_str(LogLevel l) {
-        switch (l) {
-            case LogLevel::INFO:  return "INFO";
-            case LogLevel::WARN:  return "WARN";
-            case LogLevel::ALERT: return "ALERT";
+// ---------------------------------------------------------------------------
+// 1. Policy Compatibility (Versioning & Environment Match)
+// Ensures the policy being evaluated matches the active registry and protocol.
+// ---------------------------------------------------------------------------
+struct CompatibilityManifest {
+    std::string expected_registry_version;
+    std::string expected_protocol = "UML-001";
+    std::string policy_hash;
+};
+
+// ---------------------------------------------------------------------------
+// 2. Trustworthiness (Confidence & Integrity)
+// Evaluates the reliability of the SemanticScore itself.
+// ---------------------------------------------------------------------------
+struct TrustCriteria {
+    float min_authority_confidence = 0.8f; // Hardened from 0.5f
+    float min_sensitivity_confidence = 0.8f;
+    
+    [[nodiscard]] bool is_trusted(const SemanticScore& score) const {
+        // Guard against NaN injection bypasses
+        if (std::isnan(score.authority_confidence) || std::isnan(score.sensitivity_confidence)) {
+            return false;
         }
-        return "INFO";
+        return score.authority_confidence >= min_authority_confidence &&
+               score.sensitivity_confidence >= min_sensitivity_confidence;
     }
+};
 
-    struct PolicyRule {
-        std::string              rule_id;
-        std::string              description;
-        std::optional<float>     authority_below;
-        std::optional<float>     authority_above;
-        std::optional<float>     sensitivity_above;
-        std::optional<float>     sensitivity_below;
-        float                    min_confidence = 0.5f;
-        PolicyAction             action         = PolicyAction::ALLOW;
-        LogLevel                 log_level      = LogLevel::INFO;
-    };
+// ---------------------------------------------------------------------------
+// 3. Privilege Scope (Authority & Sensitivity Bounds)
+// Defines the operational boundaries for a given rule.
+// ---------------------------------------------------------------------------
+struct ScopeCriteria {
+    std::optional<float> authority_min;
+    std::optional<float> authority_max;
+    std::optional<float> sensitivity_min;
+    std::optional<float> sensitivity_max;
 
-    struct PolicyDecision {
-        PolicyAction action;
-        std::string  matched_rule_id;   // empty if default applied
-        LogLevel     log_level;
-        bool         low_confidence;
-        std::string  payload_hash;
-    };
+    [[nodiscard]] bool is_within_scope(const SemanticScore& score) const {
+        if (std::isnan(score.authority) || std::isnan(score.sensitivity)) return false;
 
-    // ---------------------------------------------------------------------------
-    // PolicyEngine: evaluates a SemanticScore against an ordered rule list
-    // ---------------------------------------------------------------------------
-    class PolicyEngine {
-    public:
-        explicit PolicyEngine(std::vector<PolicyRule> rules,
-                              PolicyAction default_action = PolicyAction::ALLOW)
-            : rules_(std::move(rules))
-            , default_action_(default_action) {}
+        if (authority_min.has_value() && score.authority < authority_min.value()) return false;
+        if (authority_max.has_value() && score.authority > authority_max.value()) return false;
+        if (sensitivity_min.has_value() && score.sensitivity < sensitivity_min.value()) return false;
+        if (sensitivity_max.has_value() && score.sensitivity > sensitivity_max.value()) return false;
 
-        PolicyDecision evaluate(const SemanticScore& score) const {
-            PolicyDecision decision;
-            decision.payload_hash    = score.payload_hash;
-            decision.low_confidence  = score.is_low_confidence();
+        return true;
+    }
+};
 
-            float min_conf = std::min(score.authority_confidence,
-                                      score.sensitivity_confidence);
+// ---------------------------------------------------------------------------
+// Composed Policy Rule
+// ---------------------------------------------------------------------------
+struct PolicyRule {
+    std::string   rule_id;
+    std::string   description;
+    TrustCriteria trust;
+    ScopeCriteria scope;
+    PolicyAction  action    = PolicyAction::DENY; // Fail-safe default
+    LogLevel      log_level = LogLevel::INFO;
+};
 
-            for (const auto& rule : rules_) {
-                // Skip rule if score confidence is below rule's threshold
-                if (min_conf < rule.min_confidence) continue;
+struct PolicyDecision {
+    PolicyAction action;
+    std::string  matched_rule_id;
+    LogLevel     log_level;
+    std::string  payload_hash;
+    std::string  rejection_reason; // Added for better auditability
+};
 
-                bool match = true;
+// ---------------------------------------------------------------------------
+// PolicyEngine
+// ---------------------------------------------------------------------------
+class PolicyEngine {
+public:
+    // Notice default_action is now DENY
+    explicit PolicyEngine(CompatibilityManifest manifest,
+                          std::vector<PolicyRule> rules,
+                          PolicyAction default_action = PolicyAction::DENY)
+        : manifest_(std::move(manifest))
+        , rules_(std::move(rules))
+        , default_action_(default_action) {}
 
-                if (rule.authority_below.has_value() &&
-                    !(score.authority < rule.authority_below.value()))
-                    match = false;
-
-                if (match && rule.authority_above.has_value() &&
-                    !(score.authority > rule.authority_above.value()))
-                    match = false;
-
-                if (match && rule.sensitivity_above.has_value() &&
-                    !(score.sensitivity > rule.sensitivity_above.value()))
-                    match = false;
-
-                if (match && rule.sensitivity_below.has_value() &&
-                    !(score.sensitivity < rule.sensitivity_below.value()))
-                    match = false;
-
-                if (match) {
-                    decision.action          = rule.action;
-                    decision.matched_rule_id = rule.rule_id;
-                    decision.log_level       = rule.log_level;
-                    return decision;
-                }
-            }
-
-            // No rule matched: apply default
-            decision.action    = default_action_;
-            decision.log_level = LogLevel::INFO;
+    [[nodiscard]] PolicyDecision evaluate(const SemanticScore& score, const std::string& active_registry) const {
+        PolicyDecision decision;
+        decision.payload_hash = score.payload_hash;
+        
+        // Phase 1: Compatibility Check
+        if (active_registry != manifest_.expected_registry_version) {
+            decision.action = PolicyAction::DENY;
+            decision.log_level = LogLevel::ALERT;
+            decision.rejection_reason = "COMPATIBILITY_MISMATCH";
             return decision;
         }
 
-        // Convenience: returns true iff action is ALLOW or FLAG
-        bool permits(const SemanticScore& score) const {
-            return evaluate(score).action != PolicyAction::DENY;
+        // Phase 2: Rule Evaluation
+        for (const auto& rule : rules_) {
+            // Check Trustworthiness first
+            if (!rule.trust.is_trusted(score)) {
+                continue; // Skip to next rule, or you could immediately flag it
+            }
+
+            // Check Privilege Scope
+            if (rule.scope.is_within_scope(score)) {
+                decision.action          = rule.action;
+                decision.matched_rule_id = rule.rule_id;
+                decision.log_level       = rule.log_level;
+                return decision;
+            }
         }
 
-    private:
-        std::vector<PolicyRule> rules_;
-        PolicyAction            default_action_;
-    };
+        // Phase 3: Fallback to Fail-Safe Default
+        decision.action           = default_action_;
+        decision.log_level        = (default_action_ == PolicyAction::DENY) ? LogLevel::WARN : LogLevel::INFO;
+        decision.rejection_reason = "NO_MATCHING_RULE_DEFAULT_DENY";
+        return decision;
+    }
 
-    } // namespace uml001
+    [[nodiscard]] bool permits(const SemanticScore& score, const std::string& active_registry) const {
+        return evaluate(score, active_registry).action != PolicyAction::DENY;
+    }
+
+private:
+    CompatibilityManifest   manifest_;
+    std::vector<PolicyRule> rules_;
+    PolicyAction            default_action_;
+};
+
+} // namespace uml001
