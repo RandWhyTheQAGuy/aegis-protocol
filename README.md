@@ -1,16 +1,48 @@
-**Aegis Protocol** is a complete, composable security protocol designed from the ground up for autonomous AI agent systems. It solves for the following items:
+**Aegis Protocol** (aegis-protocol) s a high-performance C++ security layer designed to establish identity, trust, and accountability in decentralized AI agent ecosystems. By combining cryptographic "Semantic Passports" with a zero-trust communication protocol, it ensures that autonomous models interact within strictly defined safety bounds and leave a tamper-evident audit trail. It is implemented as multiple
+composable C++ modules (Rev 1.2), addressing the complete agent security
+lifecycle
 
-1. Cryptographically verifiable AI agent identity with granular capability constraints.
+ - PassportRegistry (passport.h): Cryptographic identity issuance and
+    verification for AI agents, with granular capability constraints enforced
+    via a four-bit Capabilities bitmap (classifier_authority,
+    classifier_sensitivity, bft_consensus, entropy_flush).
 
-2. Semantic-aware policy enforcement that evaluates what agents attempt to do.
+  - KeyStore / Key Rotation (key_rotation.h): Signing key lifecycle management
+    with ACTIVE-to-ROTATING-to-RETIRED-to-PURGED state transitions and overlap
+    windows for zero-downtime rotation.
 
-3. Byzantine-fault-tolerant consensus for multi-agent deployments.
+  - RevocationList (revocation.h): Full-model and version-scoped revocation
+    with cryptographically signed revocation tokens.
 
-4. Tamper-evident audit chains for regulatory compliance and forensic investigation.
+  - MultiPartyIssuer (multi_party_issuance.h): N-of-M threshold quorum for
+    passport issuance, with rejection and TTL-based expiry.
 
-5. Portable, open-standard implementation that avoids vendor lock-in.
+  - HandshakeValidator (handshake.h, Rev 1.2): Three-message authenticated key
+    establishment with ephemeral Diffie-Hellman, forward secrecy, partitioned
+    nonce caches (SEC-002), and transport binding enforcement.
 
-Aegis Protocol is a high-performance C++ security layer designed to establish identity, trust, and accountability in decentralized AI agent ecosystems. By combining cryptographic "Semantic Passports" with a zero-trust communication protocol, it ensures that autonomous models interact within strictly defined safety bounds and leave a tamper-evident audit trail.
+  - SemanticClassifier (classifier.h): Pluggable payload scoring producing
+    authority (-1.0 to +1.0) and sensitivity (0.0 to 1.0) dimensions with
+    confidence values.
+
+  - PolicyEngine (policy.h): Rule-based policy evaluation with
+    CompatibilityManifest, TrustCriteria confidence gates, ScopeCriteria
+    ranges, and ALLOW/FLAG/DENY actions.
+
+  - Session (session.h): State machine
+    (INIT-ACTIVE-SUSPECT-QUARANTINE-FLUSHING-RESYNC-CLOSED) with warp score
+    accumulation, entropy flush callback, and re-activation.
+
+  - BFTConsensusEngine (consensus.h): Geometric median computation with outlier
+    detection and f = floor((n-1)/3) Byzantine fault tolerance.
+
+  - ColdAuditVault (vault.h): Append-only, SHA-256 hash-chained audit vault.
+
+  - TransparencyLog (transparency_log.h): Hash-chained registry event log with
+    per-model history.
+
+  - Incident Management: Structured incident ID generation with embedded epoch
+    and 128-bit hash suffix.
 
 ### Core Capabilities
 
