@@ -1,4 +1,6 @@
-**Aegis Protocol** is a high-performance C++ security framework designed to establish identity, trust, and accountability in decentralized AI agent ecosystems. By combining cryptographic "Semantic Passports" with a zero-trust communication protocol, it ensures that autonomous models interact within strictly defined safety bounds and leave a tamper-evident audit trail.
+**Aegis Protocol** a complete, composable security protocol designed from the ground up for autonomous AI agent systems.
+
+Aegis Protocol is a high-performance C++ security layer designed to establish identity, trust, and accountability in decentralized AI agent ecosystems. By combining cryptographic "Semantic Passports" with a zero-trust communication protocol, it ensures that autonomous models interact within strictly defined safety bounds and leave a tamper-evident audit trail.
 
 ### Core Capabilities
 
