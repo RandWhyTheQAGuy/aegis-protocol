@@ -1,48 +1,33 @@
-**Aegis Protocol** (aegis-protocol) is a high-performance C++ security layer designed to establish identity, trust, and accountability in decentralized AI agent ecosystems. By combining cryptographic "Semantic Passports" with a zero-trust communication protocol, aegis-protocol ensures autonomous models interact within strictly defined safety bounds and leave a tamper-evident audit trail. It implemented as multiple
-composable C++ modules (Rev 1.2), addressing the complete agent security
-lifecycle:
+**12 modules, 4 layers**
 
- - PassportRegistry (passport.h): Cryptographic identity issuance and
-    verification for AI agents, with granular capability constraints enforced
-    via a four-bit Capabilities bitmap (classifier_authority,
-    classifier_sensitivity, bft_consensus, entropy_flush).
+**Aegis Protocol** (aegis-protocol) is a high-performance C++ security layer designed to establish identity, trust, and accountability in decentralized AI agent ecosystems. By combining cryptographic "Semantic Passports" with a zero-trust communication protocol, aegis-protocol ensures autonomous models interact within strictly defined safety bounds and leave a tamper-evident audit trail. It implemented as multiple composable C++ modules (Rev 1.2), addressing the complete agent security lifecycle:
 
-  - KeyStore / Key Rotation (key_rotation.h): Signing key lifecycle management
-    with ACTIVE-to-ROTATING-to-RETIRED-to-PURGED state transitions and overlap
-    windows for zero-downtime rotation.
+  Identity Layer:
+    - PassportRegistry
+    - KeyRotation
+    - RevocationList
+    - MultiPartyIssuer
 
-  - RevocationList (revocation.h): Full-model and version-scoped revocation
-    with cryptographically signed revocation tokens.
+  Communication Layer:
+    - HandshakeValidator
+    - TransportIdentity
+    - NonceCache
 
-  - MultiPartyIssuer (multi_party_issuance.h): N-of-M threshold quorum for
-    passport issuance, with rejection and TTL-based expiry.
+  Intelligence Layer:
+    - SemanticClassifier
+    - PolicyEngine
+    - BFTConsensusEngine
 
-  - HandshakeValidator (handshake.h, Rev 1.2): Three-message authenticated key
-    establishment with ephemeral Diffie-Hellman, forward secrecy, partitioned
-    nonce caches (SEC-002), and transport binding enforcement.
+  Operational Layer:
+    - Session state machine
+    - ColdAuditVault
+    - TransparencyLog
+    - IncidentManager
 
-  - SemanticClassifier (classifier.h): Pluggable payload scoring producing
-    authority (-1.0 to +1.0) and sensitivity (0.0 to 1.0) dimensions with
-    confidence values.
-
-  - PolicyEngine (policy.h): Rule-based policy evaluation with
-    CompatibilityManifest, TrustCriteria confidence gates, ScopeCriteria
-    ranges, and ALLOW/FLAG/DENY actions.
-
-  - Session (session.h): State machine
-    (INIT-ACTIVE-SUSPECT-QUARANTINE-FLUSHING-RESYNC-CLOSED) with warp score
-    accumulation, entropy flush callback, and re-activation.
-
-  - BFTConsensusEngine (consensus.h): Geometric median computation with outlier
-    detection and f = floor((n-1)/3) Byzantine fault tolerance.
-
-  - ColdAuditVault (vault.h): Append-only, SHA-256 hash-chained audit vault.
-
-  - TransparencyLog (transparency_log.h): Hash-chained registry event log with
-    per-model history.
-
-  - Incident Management: Structured incident ID generation with embedded epoch
-    and 128-bit hash suffix.
+All time-dependent authorization decisions are bound to a trusted, injected
+IClock abstraction (resolving SEC-003), preventing attackers from manipulating
+authorization windows via timestamp injection. Caller-supplied timestamps are
+accepted only for audit log metadata.
 
 ### Core Capabilities
 
