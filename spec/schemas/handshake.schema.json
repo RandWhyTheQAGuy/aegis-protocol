@@ -1,13 +1,84 @@
-{
-  "schema_version":        string,   // Protocol version (e.g., "uml001-v1")
-  "initiator_nonce":       string,   // 32-byte hex entropy
-  "initiator_passport":    object,   // The full Semantic Passport object
-  "initiator_ephemeral_pub": string, // Ephemeral X25519 public key (hex)
-  "transport_binding":     string    // ID binding (e.g., "NONE" or IP:Port)
+SemanticPassport: {
+  "model_id":               string,   // Agent identifier (e.g., "agent-alpha")
+  "version":                string,   // Semver string (e.g., "1.0.0")
+  "signing_key_id":         uint32,   // Numeric ID of the registry key that signed this passport
+  "signing_key_material":   string,   // Hex-encoded public key material (used to verify ephemeral_key_sig)
+  "policy_hash":            string,   // SHA-256 hex of the policy document (64 chars)
+  "capabilities": {
+    "classifier_authority":   bool,   // May act as an authoritative classifier
+    "classifier_sensitivity": bool,   // May perform read-only sensitivity classification
+    "bft_consensus":          bool,   // Participates in BFT consensus rounds
+    "entropy_flush":          bool    // May trigger a system-wide entropy flush
+  },
+  "issued_at":              uint64,   // Unix epoch seconds — passport issuance time
+  "expires_at":             uint64,   // Unix epoch seconds — passport expiry time
+  "signature":              string,   // Registry HMAC-SHA256 over passport fields (64 hex chars)
+  "flags":                  uint32,   // Bitfield: 0x00 = normal | 0x01 = RECOVERED
+  "recovery_token":         string    // [optional] Incident ID — present only when flags & 0x01
+                                      // Format: "INCIDENT-<ref>-<epoch>-<32 hex chars>"
 },
-{
-  "responder_nonce":       string,   // 32-byte hex entropy
-  "responder_passport":    object,   // The full Semantic Passport object
-  "responder_ephemeral_pub": string, // Ephemeral X25519 public key (hex)
-  "signature":             string    // HMAC over nonces + keys
+
+TransportIdentity: {
+  "type":                   string,   // "TLS_CERT_FINGERPRINT" | "TCP_ADDRESS" | "NONE"
+  "value":                  string    // TLS: SHA-256 hex of DER certificate (64 chars)
+                                      // TCP: "<ip>:<port>"
+                                      // NONE: ""
+},
+
+HelloMessage: {
+  "schema_version":         string,   // Protocol schema (e.g., "uml001-payload-v1")
+  "initiator_nonce":        string,   // CSPRNG nonce: 32 bytes as 64 hex chars
+                                      // Must not have been seen before (replay protection)
+  "initiator_passport":     object,   // SemanticPassport — verified by responder on receipt
+  "initiator_ephemeral_pub": string,  // X25519 ephemeral public key: 32 bytes, 64 hex chars
+  "initiator_ephemeral_sig": string,  // HMAC-SHA256(signing_key_material,
+                                      //   model_id + ":" + initiator_ephemeral_pub)
+                                      // Binds the ephemeral key to the passport identity
+  "transport_binding":      object    // TransportIdentity — used in session ID derivation
+},
+
+HelloAckMessage: {
+  "schema_version":         string,   // Echoed schema — must equal HelloMessage.schema_version
+  "responder_nonce":        string,   // CSPRNG nonce: 32 bytes as 64 hex chars
+  "responder_passport":     object,   // SemanticPassport — verified by initiator on receipt
+  "responder_ephemeral_pub": string,  // X25519 ephemeral public key: 32 bytes, 64 hex chars
+  "responder_ephemeral_sig": string,  // HMAC-SHA256(signing_key_material,
+                                      //   model_id + ":" + responder_ephemeral_pub)
+  "session_id":             string,   // SHA-256 hex of session ID material (64 chars)
+                                      // Preimage: "INIT_NONCE:<n1>|RESP_NONCE:<n2>
+                                      //            |INIT_TRANS:<t1>|RESP_TRANS:<t2>"
+  "transport_binding":      object,   // TransportIdentity for the responder
+  "signature":              string    // HMAC-SHA256(session_key, session_id)
+                                      // Proves responder derived the correct session key
+},
+
+HelloConfirmMessage: {
+  "session_id":             string,   // Must match HelloAckMessage.session_id exactly
+  "signature":              string    // HMAC-SHA256(session_key, session_id)
+                                      // Responder verifies this matches its own derivation
+},
+
+SessionContext: {
+  "session_id":             string,   // SHA-256 hex, 64 chars — stable identifier for this session
+  "session_key_hex":        string,   // HKDF-SHA256 output: 32 bytes, 64 hex chars
+                                      // SECRET — never log or transmit
+  "initiator_model_id":     string,   // model_id from the initiator's passport
+  "responder_model_id":     string,   // model_id from the responder's passport
+  "forward_secrecy":        bool      // true when both ephemeral private keys were destroyed
+                                      // after HKDF derivation
+},
+
+RejectReason: {
+  "REJECT_REPLAY_DETECTED":            // initiator or responder nonce seen before
+  "REJECT_TRANSPORT_MISMATCH":         // weak transport presented to a require_strong validator
+  "REJECT_RECOVERED_PASSPORT":         // recovered passport presented to a reject_recovered validator
+  "REJECT_INVALID_PASSPORT:EXPIRED":   // passport verify() returned EXPIRED
+  "REJECT_INVALID_PASSPORT:REVOKED":   // passport verify() returned REVOKED
+  "REJECT_INVALID_PASSPORT:UNKNOWN":   // passport verify() returned any other non-OK status
+  "REJECT_SCHEMA_MISMATCH":            // proposed_schema != local_schema
+  "REJECT_EPHEMERAL_KEY_SIG_INVALID":  // ephemeral_key_sig verification failed
+  "REJECT_SID_MISMATCH":              // recomputed session_id != ack.session_id
+  "REJECT_ACK_ALREADY_PROCESSED":     // process_ack() called after ephemeral key destroyed
+  "REJECT_SESSION_ID_MISMATCH":       // confirm.session_id != pending session_id
+  "REJECT_CONFIRM_SIGNATURE_INVALID"  // confirm.signature does not match expected HMAC
 }
