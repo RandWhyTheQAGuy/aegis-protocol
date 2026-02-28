@@ -168,7 +168,6 @@ int main() {
     // 32-byte key material required by KeyStore
     const std::string ROOT_KEY    = "registry-root-key-32byte-padding";
 
-    // =========================================================================
     // 1. PASSPORT REGISTRY
     // =========================================================================
     section("1. PassportRegistry v0.2 — issue, verify (VerifyResult)");

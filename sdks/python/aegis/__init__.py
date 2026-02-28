@@ -40,8 +40,6 @@ Quick start::
                  score.payload_hash, decision.to_dict())
 """
 
-from ._version import __version__
-
 from .passport import (
     SemanticPassport,
     PassportRegistry,
