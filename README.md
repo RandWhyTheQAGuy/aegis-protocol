@@ -1,4 +1,4 @@
-**Aegis Protocol** a complete, composable security protocol designed from the ground up for autonomous AI agent systems, that provides:
+**Aegis Protocol** is a complete, composable security protocol designed from the ground up for autonomous AI agent systems. It solves for the following items:
 
 1. Cryptographically verifiable AI agent identity with granular capability constraints.
 
