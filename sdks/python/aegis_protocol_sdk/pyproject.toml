@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "aegis_protocol"
+version = "1.4.0"
+description = "Aegis Protocol multi-agent semantic trust framework — Python SDK"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+keywords = ["ai", "security", "multi-agent", "trust", "handshake", "bft"]
+dependencies = [
+    "cryptography>=41.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["aegis_protocol*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
