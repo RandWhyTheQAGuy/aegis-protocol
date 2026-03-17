@@ -76,7 +76,7 @@ import uuid
 from copy import deepcopy
 from typing import Any, Callable, Dict, List, Optional, Tuple, TypeVar
 
-from aegis_adapter import (
+from python.aegis_protocol.adapters.aegis_adapter import (
     AegisAdapter,
     AegisFrameworkBridge,
     PolicyDecision,

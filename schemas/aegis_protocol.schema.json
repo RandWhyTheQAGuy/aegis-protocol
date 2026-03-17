@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "UML-001 Aegis Protocol Configuration",
+  "type": "object",
+
+  "properties": {
+    "vault": {
+      "type": "object",
+      "properties": {
+        "vault_path": { "type": "string" },
+        "archive_dir": { "type": "string" },
+        "rotate_after_bytes": { "type": "integer", "minimum": 0 },
+        "rotate_after_entries": { "type": "integer", "minimum": 0 },
+        "compress_on_archive": { "type": "boolean" }
+      },
+      "required": ["vault_path", "archive_dir"]
+    },
+
+    "clock": {
+      "type": "object",
+      "properties": {
+        "daemon_pubkey_hex": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" },
+        "socket_path": { "type": "string" },
+        "max_skew_s": { "type": "integer", "minimum": 0 },
+        "cache_ttl_ms": { "type": "integer", "minimum": 0 },
+        "ipc_hmac_key_hex": { "type": "string", "pattern": "^[0-9a-fA-F]{64}$" }
+      },
+      "required": ["daemon_pubkey_hex", "socket_path"]
+    },
+
+    "session": {
+      "type": "object",
+      "properties": {
+        "warp_weight_allow": { "type": "number" },
+        "warp_weight_flag": { "type": "number" },
+        "warp_weight_deny": { "type": "number" },
+        "warp_suspect_thresh": { "type": "number" },
+        "warp_quarantine_thresh": { "type": "number" }
+      },
+      "required": [
+        "warp_weight_allow",
+        "warp_weight_flag",
+        "warp_weight_deny",
+        "warp_suspect_thresh",
+        "warp_quarantine_thresh"
+      ]
+    },
+
+    "policy": {
+      "type": "object",
+      "properties": {
+        "expected_registry_version": { "type": "string" },
+        "policy_hash": { "type": "string" },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "rule_id": { "type": "string" },
+              "trust": {
+                "type": "object",
+                "properties": {
+                  "min_authority_confidence": { "type": "number" },
+                  "min_sensitivity_confidence": { "type": "number" }
+                },
+                "required": [
+                  "min_authority_confidence",
+                  "min_sensitivity_confidence"
+                ]
+              },
+              "scope": {
+                "type": "object",
+                "properties": {
+                  "authority_min": { "type": "number" },
+                  "sensitivity_max": { "type": "number" }
+                },
+                "required": ["authority_min", "sensitivity_max"]
+              },
+              "action": {
+                "type": "string",
+                "enum": ["ALLOW", "FLAG", "DENY", "DENY_CONF"]
+              }
+            },
+            "required": ["rule_id", "trust", "scope", "action"]
+          }
+        }
+      },
+      "required": ["expected_registry_version", "policy_hash"]
+    },
+
+    "multiparty": {
+      "type": "object",
+      "properties": {
+        "quorum": { "type": "integer", "minimum": 1 }
+      },
+      "required": ["quorum"]
+    },
+
+    "revocation": {
+      "type": "object",
+      "properties": {
+        "revoked_models": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "model_id": { "type": "string" },
+              "version": { "type": "string" }
+            },
+            "required": ["model_id"]
+          }
+        }
+      }
+    },
+
+    "key_rotation": {
+      "type": "object",
+      "properties": {
+        "root_key": { "type": "string" }
+      },
+      "required": ["root_key"]
+    }
+  }
+}

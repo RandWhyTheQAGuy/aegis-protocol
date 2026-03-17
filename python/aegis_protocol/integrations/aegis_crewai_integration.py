@@ -58,7 +58,7 @@ import uuid
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-from aegis_adapter import (
+from python.aegis_protocol.adapters.aegis_adapter import (
     AegisAdapter,
     AegisFrameworkBridge,
     PolicyDecision,

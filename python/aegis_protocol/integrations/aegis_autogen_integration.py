@@ -61,7 +61,7 @@ import time
 import uuid
 from typing import Any, AsyncGenerator, Dict, List, Optional, Sequence, Tuple
 
-from aegis_adapter import (
+from python.aegis_protocol.adapters.aegis_adapter import (
     AegisAdapter,
     AegisFrameworkBridge,
     PolicyDecision,

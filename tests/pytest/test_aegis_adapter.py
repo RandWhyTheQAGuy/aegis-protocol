@@ -1,7 +1,7 @@
 import time
 import pytest
 
-from aegis_adapter import (
+from python.aegis_protocol.adapters.aegis_adapter import (
     SemanticPassport,
     PolicyEngine,
     SemanticScore,
