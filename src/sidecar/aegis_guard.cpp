@@ -1,22 +1,21 @@
 #include "aegis/sidecar/aegis_guard.h"
 #include <iostream>
 
-namespace aegis::sidecar {
+namespace aegis {
 
-AegisGuard::AegisGuard(const std::string& agent_id,
-                       std::shared_ptr<uml001::ColdVault> vault)
-    : agent_id_(agent_id), vault_(vault) {}
-
-bool AegisGuard::validate_request(const std::string& request_payload,
-                                 const uml001::Passport& passport) {
-    // Ensure the passport belongs to this agent
-    if (passport.model_id != agent_id_) {
-        return false;
+AegisGuard::AegisGuard(Config config, std::shared_ptr<uml001::IVault> vault)
+    : config_(config), vault_(vault) {
+    if (config_.agent_id.empty()) {
+        throw std::runtime_error("AegisGuard Error: agent_id must be specified in config.");
     }
-
-    // Logic for runtime sidecar validation goes here
-    std::cout << "[AegisGuard] Validating request for agent: " << agent_id_ << std::endl;
-    return true;
 }
 
-} // namespace aegis::sidecar
+bool AegisGuard::validate_action(const std::string& action_type, const std::string& resource) {
+    // Logic to check if the AI agent is allowed to perform this action
+    std::cout << "[AegisGuard] Validating action: " << action_type 
+              << " on resource: " << resource << " for Agent: " << config_.agent_id << std::endl;
+    
+    return true; // Simple pass-through for now
+}
+
+} // namespace aegis
