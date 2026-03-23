@@ -1,0 +1,87 @@
+.
+├── CMakeCache.txt
+├── CMakeFiles
+│   ├── 4.3.0
+│   │   ├── CMakeCXXCompiler.cmake
+│   │   ├── CMakeDetermineCompilerABI_CXX.bin
+│   │   ├── CMakeSystem.cmake
+│   │   └── CompilerIdCXX
+│   ├── CMakeConfigureLog.yaml
+│   ├── CMakeDirectoryInformation.cmake
+│   ├── CMakeRuleHashes.txt
+│   ├── CMakeScratch
+│   ├── InstallScripts.json
+│   ├── Makefile.cmake
+│   ├── Makefile2
+│   ├── Progress
+│   │   ├── 17
+│   │   ├── 18
+│   │   ├── 19
+│   │   ├── 20
+│   │   ├── 8
+│   │   └── count.txt
+│   ├── TargetDirectories.txt
+│   ├── aegis_core.dir
+│   │   ├── DependInfo.cmake
+│   │   ├── build.make
+│   │   ├── cmake_clean.cmake
+│   │   ├── cmake_clean_target.cmake
+│   │   ├── compiler_depend.internal
+│   │   ├── compiler_depend.make
+│   │   ├── compiler_depend.ts
+│   │   ├── depend.make
+│   │   ├── flags.make
+│   │   ├── link.txt
+│   │   ├── progress.make
+│   │   └── src
+│   ├── aegis_daemon.dir
+│   │   ├── DependInfo.cmake
+│   │   ├── build.make
+│   │   ├── cmake_clean.cmake
+│   │   ├── compiler_depend.make
+│   │   ├── compiler_depend.ts
+│   │   ├── depend.make
+│   │   ├── flags.make
+│   │   ├── link.txt
+│   │   ├── progress.make
+│   │   └── src
+│   ├── aegis_e2e.dir
+│   │   ├── DependInfo.cmake
+│   │   ├── build.make
+│   │   ├── cmake_clean.cmake
+│   │   ├── compiler_depend.make
+│   │   ├── compiler_depend.ts
+│   │   ├── depend.make
+│   │   ├── flags.make
+│   │   ├── link.txt
+│   │   ├── progress.make
+│   │   └── src
+│   ├── clock_proto.dir
+│   │   ├── DependInfo.cmake
+│   │   ├── build.make
+│   │   ├── clock_service.grpc.pb.cc.o
+│   │   ├── clock_service.grpc.pb.cc.o.d
+│   │   ├── clock_service.pb.cc.o
+│   │   ├── clock_service.pb.cc.o.d
+│   │   ├── cmake_clean.cmake
+│   │   ├── cmake_clean_target.cmake
+│   │   ├── compiler_depend.internal
+│   │   ├── compiler_depend.make
+│   │   ├── compiler_depend.ts
+│   │   ├── depend.make
+│   │   ├── flags.make
+│   │   ├── link.txt
+│   │   └── progress.make
+│   ├── cmake.check_cache
+│   ├── pkgRedirects
+│   └── progress.marks
+├── Makefile
+├── clock_service.grpc.pb.cc
+├── clock_service.grpc.pb.h
+├── clock_service.pb.cc
+├── clock_service.pb.h
+├── cmake_install.cmake
+├── libclock_proto.a
+└── project_structure.txt
+
+14 directories, 71 files

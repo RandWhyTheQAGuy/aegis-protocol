@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RevocationRecord",
+  "type": "object",
+  "required": ["passport_id", "revoked_at", "reason", "evidence_hash", "revoked_by"],
+  "properties": {
+    "passport_id": { "type": "string", "description": "Hash of the passport being revoked" },
+    "revoked_at": { "type": "integer" },
+    "reason": { 
+      "type": "string", 
+      "enum": ["COMPROMISED_KEY", "USER_REQUEST", "POLICY_VIOLATION", "MULTI_PARTY_DECISION", "OTHER"] 
+    },
+    "evidence_hash": { "type": "string", "description": "Hash of the bundle containing proof for revocation" },
+    "revoked_by": { "type": "string" },
+    "signature_hex": { "type": "string" }
+  }
+}

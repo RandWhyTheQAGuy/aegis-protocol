@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BFT Clock Canonical Payload",
+  "type": "string",
+  "description": "Pipe-delimited canonical payload string used for signature verification",
+  "examples": [
+    "1700000000|1699999990|1700000010|2|abcdef1234|<nonce>|1700000001"
+  ],
+  "pattern": "^[0-9]+\\|[0-9]+\\|[0-9]+\\|[0-9]+\\|[a-f0-9]+\\|[a-f0-9]{64}\\|[0-9]+$"
+}

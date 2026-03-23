@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BFT Clock IPC Request",
+  "type": "object",
+  "required": ["cmd", "nonce", "client_id", "req_at"],
+  "additionalProperties": false,
+  "properties": {
+    "cmd": {
+      "type": "string",
+      "const": "time_request"
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "32-byte nonce encoded as 64 hex chars"
+    },
+    "client_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "req_at": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Unix timestamp (seconds), informational only"
+    },
+    "mac": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Optional HMAC-SHA256 tag (hex)"
+    }
+  }
+}

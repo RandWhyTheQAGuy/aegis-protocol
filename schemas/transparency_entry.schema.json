@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TransparencyEntry",
+  "description": "A single auditable event in the Aegis Merkle Log",
+  "type": "object",
+  "required": ["entry_id", "timestamp", "type", "event_type", "payload_hash", "signer_id"],
+  "properties": {
+    "entry_id": { "type": "string", "description": "SHA-256 hash of the entry content" },
+    "timestamp": { "type": "integer", "description": "Unix timestamp in seconds" },
+    "drift_floor": { "type": "integer", "default": 0 },
+    "drift_ceiling": { "type": "integer", "default": 0 },
+    "type": {
+      "type": "integer",
+      "enum": [0, 1, 2, 3, 4, 5, 6, 7, 8],
+      "description": "0:GENERIC, 1:ISSUED, 2:REJECTED, 3:VERIFIED, 5:REVOKED, 8:FINALIZED"
+    },
+    "event_type": { "type": "string" },
+    "payload_hash": { "type": "string", "description": "Hash of the subject (Passport or Revocation)" },
+    "signature": { "type": "string" },
+    "signer_id": { "type": "string" }
+  }
+}

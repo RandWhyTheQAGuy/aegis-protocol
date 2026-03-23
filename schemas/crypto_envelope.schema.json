@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Crypto Envelope",
+  "type": "object",
+  "properties": {
+    "ciphertext": { "type": "string", "description": "Base64 encoded encrypted data" },
+    "nonce": { "type": "string", "description": "Base64 encoded IV/Nonce" },
+    "tag": { "type": "string", "description": "Base64 encoded Auth Tag (empty for non-AEAD)" },
+    "alg": { "type": "string", "description": "Algorithm used for this envelope" }
+  },
+  "required": ["ciphertext", "nonce"]
+}

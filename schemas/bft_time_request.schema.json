@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BFT Clock Time Request",
+  "type": "object",
+  "required": ["cmd", "nonce", "client_id", "req_at"],
+  "properties": {
+    "cmd": {
+      "type": "string",
+      "enum": ["time_request"]
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "32-byte random nonce encoded as hex"
+    },
+    "client_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "req_at": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Client wall-clock timestamp (non-authoritative)"
+    },
+    "mac": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Optional HMAC-SHA256 hex digest"
+    }
+  },
+  "additionalProperties": false
+}

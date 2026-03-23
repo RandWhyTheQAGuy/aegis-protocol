@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BFT Clock IPC Response (HMAC)",
+  "type": "object",
+  "required": [
+    "agreed_time",
+    "lower_bound",
+    "upper_bound",
+    "uncertainty_s",
+    "evidence_hash",
+    "nonce",
+    "issued_at",
+    "sig",
+    "mac"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "agreed_time": { "type": "integer", "minimum": 1 },
+    "lower_bound": { "type": "integer", "minimum": 0 },
+    "upper_bound": { "type": "integer", "minimum": 0 },
+    "uncertainty_s": { "type": "integer", "minimum": 0 },
+    "evidence_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]+$"
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "issued_at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "sig": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{128}$"
+    },
+    "mac": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "HMAC-SHA256 over response body"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+.
+├── daemon
+│   └── aegis-clockd
+├── project_structure.txt
+├── sdk
+│   └── cpp
+└── src
+    ├── bft
+    ├── crypto
+    ├── ntp
+    └── security
+
+10 directories, 1 file

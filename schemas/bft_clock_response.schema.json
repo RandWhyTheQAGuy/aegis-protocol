@@ -1,0 +1,51 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BFT Clock Response",
+  "type": "object",
+  "required": [
+    "agreed_time",
+    "lower_bound",
+    "upper_bound",
+    "uncertainty_s",
+    "evidence_hash",
+    "nonce",
+    "issued_at",
+    "sig"
+  ],
+  "properties": {
+    "agreed_time": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "lower_bound": {
+      "type": "integer"
+    },
+    "upper_bound": {
+      "type": "integer"
+    },
+    "uncertainty_s": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "evidence_hash": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "issued_at": {
+      "type": "integer"
+    },
+    "sig": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{128}$"
+    },
+    "mac": {
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    }
+  },
+  "additionalProperties": false
+}

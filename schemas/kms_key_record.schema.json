@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "KMS Key Record",
+  "type": "object",
+  "properties": {
+    "key_id": { "type": "string", "description": "Unique identifier for the key" },
+    "purpose": { "type": "string", "description": "Description of use (e.g., 'session_enc', 'identity_sign')" },
+    "algorithm": { "type": "string", "enum": ["AES-256-GCM", "ChaCha20-Poly1305", "Ed25519"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "version": { "type": "integer", "minimum": 1 },
+    "is_hsm_backed": { "type": "boolean" }
+  },
+  "required": ["key_id", "algorithm"]
+}

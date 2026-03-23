@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Sidecar Time Response",
+  "type": "object",
+  "required": ["status", "data"],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": ["success"]
+    },
+    "data": {
+      "type": "object",
+      "required": [
+        "secure_time_unix",
+        "applied_drift_seconds",
+        "is_degraded"
+      ],
+      "properties": {
+        "secure_time_unix": {
+          "type": "integer"
+        },
+        "applied_drift_seconds": {
+          "type": "integer"
+        },
+        "is_degraded": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

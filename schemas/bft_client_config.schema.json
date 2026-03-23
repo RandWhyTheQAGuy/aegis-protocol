@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BFT Clock Client Config",
+  "type": "object",
+  "required": ["daemon_pubkey_hex"],
+  "properties": {
+    "socket_path": {
+      "type": "string"
+    },
+    "pipe_name": {
+      "type": "string"
+    },
+    "daemon_pubkey_hex": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "ipc_hmac_key_hex": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "client_id": {
+      "type": "string"
+    },
+    "cache_ttl_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "max_skew_s": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "fail_closed": {
+      "type": "boolean"
+    },
+    "backoff_initial_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "backoff_max_ms": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false
+}

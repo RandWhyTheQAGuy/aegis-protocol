@@ -1,0 +1,2 @@
+/usr/bin/ar qc libclock_proto.a CMakeFiles/clock_proto.dir/clock_service.pb.cc.o CMakeFiles/clock_proto.dir/clock_service.grpc.pb.cc.o
+/usr/bin/ranlib libclock_proto.a
