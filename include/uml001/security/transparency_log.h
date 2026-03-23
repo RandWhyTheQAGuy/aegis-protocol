@@ -1,8 +1,8 @@
 #pragma once
 
 #include "uml001/core/iclock.h"
-#include "uml001/core/remote_quorum_clock.h"
-#include "uml001/crypto_utils.h"
+#include "uml001/bft/remote_quorum_clock.h"
+#include "uml001/crypto/crypto_utils.h"
 
 #include <string>
 #include <vector>

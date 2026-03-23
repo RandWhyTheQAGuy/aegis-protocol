@@ -1,4 +1,4 @@
-#include "uml001/core/remote_quorum_clock.h"
+#include "uml001/bft/remote_quorum_clock.h"
 
 #include <algorithm>
 #include <chrono>

@@ -1,7 +1,7 @@
 #include <thread>
 #include <atomic>
 #include <chrono>
-#include "uml001/core/remote_quorum_clock.h"
+#include "uml001/bft/remote_quorum_clock.h"
 
 namespace uml001 {
 

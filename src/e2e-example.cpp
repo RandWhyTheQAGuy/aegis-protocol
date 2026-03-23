@@ -35,7 +35,7 @@
 #include "uml001/simple_file_vault_backend.h"
 #include "uml001/simple_hash_provider.h"
 #include "uml001/strong_clock.h"     // OsStrongClock
-#include "uml001/crypto_utils.h"     // sha256_hex, hmac_sha256_hex,
+#include "uml001/crypto/crypto_utils.h"     // sha256_hex, hmac_sha256_hex,
                                      // generate_random_bytes_hex, ed25519_keygen
 #include "session.h"                 // Session, SessionConfig, SessionState,
                                      // FlushCallback

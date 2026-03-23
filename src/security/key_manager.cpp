@@ -1,5 +1,5 @@
 #include "uml001/security/key_manager.h"
-#include "uml001/crypto_utils.h"
+#include "uml001/crypto/crypto_utils.h"
 #include <stdexcept>
 #include <algorithm>
 

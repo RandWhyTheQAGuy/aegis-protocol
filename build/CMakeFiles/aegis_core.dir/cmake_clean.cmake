@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/aegis_core.dir/src/classifier.cpp.o.d"
   "CMakeFiles/aegis_core.dir/src/core/passport.cpp.o"
   "CMakeFiles/aegis_core.dir/src/core/passport.cpp.o.d"
+  "CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o"
+  "CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o.d"
   "CMakeFiles/aegis_core.dir/src/core/transparency_log.cpp.o"
   "CMakeFiles/aegis_core.dir/src/core/transparency_log.cpp.o.d"
   "CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.o"

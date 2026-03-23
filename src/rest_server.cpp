@@ -21,7 +21,7 @@
 #include "uml001/simple_file_vault_backend.h"
 #include "uml001/simple_hash_provider.h"
 #include "uml001/strong_clock.h"
-#include "uml001/crypto_utils.h"
+#include "uml001/crypto/crypto_utils.h"
 #include "uml001/rest_handlers.h"
 #include "uml001/rest_auth_config.h"
 

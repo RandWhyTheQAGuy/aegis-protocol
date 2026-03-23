@@ -50,7 +50,7 @@
 
 #include "uml001/ntp_observation_fetcher.h"
 #include "uml001/bft_quorum_clock.h"
-#include "uml001/crypto_utils.h"
+#include "uml001/crypto/crypto_utils.h"
 #include "uml001/vault.h"
 #include "uml001/strong_clock.h"
 #include "uml001/vault_logger.h"

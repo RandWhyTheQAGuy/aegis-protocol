@@ -11,6 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/rspickler/Documents/GitHub/aegis-protocol/src/bft_clock_client.cpp" "CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.o" "gcc" "CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.o.d"
   "/Users/rspickler/Documents/GitHub/aegis-protocol/src/classifier.cpp" "CMakeFiles/aegis_core.dir/src/classifier.cpp.o" "gcc" "CMakeFiles/aegis_core.dir/src/classifier.cpp.o.d"
   "/Users/rspickler/Documents/GitHub/aegis-protocol/src/core/passport.cpp" "CMakeFiles/aegis_core.dir/src/core/passport.cpp.o" "gcc" "CMakeFiles/aegis_core.dir/src/core/passport.cpp.o.d"
+  "/Users/rspickler/Documents/GitHub/aegis-protocol/src/core/remote_quorum_clock.cpp" "CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o" "gcc" "CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o.d"
   "/Users/rspickler/Documents/GitHub/aegis-protocol/src/core/transparency_log.cpp" "CMakeFiles/aegis_core.dir/src/core/transparency_log.cpp.o" "gcc" "CMakeFiles/aegis_core.dir/src/core/transparency_log.cpp.o.d"
   "/Users/rspickler/Documents/GitHub/aegis-protocol/src/crypto/crypto_facade.cpp" "CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.o" "gcc" "CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.o.d"
   "/Users/rspickler/Documents/GitHub/aegis-protocol/src/crypto/crypto_utils.cpp" "CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.o" "gcc" "CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.o.d"

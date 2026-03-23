@@ -23,7 +23,7 @@
 #include <unordered_set>
 
 #include "uml001/crypto_mode.h"
-#include "uml001/crypto_utils.h"
+#include "uml001/crypto/crypto_utils.h"
 #include "uml001/vault.h"
 #include "uml001/ntp_observation_fetcher.h"
 

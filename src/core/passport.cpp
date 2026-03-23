@@ -1,19 +1,21 @@
 #include "uml001/core/passport.h"
+#include "uml001/core/clock.h" // Ensure the full definition of IClock is visible
 #include <iostream>
+#include <stdexcept>
 
 namespace uml001 {
 
-// This ensures every Passport issued is timestamped by our BFT Quorum
 void Passport::issue(std::shared_ptr<IClock> clock) {
     if (!clock) {
         throw std::runtime_error("Cannot issue passport without a trusted clock.");
     }
     
-    this->issuance_timestamp = clock->now_unix();
+    // Updated to match the header field 'issued_at'
+    this->issued_at = clock->now_unix();
     this->status = PassportStatus::ACTIVE;
     
-    std::cout << "[Passport] Issued new passport at BFT Time: " 
-              << this->issuance_timestamp << std::endl;
+    std::cout << "[Passport] Issued new passport for model " << model_id 
+              << " at BFT Time: " << this->issued_at << std::endl;
 }
 
 } // namespace uml001

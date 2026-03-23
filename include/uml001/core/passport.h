@@ -1,13 +1,22 @@
 #pragma once
 
-#include "uml001/crypto_utils.h"
+#include "uml001/crypto/crypto_utils.h"
 #include <string>
 #include <vector>
 #include <optional>
 #include <cstdint>
-#include <map>
+#include <memory> // Added for std::shared_ptr
 
 namespace uml001 {
+
+// Forward declaration of the clock interface
+class IClock;
+
+enum class PassportStatus {
+    INACTIVE,
+    ACTIVE,
+    REVOKED
+};
 
 struct Capabilities {
     bool classifier_authority = false;
@@ -28,11 +37,18 @@ struct Passport {
     std::string model_version;
     Capabilities capabilities;
     std::string policy_hash;
-    uint64_t issued_at = 0;
+    
+    // Updated to match the logic in passport.cpp
+    uint64_t issued_at = 0; 
     uint64_t expires_at = 0;
+    PassportStatus status = PassportStatus::INACTIVE; 
+
     uint32_t signing_key_id = 0;
     std::string signature;
     std::optional<std::string> recovery_token;
+
+    // The function the compiler was looking for
+    void issue(std::shared_ptr<IClock> clock);
 
     std::string content_hash() const {
         std::string raw = model_id + "|" + model_version + "|" + 
@@ -46,6 +62,7 @@ struct Passport {
 
 class PassportRegistry {
 public:
+    // Using references here as per your original design
     PassportRegistry(class TransparencyLog& log, class RevocationList& list, class IClock& clock)
         : log_(log), revocation_list_(list), clock_(clock) {}
 
