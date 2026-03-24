@@ -28,9 +28,6 @@
 
 namespace quorumtime {
 
-// ===============================
-// Service Definition
-// ===============================
 class ClockService final {
  public:
   static constexpr char const* service_full_name() {

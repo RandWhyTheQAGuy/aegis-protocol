@@ -221,11 +221,60 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED TimeResponse final : public ::googl
 
   // accessors -------------------------------------------------------
   enum : int {
+    kNodeIdFieldNumber = 5,
+    kSignatureFieldNumber = 6,
+    kRequestIdFieldNumber = 7,
     kUnixTimeMsFieldNumber = 1,
     kConfidenceIntervalMsFieldNumber = 2,
     kProjectedDriftPpmFieldNumber = 4,
     kActiveNodesFieldNumber = 3,
+    kProtocolVersionFieldNumber = 8,
   };
+  // string node_id = 5;
+  void clear_node_id() ;
+  [[nodiscard]] const ::std::string& node_id() const;
+  template <typename Arg_ = const ::std::string&, typename... Args_>
+  void set_node_id(Arg_&& arg, Args_... args);
+  ::std::string* PROTOBUF_NONNULL mutable_node_id();
+  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_node_id();
+  void set_allocated_node_id(::std::string* PROTOBUF_NULLABLE value);
+
+  private:
+  const ::std::string& _internal_node_id() const;
+  PROTOBUF_ALWAYS_INLINE void _internal_set_node_id(const ::std::string& value);
+  ::std::string* PROTOBUF_NONNULL _internal_mutable_node_id();
+
+  public:
+  // bytes signature = 6;
+  void clear_signature() ;
+  [[nodiscard]] const ::std::string& signature() const;
+  template <typename Arg_ = const ::std::string&, typename... Args_>
+  void set_signature(Arg_&& arg, Args_... args);
+  ::std::string* PROTOBUF_NONNULL mutable_signature();
+  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_signature();
+  void set_allocated_signature(::std::string* PROTOBUF_NULLABLE value);
+
+  private:
+  const ::std::string& _internal_signature() const;
+  PROTOBUF_ALWAYS_INLINE void _internal_set_signature(const ::std::string& value);
+  ::std::string* PROTOBUF_NONNULL _internal_mutable_signature();
+
+  public:
+  // string request_id = 7;
+  void clear_request_id() ;
+  [[nodiscard]] const ::std::string& request_id() const;
+  template <typename Arg_ = const ::std::string&, typename... Args_>
+  void set_request_id(Arg_&& arg, Args_... args);
+  ::std::string* PROTOBUF_NONNULL mutable_request_id();
+  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_request_id();
+  void set_allocated_request_id(::std::string* PROTOBUF_NULLABLE value);
+
+  private:
+  const ::std::string& _internal_request_id() const;
+  PROTOBUF_ALWAYS_INLINE void _internal_set_request_id(const ::std::string& value);
+  ::std::string* PROTOBUF_NONNULL _internal_mutable_request_id();
+
+  public:
   // int64 unix_time_ms = 1;
   void clear_unix_time_ms() ;
   [[nodiscard]] ::int64_t unix_time_ms() const;
@@ -266,12 +315,22 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED TimeResponse final : public ::googl
   void _internal_set_active_nodes(::int32_t value);
 
   public:
+  // uint32 protocol_version = 8;
+  void clear_protocol_version() ;
+  [[nodiscard]] ::uint32_t protocol_version() const;
+  void set_protocol_version(::uint32_t value);
+
+  private:
+  ::uint32_t _internal_protocol_version() const;
+  void _internal_set_protocol_version(::uint32_t value);
+
+  public:
   // @@protoc_insertion_point(class_scope:quorumtime.TimeResponse)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<2, 4,
-                                   0, 0,
+  static const ::google::protobuf::internal::TcParseTable<3, 8,
+                                   0, 57,
                                    2>
       _table_;
 
@@ -294,10 +353,14 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED TimeResponse final : public ::googl
         const TimeResponse& from_msg);
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
+    ::google::protobuf::internal::ArenaStringPtr node_id_;
+    ::google::protobuf::internal::ArenaStringPtr signature_;
+    ::google::protobuf::internal::ArenaStringPtr request_id_;
     ::int64_t unix_time_ms_;
     double confidence_interval_ms_;
     double projected_drift_ppm_;
     ::int32_t active_nodes_;
+    ::uint32_t protocol_version_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -454,6 +517,8 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED TimeRequest final : public ::google
   // accessors -------------------------------------------------------
   enum : int {
     kClientIdFieldNumber = 1,
+    kRequestIdFieldNumber = 2,
+    kClientUnixTimeMsFieldNumber = 3,
   };
   // string client_id = 1;
   void clear_client_id() ;
@@ -470,12 +535,37 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED TimeRequest final : public ::google
   ::std::string* PROTOBUF_NONNULL _internal_mutable_client_id();
 
   public:
+  // string request_id = 2;
+  void clear_request_id() ;
+  [[nodiscard]] const ::std::string& request_id() const;
+  template <typename Arg_ = const ::std::string&, typename... Args_>
+  void set_request_id(Arg_&& arg, Args_... args);
+  ::std::string* PROTOBUF_NONNULL mutable_request_id();
+  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_request_id();
+  void set_allocated_request_id(::std::string* PROTOBUF_NULLABLE value);
+
+  private:
+  const ::std::string& _internal_request_id() const;
+  PROTOBUF_ALWAYS_INLINE void _internal_set_request_id(const ::std::string& value);
+  ::std::string* PROTOBUF_NONNULL _internal_mutable_request_id();
+
+  public:
+  // int64 client_unix_time_ms = 3;
+  void clear_client_unix_time_ms() ;
+  [[nodiscard]] ::int64_t client_unix_time_ms() const;
+  void set_client_unix_time_ms(::int64_t value);
+
+  private:
+  ::int64_t _internal_client_unix_time_ms() const;
+  void _internal_set_client_unix_time_ms(::int64_t value);
+
+  public:
   // @@protoc_insertion_point(class_scope:quorumtime.TimeRequest)
  private:
   class _Internal;
   friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<0, 1,
-                                   0, 40,
+  static const ::google::protobuf::internal::TcParseTable<2, 3,
+                                   0, 50,
                                    2>
       _table_;
 
@@ -499,6 +589,8 @@ class  PROTOBUF_FUTURE_ADD_EARLY_WARN_UNUSED TimeRequest final : public ::google
     ::google::protobuf::internal::HasBits<1> _has_bits_;
     ::google::protobuf::internal::CachedSize _cached_size_;
     ::google::protobuf::internal::ArenaStringPtr client_id_;
+    ::google::protobuf::internal::ArenaStringPtr request_id_;
+    ::int64_t client_unix_time_ms_;
     PROTOBUF_TSAN_DECLARE_MEMBER
   };
   union { Impl_ _impl_; };
@@ -588,6 +680,96 @@ inline void TimeRequest::set_allocated_client_id(::std::string* PROTOBUF_NULLABL
   // @@protoc_insertion_point(field_set_allocated:quorumtime.TimeRequest.client_id)
 }
 
+// string request_id = 2;
+inline void TimeRequest::clear_request_id() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.request_id_.ClearToEmpty();
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000002U);
+}
+inline const ::std::string& TimeRequest::request_id() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:quorumtime.TimeRequest.request_id)
+  return _internal_request_id();
+}
+template <typename Arg_, typename... Args_>
+PROTOBUF_ALWAYS_INLINE void TimeRequest::set_request_id(Arg_&& arg, Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  _impl_.request_id_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:quorumtime.TimeRequest.request_id)
+}
+inline ::std::string* PROTOBUF_NONNULL TimeRequest::mutable_request_id()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  ::std::string* _s = _internal_mutable_request_id();
+  // @@protoc_insertion_point(field_mutable:quorumtime.TimeRequest.request_id)
+  return _s;
+}
+inline const ::std::string& TimeRequest::_internal_request_id() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.request_id_.Get();
+}
+inline void TimeRequest::_internal_set_request_id(const ::std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.request_id_.Set(value, GetArena());
+}
+inline ::std::string* PROTOBUF_NONNULL TimeRequest::_internal_mutable_request_id() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.request_id_.Mutable( GetArena());
+}
+inline ::std::string* PROTOBUF_NULLABLE TimeRequest::release_request_id() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:quorumtime.TimeRequest.request_id)
+  if (!CheckHasBit(_impl_._has_bits_[0], 0x00000002U)) {
+    return nullptr;
+  }
+  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  auto* released = _impl_.request_id_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.request_id_.Set("", GetArena());
+  }
+  return released;
+}
+inline void TimeRequest::set_allocated_request_id(::std::string* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  }
+  _impl_.request_id_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.request_id_.IsDefault()) {
+    _impl_.request_id_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:quorumtime.TimeRequest.request_id)
+}
+
+// int64 client_unix_time_ms = 3;
+inline void TimeRequest::clear_client_unix_time_ms() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.client_unix_time_ms_ = ::int64_t{0};
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000004U);
+}
+inline ::int64_t TimeRequest::client_unix_time_ms() const {
+  // @@protoc_insertion_point(field_get:quorumtime.TimeRequest.client_unix_time_ms)
+  return _internal_client_unix_time_ms();
+}
+inline void TimeRequest::set_client_unix_time_ms(::int64_t value) {
+  _internal_set_client_unix_time_ms(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  // @@protoc_insertion_point(field_set:quorumtime.TimeRequest.client_unix_time_ms)
+}
+inline ::int64_t TimeRequest::_internal_client_unix_time_ms() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.client_unix_time_ms_;
+}
+inline void TimeRequest::_internal_set_client_unix_time_ms(::int64_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.client_unix_time_ms_ = value;
+}
+
 // -------------------------------------------------------------------
 
 // TimeResponse
@@ -597,7 +779,7 @@ inline void TimeResponse::clear_unix_time_ms() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.unix_time_ms_ = ::int64_t{0};
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000001U);
+                  0x00000008U);
 }
 inline ::int64_t TimeResponse::unix_time_ms() const {
   // @@protoc_insertion_point(field_get:quorumtime.TimeResponse.unix_time_ms)
@@ -605,7 +787,7 @@ inline ::int64_t TimeResponse::unix_time_ms() const {
 }
 inline void TimeResponse::set_unix_time_ms(::int64_t value) {
   _internal_set_unix_time_ms(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
   // @@protoc_insertion_point(field_set:quorumtime.TimeResponse.unix_time_ms)
 }
 inline ::int64_t TimeResponse::_internal_unix_time_ms() const {
@@ -622,7 +804,7 @@ inline void TimeResponse::clear_confidence_interval_ms() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.confidence_interval_ms_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000002U);
+                  0x00000010U);
 }
 inline double TimeResponse::confidence_interval_ms() const {
   // @@protoc_insertion_point(field_get:quorumtime.TimeResponse.confidence_interval_ms)
@@ -630,7 +812,7 @@ inline double TimeResponse::confidence_interval_ms() const {
 }
 inline void TimeResponse::set_confidence_interval_ms(double value) {
   _internal_set_confidence_interval_ms(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000010U);
   // @@protoc_insertion_point(field_set:quorumtime.TimeResponse.confidence_interval_ms)
 }
 inline double TimeResponse::_internal_confidence_interval_ms() const {
@@ -647,7 +829,7 @@ inline void TimeResponse::clear_active_nodes() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.active_nodes_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000008U);
+                  0x00000040U);
 }
 inline ::int32_t TimeResponse::active_nodes() const {
   // @@protoc_insertion_point(field_get:quorumtime.TimeResponse.active_nodes)
@@ -655,7 +837,7 @@ inline ::int32_t TimeResponse::active_nodes() const {
 }
 inline void TimeResponse::set_active_nodes(::int32_t value) {
   _internal_set_active_nodes(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000008U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000040U);
   // @@protoc_insertion_point(field_set:quorumtime.TimeResponse.active_nodes)
 }
 inline ::int32_t TimeResponse::_internal_active_nodes() const {
@@ -672,7 +854,7 @@ inline void TimeResponse::clear_projected_drift_ppm() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.projected_drift_ppm_ = 0;
   ClearHasBit(_impl_._has_bits_[0],
-                  0x00000004U);
+                  0x00000020U);
 }
 inline double TimeResponse::projected_drift_ppm() const {
   // @@protoc_insertion_point(field_get:quorumtime.TimeResponse.projected_drift_ppm)
@@ -680,7 +862,7 @@ inline double TimeResponse::projected_drift_ppm() const {
 }
 inline void TimeResponse::set_projected_drift_ppm(double value) {
   _internal_set_projected_drift_ppm(value);
-  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  SetHasBit(_impl_._has_bits_[0], 0x00000020U);
   // @@protoc_insertion_point(field_set:quorumtime.TimeResponse.projected_drift_ppm)
 }
 inline double TimeResponse::_internal_projected_drift_ppm() const {
@@ -690,6 +872,226 @@ inline double TimeResponse::_internal_projected_drift_ppm() const {
 inline void TimeResponse::_internal_set_projected_drift_ppm(double value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
   _impl_.projected_drift_ppm_ = value;
+}
+
+// string node_id = 5;
+inline void TimeResponse::clear_node_id() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.node_id_.ClearToEmpty();
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000001U);
+}
+inline const ::std::string& TimeResponse::node_id() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:quorumtime.TimeResponse.node_id)
+  return _internal_node_id();
+}
+template <typename Arg_, typename... Args_>
+PROTOBUF_ALWAYS_INLINE void TimeResponse::set_node_id(Arg_&& arg, Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  _impl_.node_id_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:quorumtime.TimeResponse.node_id)
+}
+inline ::std::string* PROTOBUF_NONNULL TimeResponse::mutable_node_id()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  ::std::string* _s = _internal_mutable_node_id();
+  // @@protoc_insertion_point(field_mutable:quorumtime.TimeResponse.node_id)
+  return _s;
+}
+inline const ::std::string& TimeResponse::_internal_node_id() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.node_id_.Get();
+}
+inline void TimeResponse::_internal_set_node_id(const ::std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.node_id_.Set(value, GetArena());
+}
+inline ::std::string* PROTOBUF_NONNULL TimeResponse::_internal_mutable_node_id() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.node_id_.Mutable( GetArena());
+}
+inline ::std::string* PROTOBUF_NULLABLE TimeResponse::release_node_id() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:quorumtime.TimeResponse.node_id)
+  if (!CheckHasBit(_impl_._has_bits_[0], 0x00000001U)) {
+    return nullptr;
+  }
+  ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  auto* released = _impl_.node_id_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.node_id_.Set("", GetArena());
+  }
+  return released;
+}
+inline void TimeResponse::set_allocated_node_id(::std::string* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  }
+  _impl_.node_id_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.node_id_.IsDefault()) {
+    _impl_.node_id_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:quorumtime.TimeResponse.node_id)
+}
+
+// bytes signature = 6;
+inline void TimeResponse::clear_signature() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.signature_.ClearToEmpty();
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000002U);
+}
+inline const ::std::string& TimeResponse::signature() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:quorumtime.TimeResponse.signature)
+  return _internal_signature();
+}
+template <typename Arg_, typename... Args_>
+PROTOBUF_ALWAYS_INLINE void TimeResponse::set_signature(Arg_&& arg, Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  _impl_.signature_.SetBytes(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:quorumtime.TimeResponse.signature)
+}
+inline ::std::string* PROTOBUF_NONNULL TimeResponse::mutable_signature()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  ::std::string* _s = _internal_mutable_signature();
+  // @@protoc_insertion_point(field_mutable:quorumtime.TimeResponse.signature)
+  return _s;
+}
+inline const ::std::string& TimeResponse::_internal_signature() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.signature_.Get();
+}
+inline void TimeResponse::_internal_set_signature(const ::std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.signature_.Set(value, GetArena());
+}
+inline ::std::string* PROTOBUF_NONNULL TimeResponse::_internal_mutable_signature() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.signature_.Mutable( GetArena());
+}
+inline ::std::string* PROTOBUF_NULLABLE TimeResponse::release_signature() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:quorumtime.TimeResponse.signature)
+  if (!CheckHasBit(_impl_._has_bits_[0], 0x00000002U)) {
+    return nullptr;
+  }
+  ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  auto* released = _impl_.signature_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.signature_.Set("", GetArena());
+  }
+  return released;
+}
+inline void TimeResponse::set_allocated_signature(::std::string* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000002U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000002U);
+  }
+  _impl_.signature_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.signature_.IsDefault()) {
+    _impl_.signature_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:quorumtime.TimeResponse.signature)
+}
+
+// string request_id = 7;
+inline void TimeResponse::clear_request_id() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.request_id_.ClearToEmpty();
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000004U);
+}
+inline const ::std::string& TimeResponse::request_id() const
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:quorumtime.TimeResponse.request_id)
+  return _internal_request_id();
+}
+template <typename Arg_, typename... Args_>
+PROTOBUF_ALWAYS_INLINE void TimeResponse::set_request_id(Arg_&& arg, Args_... args) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  _impl_.request_id_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
+  // @@protoc_insertion_point(field_set:quorumtime.TimeResponse.request_id)
+}
+inline ::std::string* PROTOBUF_NONNULL TimeResponse::mutable_request_id()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  ::std::string* _s = _internal_mutable_request_id();
+  // @@protoc_insertion_point(field_mutable:quorumtime.TimeResponse.request_id)
+  return _s;
+}
+inline const ::std::string& TimeResponse::_internal_request_id() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.request_id_.Get();
+}
+inline void TimeResponse::_internal_set_request_id(const ::std::string& value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.request_id_.Set(value, GetArena());
+}
+inline ::std::string* PROTOBUF_NONNULL TimeResponse::_internal_mutable_request_id() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  return _impl_.request_id_.Mutable( GetArena());
+}
+inline ::std::string* PROTOBUF_NULLABLE TimeResponse::release_request_id() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:quorumtime.TimeResponse.request_id)
+  if (!CheckHasBit(_impl_._has_bits_[0], 0x00000004U)) {
+    return nullptr;
+  }
+  ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+  auto* released = _impl_.request_id_.Release();
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
+    _impl_.request_id_.Set("", GetArena());
+  }
+  return released;
+}
+inline void TimeResponse::set_allocated_request_id(::std::string* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (value != nullptr) {
+    SetHasBit(_impl_._has_bits_[0], 0x00000004U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000004U);
+  }
+  _impl_.request_id_.SetAllocated(value, GetArena());
+  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.request_id_.IsDefault()) {
+    _impl_.request_id_.Set("", GetArena());
+  }
+  // @@protoc_insertion_point(field_set_allocated:quorumtime.TimeResponse.request_id)
+}
+
+// uint32 protocol_version = 8;
+inline void TimeResponse::clear_protocol_version() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.protocol_version_ = 0u;
+  ClearHasBit(_impl_._has_bits_[0],
+                  0x00000080U);
+}
+inline ::uint32_t TimeResponse::protocol_version() const {
+  // @@protoc_insertion_point(field_get:quorumtime.TimeResponse.protocol_version)
+  return _internal_protocol_version();
+}
+inline void TimeResponse::set_protocol_version(::uint32_t value) {
+  _internal_set_protocol_version(value);
+  SetHasBit(_impl_._has_bits_[0], 0x00000080U);
+  // @@protoc_insertion_point(field_set:quorumtime.TimeResponse.protocol_version)
+}
+inline ::uint32_t TimeResponse::_internal_protocol_version() const {
+  ::google::protobuf::internal::TSanRead(&_impl_);
+  return _impl_.protocol_version_;
+}
+inline void TimeResponse::_internal_set_protocol_version(::uint32_t value) {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.protocol_version_ = value;
 }
 
 #ifdef __GNUC__

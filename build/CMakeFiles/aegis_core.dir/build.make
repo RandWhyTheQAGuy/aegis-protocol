@@ -86,19 +86,19 @@ CMakeFiles/aegis_core.dir/src/core/transparency_log.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/aegis_core.dir/src/core/transparency_log.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/rspickler/Documents/GitHub/aegis-protocol/src/core/transparency_log.cpp -o CMakeFiles/aegis_core.dir/src/core/transparency_log.cpp.s
 
-CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o: CMakeFiles/aegis_core.dir/flags.make
-CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o: /Users/rspickler/Documents/GitHub/aegis-protocol/src/security/revocation.cpp
-CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o: CMakeFiles/aegis_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o -MF CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o.d -o CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o -c /Users/rspickler/Documents/GitHub/aegis-protocol/src/security/revocation.cpp
+CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o: CMakeFiles/aegis_core.dir/flags.make
+CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o: /Users/rspickler/Documents/GitHub/aegis-protocol/src/core/remote_quorum_clock.cpp
+CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o: CMakeFiles/aegis_core.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o -MF CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o.d -o CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o -c /Users/rspickler/Documents/GitHub/aegis-protocol/src/core/remote_quorum_clock.cpp
 
-CMakeFiles/aegis_core.dir/src/security/revocation.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/aegis_core.dir/src/security/revocation.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/rspickler/Documents/GitHub/aegis-protocol/src/security/revocation.cpp > CMakeFiles/aegis_core.dir/src/security/revocation.cpp.i
+CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/rspickler/Documents/GitHub/aegis-protocol/src/core/remote_quorum_clock.cpp > CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.i
 
-CMakeFiles/aegis_core.dir/src/security/revocation.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/aegis_core.dir/src/security/revocation.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/rspickler/Documents/GitHub/aegis-protocol/src/security/revocation.cpp -o CMakeFiles/aegis_core.dir/src/security/revocation.cpp.s
+CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/rspickler/Documents/GitHub/aegis-protocol/src/core/remote_quorum_clock.cpp -o CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.s
 
 CMakeFiles/aegis_core.dir/src/core/passport.cpp.o: CMakeFiles/aegis_core.dir/flags.make
 CMakeFiles/aegis_core.dir/src/core/passport.cpp.o: /Users/rspickler/Documents/GitHub/aegis-protocol/src/core/passport.cpp
@@ -114,10 +114,24 @@ CMakeFiles/aegis_core.dir/src/core/passport.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/aegis_core.dir/src/core/passport.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/rspickler/Documents/GitHub/aegis-protocol/src/core/passport.cpp -o CMakeFiles/aegis_core.dir/src/core/passport.cpp.s
 
+CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o: CMakeFiles/aegis_core.dir/flags.make
+CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o: /Users/rspickler/Documents/GitHub/aegis-protocol/src/security/revocation.cpp
+CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o: CMakeFiles/aegis_core.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o -MF CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o.d -o CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o -c /Users/rspickler/Documents/GitHub/aegis-protocol/src/security/revocation.cpp
+
+CMakeFiles/aegis_core.dir/src/security/revocation.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/aegis_core.dir/src/security/revocation.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/rspickler/Documents/GitHub/aegis-protocol/src/security/revocation.cpp > CMakeFiles/aegis_core.dir/src/security/revocation.cpp.i
+
+CMakeFiles/aegis_core.dir/src/security/revocation.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/aegis_core.dir/src/security/revocation.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/rspickler/Documents/GitHub/aegis-protocol/src/security/revocation.cpp -o CMakeFiles/aegis_core.dir/src/security/revocation.cpp.s
+
 CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.o: CMakeFiles/aegis_core.dir/flags.make
 CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.o: /Users/rspickler/Documents/GitHub/aegis-protocol/src/crypto/crypto_utils.cpp
 CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.o: CMakeFiles/aegis_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.o -MF CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.o.d -o CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.o -c /Users/rspickler/Documents/GitHub/aegis-protocol/src/crypto/crypto_utils.cpp
 
 CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.i: cmake_force
@@ -131,7 +145,7 @@ CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.s: cmake_force
 CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.o: CMakeFiles/aegis_core.dir/flags.make
 CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.o: /Users/rspickler/Documents/GitHub/aegis-protocol/src/crypto/crypto_facade.cpp
 CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.o: CMakeFiles/aegis_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.o -MF CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.o.d -o CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.o -c /Users/rspickler/Documents/GitHub/aegis-protocol/src/crypto/crypto_facade.cpp
 
 CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.i: cmake_force
@@ -145,7 +159,7 @@ CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.s: cmake_force
 CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.o: CMakeFiles/aegis_core.dir/flags.make
 CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.o: /Users/rspickler/Documents/GitHub/aegis-protocol/src/security/key_manager.cpp
 CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.o: CMakeFiles/aegis_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.o -MF CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.o.d -o CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.o -c /Users/rspickler/Documents/GitHub/aegis-protocol/src/security/key_manager.cpp
 
 CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.i: cmake_force
@@ -159,7 +173,7 @@ CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.s: cmake_force
 CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.o: CMakeFiles/aegis_core.dir/flags.make
 CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.o: /Users/rspickler/Documents/GitHub/aegis-protocol/src/bft_clock_client.cpp
 CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.o: CMakeFiles/aegis_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.o -MF CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.o.d -o CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.o -c /Users/rspickler/Documents/GitHub/aegis-protocol/src/bft_clock_client.cpp
 
 CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.i: cmake_force
@@ -173,7 +187,7 @@ CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.s: cmake_force
 CMakeFiles/aegis_core.dir/src/sidecar/aegis_guard.cpp.o: CMakeFiles/aegis_core.dir/flags.make
 CMakeFiles/aegis_core.dir/src/sidecar/aegis_guard.cpp.o: /Users/rspickler/Documents/GitHub/aegis-protocol/src/sidecar/aegis_guard.cpp
 CMakeFiles/aegis_core.dir/src/sidecar/aegis_guard.cpp.o: CMakeFiles/aegis_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/aegis_core.dir/src/sidecar/aegis_guard.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/aegis_core.dir/src/sidecar/aegis_guard.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aegis_core.dir/src/sidecar/aegis_guard.cpp.o -MF CMakeFiles/aegis_core.dir/src/sidecar/aegis_guard.cpp.o.d -o CMakeFiles/aegis_core.dir/src/sidecar/aegis_guard.cpp.o -c /Users/rspickler/Documents/GitHub/aegis-protocol/src/sidecar/aegis_guard.cpp
 
 CMakeFiles/aegis_core.dir/src/sidecar/aegis_guard.cpp.i: cmake_force
@@ -187,7 +201,7 @@ CMakeFiles/aegis_core.dir/src/sidecar/aegis_guard.cpp.s: cmake_force
 CMakeFiles/aegis_core.dir/src/classifier.cpp.o: CMakeFiles/aegis_core.dir/flags.make
 CMakeFiles/aegis_core.dir/src/classifier.cpp.o: /Users/rspickler/Documents/GitHub/aegis-protocol/src/classifier.cpp
 CMakeFiles/aegis_core.dir/src/classifier.cpp.o: CMakeFiles/aegis_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/aegis_core.dir/src/classifier.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/aegis_core.dir/src/classifier.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aegis_core.dir/src/classifier.cpp.o -MF CMakeFiles/aegis_core.dir/src/classifier.cpp.o.d -o CMakeFiles/aegis_core.dir/src/classifier.cpp.o -c /Users/rspickler/Documents/GitHub/aegis-protocol/src/classifier.cpp
 
 CMakeFiles/aegis_core.dir/src/classifier.cpp.i: cmake_force
@@ -201,7 +215,7 @@ CMakeFiles/aegis_core.dir/src/classifier.cpp.s: cmake_force
 CMakeFiles/aegis_core.dir/src/providers/datadog_logger.cpp.o: CMakeFiles/aegis_core.dir/flags.make
 CMakeFiles/aegis_core.dir/src/providers/datadog_logger.cpp.o: /Users/rspickler/Documents/GitHub/aegis-protocol/src/providers/datadog_logger.cpp
 CMakeFiles/aegis_core.dir/src/providers/datadog_logger.cpp.o: CMakeFiles/aegis_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/aegis_core.dir/src/providers/datadog_logger.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/aegis_core.dir/src/providers/datadog_logger.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aegis_core.dir/src/providers/datadog_logger.cpp.o -MF CMakeFiles/aegis_core.dir/src/providers/datadog_logger.cpp.o.d -o CMakeFiles/aegis_core.dir/src/providers/datadog_logger.cpp.o -c /Users/rspickler/Documents/GitHub/aegis-protocol/src/providers/datadog_logger.cpp
 
 CMakeFiles/aegis_core.dir/src/providers/datadog_logger.cpp.i: cmake_force
@@ -215,7 +229,7 @@ CMakeFiles/aegis_core.dir/src/providers/datadog_logger.cpp.s: cmake_force
 CMakeFiles/aegis_core.dir/src/providers/memory_clock_store.cpp.o: CMakeFiles/aegis_core.dir/flags.make
 CMakeFiles/aegis_core.dir/src/providers/memory_clock_store.cpp.o: /Users/rspickler/Documents/GitHub/aegis-protocol/src/providers/memory_clock_store.cpp
 CMakeFiles/aegis_core.dir/src/providers/memory_clock_store.cpp.o: CMakeFiles/aegis_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/aegis_core.dir/src/providers/memory_clock_store.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/aegis_core.dir/src/providers/memory_clock_store.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/aegis_core.dir/src/providers/memory_clock_store.cpp.o -MF CMakeFiles/aegis_core.dir/src/providers/memory_clock_store.cpp.o.d -o CMakeFiles/aegis_core.dir/src/providers/memory_clock_store.cpp.o -c /Users/rspickler/Documents/GitHub/aegis-protocol/src/providers/memory_clock_store.cpp
 
 CMakeFiles/aegis_core.dir/src/providers/memory_clock_store.cpp.i: cmake_force
@@ -229,8 +243,9 @@ CMakeFiles/aegis_core.dir/src/providers/memory_clock_store.cpp.s: cmake_force
 # Object files for target aegis_core
 aegis_core_OBJECTS = \
 "CMakeFiles/aegis_core.dir/src/core/transparency_log.cpp.o" \
-"CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o" \
+"CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o" \
 "CMakeFiles/aegis_core.dir/src/core/passport.cpp.o" \
+"CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o" \
 "CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.o" \
 "CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.o" \
 "CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.o" \
@@ -244,8 +259,9 @@ aegis_core_OBJECTS = \
 aegis_core_EXTERNAL_OBJECTS =
 
 libaegis_core.a: CMakeFiles/aegis_core.dir/src/core/transparency_log.cpp.o
-libaegis_core.a: CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o
+libaegis_core.a: CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o
 libaegis_core.a: CMakeFiles/aegis_core.dir/src/core/passport.cpp.o
+libaegis_core.a: CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o
 libaegis_core.a: CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.o
 libaegis_core.a: CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.o
 libaegis_core.a: CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.o
@@ -256,7 +272,7 @@ libaegis_core.a: CMakeFiles/aegis_core.dir/src/providers/datadog_logger.cpp.o
 libaegis_core.a: CMakeFiles/aegis_core.dir/src/providers/memory_clock_store.cpp.o
 libaegis_core.a: CMakeFiles/aegis_core.dir/build.make
 libaegis_core.a: CMakeFiles/aegis_core.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX static library libaegis_core.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX static library libaegis_core.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/aegis_core.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/aegis_core.dir/link.txt --verbose=$(VERBOSE)
 

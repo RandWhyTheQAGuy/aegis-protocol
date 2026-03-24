@@ -31,10 +31,20 @@ inline constexpr TimeResponse::Impl_::Impl_(
     [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
+        node_id_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        signature_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        request_id_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
         unix_time_ms_{::int64_t{0}},
         confidence_interval_ms_{0},
         projected_drift_ppm_{0},
-        active_nodes_{0} {}
+        active_nodes_{0},
+        protocol_version_{0u} {}
 
 template <typename>
 constexpr TimeResponse::TimeResponse(::_pbi::ConstantInitialized)
@@ -62,7 +72,11 @@ inline constexpr TimeRequest::Impl_::Impl_(
       : _cached_size_{0},
         client_id_(
             &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()) {}
+            ::_pbi::ConstantInitialized()),
+        request_id_(
+            &::google::protobuf::internal::fixed_address_empty_string,
+            ::_pbi::ConstantInitialized()),
+        client_unix_time_ms_{::int64_t{0}} {}
 
 template <typename>
 constexpr TimeRequest::TimeRequest(::_pbi::ConstantInitialized)
@@ -93,26 +107,38 @@ const ::uint32_t
         protodesc_cold) = {
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::quorumtime::TimeRequest, _impl_._has_bits_),
-        4, // hasbit index offset
+        6, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::quorumtime::TimeRequest, _impl_.client_id_),
+        PROTOBUF_FIELD_OFFSET(::quorumtime::TimeRequest, _impl_.request_id_),
+        PROTOBUF_FIELD_OFFSET(::quorumtime::TimeRequest, _impl_.client_unix_time_ms_),
         0,
+        1,
+        2,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::quorumtime::TimeResponse, _impl_._has_bits_),
-        7, // hasbit index offset
+        11, // hasbit index offset
         PROTOBUF_FIELD_OFFSET(::quorumtime::TimeResponse, _impl_.unix_time_ms_),
         PROTOBUF_FIELD_OFFSET(::quorumtime::TimeResponse, _impl_.confidence_interval_ms_),
         PROTOBUF_FIELD_OFFSET(::quorumtime::TimeResponse, _impl_.active_nodes_),
         PROTOBUF_FIELD_OFFSET(::quorumtime::TimeResponse, _impl_.projected_drift_ppm_),
+        PROTOBUF_FIELD_OFFSET(::quorumtime::TimeResponse, _impl_.node_id_),
+        PROTOBUF_FIELD_OFFSET(::quorumtime::TimeResponse, _impl_.signature_),
+        PROTOBUF_FIELD_OFFSET(::quorumtime::TimeResponse, _impl_.request_id_),
+        PROTOBUF_FIELD_OFFSET(::quorumtime::TimeResponse, _impl_.protocol_version_),
+        3,
+        4,
+        6,
+        5,
         0,
         1,
-        3,
         2,
+        7,
 };
 
 static const ::_pbi::MigrationSchema
     schemas[] ABSL_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
         {0, sizeof(::quorumtime::TimeRequest)},
-        {5, sizeof(::quorumtime::TimeResponse)},
+        {9, sizeof(::quorumtime::TimeResponse)},
 };
 static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
     &::quorumtime::_TimeRequest_default_instance_._instance,
@@ -120,19 +146,23 @@ static const ::_pb::Message* PROTOBUF_NONNULL const file_default_instances[] = {
 };
 const char descriptor_table_protodef_clock_5fservice_2eproto[] ABSL_ATTRIBUTE_SECTION_VARIABLE(
     protodesc_cold) = {
-    "\n\023clock_service.proto\022\nquorumtime\" \n\013Tim"
-    "eRequest\022\021\n\tclient_id\030\001 \001(\t\"w\n\014TimeRespo"
-    "nse\022\024\n\014unix_time_ms\030\001 \001(\003\022\036\n\026confidence_"
-    "interval_ms\030\002 \001(\001\022\024\n\014active_nodes\030\003 \001(\005\022"
-    "\033\n\023projected_drift_ppm\030\004 \001(\0012R\n\014ClockSer"
-    "vice\022B\n\rGetQuorumTime\022\027.quorumtime.TimeR"
-    "equest\032\030.quorumtime.TimeResponseb\006proto3"
+    "\n\023clock_service.proto\022\nquorumtime\"Q\n\013Tim"
+    "eRequest\022\021\n\tclient_id\030\001 \001(\t\022\022\n\nrequest_i"
+    "d\030\002 \001(\t\022\033\n\023client_unix_time_ms\030\003 \001(\003\"\311\001\n"
+    "\014TimeResponse\022\024\n\014unix_time_ms\030\001 \001(\003\022\036\n\026c"
+    "onfidence_interval_ms\030\002 \001(\001\022\024\n\014active_no"
+    "des\030\003 \001(\005\022\033\n\023projected_drift_ppm\030\004 \001(\001\022\017"
+    "\n\007node_id\030\005 \001(\t\022\021\n\tsignature\030\006 \001(\014\022\022\n\nre"
+    "quest_id\030\007 \001(\t\022\030\n\020protocol_version\030\010 \001(\r"
+    "2R\n\014ClockService\022B\n\rGetQuorumTime\022\027.quor"
+    "umtime.TimeRequest\032\030.quorumtime.TimeResp"
+    "onseb\006proto3"
 };
 static ::absl::once_flag descriptor_table_clock_5fservice_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_clock_5fservice_2eproto = {
     false,
     false,
-    280,
+    412,
     descriptor_table_protodef_clock_5fservice_2eproto,
     "clock_service.proto",
     &descriptor_table_clock_5fservice_2eproto_once,
@@ -171,7 +201,8 @@ PROTOBUF_NDEBUG_INLINE TimeRequest::Impl_::Impl_(
     [[maybe_unused]] const ::quorumtime::TimeRequest& from_msg)
       : _has_bits_{from._has_bits_},
         _cached_size_{0},
-        client_id_(arena, from.client_id_) {}
+        client_id_(arena, from.client_id_),
+        request_id_(arena, from.request_id_) {}
 
 TimeRequest::TimeRequest(
     ::google::protobuf::Arena* PROTOBUF_NULLABLE arena,
@@ -186,6 +217,7 @@ TimeRequest::TimeRequest(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  _impl_.client_unix_time_ms_ = from._impl_.client_unix_time_ms_;
 
   // @@protoc_insertion_point(copy_constructor:quorumtime.TimeRequest)
 }
@@ -193,10 +225,12 @@ PROTOBUF_NDEBUG_INLINE TimeRequest::Impl_::Impl_(
     [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
     [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
       : _cached_size_{0},
-        client_id_(arena) {}
+        client_id_(arena),
+        request_id_(arena) {}
 
 inline void TimeRequest::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.client_unix_time_ms_ = {};
 }
 TimeRequest::~TimeRequest() {
   // @@protoc_insertion_point(destructor:quorumtime.TimeRequest)
@@ -210,6 +244,7 @@ inline void TimeRequest::SharedDtor(MessageLite& self) {
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
   this_._impl_.client_id_.Destroy();
+  this_._impl_.request_id_.Destroy();
   this_._impl_.~Impl_();
 }
 
@@ -255,16 +290,16 @@ TimeRequest::GetClassData() const {
   return TimeRequest_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 1, 0, 40, 2>
+const ::_pbi::TcParseTable<2, 3, 0, 50, 2>
 TimeRequest::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(TimeRequest, _impl_._has_bits_),
     0, // no _extensions_
-    1, 0,  // max_field_number, fast_idx_mask
+    3, 24,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967294,  // skipmap
+    4294967288,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    1,  // num_field_entries
+    3,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     TimeRequest_class_data_.base(),
@@ -274,21 +309,35 @@ TimeRequest::_table_ = {
     ::_pbi::TcParser::GetTable<::quorumtime::TimeRequest>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
+    {::_pbi::TcParser::MiniParse, {}},
     // string client_id = 1;
     {::_pbi::TcParser::FastUS1,
      {10, 0, 0,
       PROTOBUF_FIELD_OFFSET(TimeRequest, _impl_.client_id_)}},
+    // string request_id = 2;
+    {::_pbi::TcParser::FastUS1,
+     {18, 1, 0,
+      PROTOBUF_FIELD_OFFSET(TimeRequest, _impl_.request_id_)}},
+    // int64 client_unix_time_ms = 3;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(TimeRequest, _impl_.client_unix_time_ms_), 2>(),
+     {24, 2, 0,
+      PROTOBUF_FIELD_OFFSET(TimeRequest, _impl_.client_unix_time_ms_)}},
   }}, {{
     65535, 65535
   }}, {{
     // string client_id = 1;
     {PROTOBUF_FIELD_OFFSET(TimeRequest, _impl_.client_id_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string request_id = 2;
+    {PROTOBUF_FIELD_OFFSET(TimeRequest, _impl_.request_id_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // int64 client_unix_time_ms = 3;
+    {PROTOBUF_FIELD_OFFSET(TimeRequest, _impl_.client_unix_time_ms_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kInt64)},
   }},
   // no aux_entries
   {{
-    "\26\11\0\0\0\0\0\0"
+    "\26\11\12\0\0\0\0\0"
     "quorumtime.TimeRequest"
     "client_id"
+    "request_id"
   }},
 };
 PROTOBUF_NOINLINE void TimeRequest::Clear() {
@@ -299,9 +348,15 @@ PROTOBUF_NOINLINE void TimeRequest::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-    _impl_.client_id_.ClearNonDefaultToEmpty();
+  if (BatchCheckHasBit(cached_has_bits, 0x00000003U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+      _impl_.client_id_.ClearNonDefaultToEmpty();
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+      _impl_.request_id_.ClearNonDefaultToEmpty();
+    }
   }
+  _impl_.client_unix_time_ms_ = ::int64_t{0};
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
 }
@@ -335,6 +390,25 @@ PROTOBUF_NOINLINE void TimeRequest::Clear() {
     }
   }
 
+  // string request_id = 2;
+  if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+    if (!this_._internal_request_id().empty()) {
+      const ::std::string& _s = this_._internal_request_id();
+      ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "quorumtime.TimeRequest.request_id");
+      target = stream->WriteStringMaybeAliased(2, _s, target);
+    }
+  }
+
+  // int64 client_unix_time_ms = 3;
+  if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+    if (this_._internal_client_unix_time_ms() != 0) {
+      target =
+          ::google::protobuf::internal::WireFormatLite::WriteInt64ToArrayWithField<3>(
+              stream, this_._internal_client_unix_time_ms(), target);
+    }
+  }
+
   if (ABSL_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
     target =
         ::_pbi::WireFormat::InternalSerializeUnknownFieldsToArray(
@@ -358,13 +432,28 @@ PROTOBUF_NOINLINE void TimeRequest::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void)cached_has_bits;
 
-   {
+  ::_pbi::Prefetch5LinesFrom7Lines(&this_);
+  cached_has_bits = this_._impl_._has_bits_[0];
+  if (BatchCheckHasBit(cached_has_bits, 0x00000007U)) {
     // string client_id = 1;
-    cached_has_bits = this_._impl_._has_bits_[0];
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
       if (!this_._internal_client_id().empty()) {
         total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
                                         this_._internal_client_id());
+      }
+    }
+    // string request_id = 2;
+    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+      if (!this_._internal_request_id().empty()) {
+        total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                        this_._internal_request_id());
+      }
+    }
+    // int64 client_unix_time_ms = 3;
+    if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+      if (this_._internal_client_unix_time_ms() != 0) {
+        total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(
+            this_._internal_client_unix_time_ms());
       }
     }
   }
@@ -386,12 +475,28 @@ void TimeRequest::MergeImpl(::google::protobuf::MessageLite& to_msg,
   (void)cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-    if (!from._internal_client_id().empty()) {
-      _this->_internal_set_client_id(from._internal_client_id());
-    } else {
-      if (_this->_impl_.client_id_.IsDefault()) {
-        _this->_internal_set_client_id("");
+  if (BatchCheckHasBit(cached_has_bits, 0x00000007U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+      if (!from._internal_client_id().empty()) {
+        _this->_internal_set_client_id(from._internal_client_id());
+      } else {
+        if (_this->_impl_.client_id_.IsDefault()) {
+          _this->_internal_set_client_id("");
+        }
+      }
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+      if (!from._internal_request_id().empty()) {
+        _this->_internal_set_request_id(from._internal_request_id());
+      } else {
+        if (_this->_impl_.request_id_.IsDefault()) {
+          _this->_internal_set_request_id("");
+        }
+      }
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+      if (from._internal_client_unix_time_ms() != 0) {
+        _this->_impl_.client_unix_time_ms_ = from._impl_.client_unix_time_ms_;
       }
     }
   }
@@ -415,6 +520,8 @@ void TimeRequest::InternalSwap(TimeRequest* PROTOBUF_RESTRICT PROTOBUF_NONNULL o
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
   ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.client_id_, &other->_impl_.client_id_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.request_id_, &other->_impl_.request_id_, arena);
+  swap(_impl_.client_unix_time_ms_, other->_impl_.client_unix_time_ms_);
 }
 
 ::google::protobuf::Metadata TimeRequest::GetMetadata() const {
@@ -439,30 +546,55 @@ TimeResponse::TimeResponse(::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
   SharedCtor(arena);
   // @@protoc_insertion_point(arena_constructor:quorumtime.TimeResponse)
 }
+PROTOBUF_NDEBUG_INLINE TimeResponse::Impl_::Impl_(
+    [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
+    [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+    [[maybe_unused]] const ::quorumtime::TimeResponse& from_msg)
+      : _has_bits_{from._has_bits_},
+        _cached_size_{0},
+        node_id_(arena, from.node_id_),
+        signature_(arena, from.signature_),
+        request_id_(arena, from.request_id_) {}
+
 TimeResponse::TimeResponse(
-    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const TimeResponse& from)
+    ::google::protobuf::Arena* PROTOBUF_NULLABLE arena,
+    const TimeResponse& from)
 #if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(arena, TimeResponse_class_data_.base()),
+    : ::google::protobuf::Message(arena, TimeResponse_class_data_.base()) {
 #else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(arena),
+    : ::google::protobuf::Message(arena) {
 #endif  // PROTOBUF_CUSTOM_VTABLE
-      _impl_(from._impl_) {
+  TimeResponse* const _this = this;
+  (void)_this;
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
+  new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  ::memcpy(reinterpret_cast<char*>(&_impl_) +
+               offsetof(Impl_, unix_time_ms_),
+           reinterpret_cast<const char*>(&from._impl_) +
+               offsetof(Impl_, unix_time_ms_),
+           offsetof(Impl_, protocol_version_) -
+               offsetof(Impl_, unix_time_ms_) +
+               sizeof(Impl_::protocol_version_));
+
+  // @@protoc_insertion_point(copy_constructor:quorumtime.TimeResponse)
 }
 PROTOBUF_NDEBUG_INLINE TimeResponse::Impl_::Impl_(
     [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
     [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
-      : _cached_size_{0} {}
+      : _cached_size_{0},
+        node_id_(arena),
+        signature_(arena),
+        request_id_(arena) {}
 
 inline void TimeResponse::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
   ::memset(reinterpret_cast<char*>(&_impl_) +
                offsetof(Impl_, unix_time_ms_),
            0,
-           offsetof(Impl_, active_nodes_) -
+           offsetof(Impl_, protocol_version_) -
                offsetof(Impl_, unix_time_ms_) +
-               sizeof(Impl_::active_nodes_));
+               sizeof(Impl_::protocol_version_));
 }
 TimeResponse::~TimeResponse() {
   // @@protoc_insertion_point(destructor:quorumtime.TimeResponse)
@@ -475,6 +607,9 @@ inline void TimeResponse::SharedDtor(MessageLite& self) {
   }
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
+  this_._impl_.node_id_.Destroy();
+  this_._impl_.signature_.Destroy();
+  this_._impl_.request_id_.Destroy();
   this_._impl_.~Impl_();
 }
 
@@ -484,7 +619,7 @@ inline void* PROTOBUF_NONNULL TimeResponse::PlacementNew_(
   return ::new (mem) TimeResponse(arena);
 }
 constexpr auto TimeResponse::InternalNewImpl_() {
-  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(TimeResponse),
+  return ::google::protobuf::internal::MessageCreator::CopyInit(sizeof(TimeResponse),
                                             alignof(TimeResponse));
 }
 constexpr auto TimeResponse::InternalGenerateClassData_() {
@@ -520,16 +655,16 @@ TimeResponse::GetClassData() const {
   return TimeResponse_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<2, 4, 0, 0, 2>
+const ::_pbi::TcParseTable<3, 8, 0, 57, 2>
 TimeResponse::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_._has_bits_),
     0, // no _extensions_
-    4, 24,  // max_field_number, fast_idx_mask
+    8, 56,  // max_field_number, fast_idx_mask
     offsetof(decltype(_table_), field_lookup_table),
-    4294967280,  // skipmap
+    4294967040,  // skipmap
     offsetof(decltype(_table_), field_entries),
-    4,  // num_field_entries
+    8,  // num_field_entries
     0,  // num_aux_entries
     offsetof(decltype(_table_), field_names),  // no aux_entries
     TimeResponse_class_data_.base(),
@@ -539,36 +674,64 @@ TimeResponse::_table_ = {
     ::_pbi::TcParser::GetTable<::quorumtime::TimeResponse>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // double projected_drift_ppm = 4;
-    {::_pbi::TcParser::FastF64S1,
-     {33, 2, 0,
-      PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.projected_drift_ppm_)}},
+    // uint32 protocol_version = 8;
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(TimeResponse, _impl_.protocol_version_), 7>(),
+     {64, 7, 0,
+      PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.protocol_version_)}},
     // int64 unix_time_ms = 1;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(TimeResponse, _impl_.unix_time_ms_), 0>(),
-     {8, 0, 0,
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint64_t, offsetof(TimeResponse, _impl_.unix_time_ms_), 3>(),
+     {8, 3, 0,
       PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.unix_time_ms_)}},
     // double confidence_interval_ms = 2;
     {::_pbi::TcParser::FastF64S1,
-     {17, 1, 0,
+     {17, 4, 0,
       PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.confidence_interval_ms_)}},
     // int32 active_nodes = 3;
-    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(TimeResponse, _impl_.active_nodes_), 3>(),
-     {24, 3, 0,
+    {::_pbi::TcParser::SingularVarintNoZag1<::uint32_t, offsetof(TimeResponse, _impl_.active_nodes_), 6>(),
+     {24, 6, 0,
       PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.active_nodes_)}},
+    // double projected_drift_ppm = 4;
+    {::_pbi::TcParser::FastF64S1,
+     {33, 5, 0,
+      PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.projected_drift_ppm_)}},
+    // string node_id = 5;
+    {::_pbi::TcParser::FastUS1,
+     {42, 0, 0,
+      PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.node_id_)}},
+    // bytes signature = 6;
+    {::_pbi::TcParser::FastBS1,
+     {50, 1, 0,
+      PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.signature_)}},
+    // string request_id = 7;
+    {::_pbi::TcParser::FastUS1,
+     {58, 2, 0,
+      PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.request_id_)}},
   }}, {{
     65535, 65535
   }}, {{
     // int64 unix_time_ms = 1;
-    {PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.unix_time_ms_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kInt64)},
+    {PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.unix_time_ms_), _Internal::kHasBitsOffset + 3, 0, (0 | ::_fl::kFcOptional | ::_fl::kInt64)},
     // double confidence_interval_ms = 2;
-    {PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.confidence_interval_ms_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kDouble)},
+    {PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.confidence_interval_ms_), _Internal::kHasBitsOffset + 4, 0, (0 | ::_fl::kFcOptional | ::_fl::kDouble)},
     // int32 active_nodes = 3;
-    {PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.active_nodes_), _Internal::kHasBitsOffset + 3, 0, (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
+    {PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.active_nodes_), _Internal::kHasBitsOffset + 6, 0, (0 | ::_fl::kFcOptional | ::_fl::kInt32)},
     // double projected_drift_ppm = 4;
-    {PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.projected_drift_ppm_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kDouble)},
+    {PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.projected_drift_ppm_), _Internal::kHasBitsOffset + 5, 0, (0 | ::_fl::kFcOptional | ::_fl::kDouble)},
+    // string node_id = 5;
+    {PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.node_id_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // bytes signature = 6;
+    {PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.signature_), _Internal::kHasBitsOffset + 1, 0, (0 | ::_fl::kFcOptional | ::_fl::kBytes | ::_fl::kRepAString)},
+    // string request_id = 7;
+    {PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.request_id_), _Internal::kHasBitsOffset + 2, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // uint32 protocol_version = 8;
+    {PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.protocol_version_), _Internal::kHasBitsOffset + 7, 0, (0 | ::_fl::kFcOptional | ::_fl::kUInt32)},
   }},
   // no aux_entries
   {{
+    "\27\0\0\0\0\7\0\12\0\0\0\0\0\0\0\0"
+    "quorumtime.TimeResponse"
+    "node_id"
+    "request_id"
   }},
 };
 PROTOBUF_NOINLINE void TimeResponse::Clear() {
@@ -579,10 +742,21 @@ PROTOBUF_NOINLINE void TimeResponse::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000000fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x00000007U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+      _impl_.node_id_.ClearNonDefaultToEmpty();
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+      _impl_.signature_.ClearNonDefaultToEmpty();
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+      _impl_.request_id_.ClearNonDefaultToEmpty();
+    }
+  }
+  if (BatchCheckHasBit(cached_has_bits, 0x000000f8U)) {
     ::memset(&_impl_.unix_time_ms_, 0, static_cast<::size_t>(
-        reinterpret_cast<char*>(&_impl_.active_nodes_) -
-        reinterpret_cast<char*>(&_impl_.unix_time_ms_)) + sizeof(_impl_.active_nodes_));
+        reinterpret_cast<char*>(&_impl_.protocol_version_) -
+        reinterpret_cast<char*>(&_impl_.unix_time_ms_)) + sizeof(_impl_.protocol_version_));
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -608,7 +782,7 @@ PROTOBUF_NOINLINE void TimeResponse::Clear() {
 
   cached_has_bits = this_._impl_._has_bits_[0];
   // int64 unix_time_ms = 1;
-  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000008U)) {
     if (this_._internal_unix_time_ms() != 0) {
       target =
           ::google::protobuf::internal::WireFormatLite::WriteInt64ToArrayWithField<1>(
@@ -617,7 +791,7 @@ PROTOBUF_NOINLINE void TimeResponse::Clear() {
   }
 
   // double confidence_interval_ms = 2;
-  if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000010U)) {
     if (::absl::bit_cast<::uint64_t>(this_._internal_confidence_interval_ms()) != 0) {
       target = stream->EnsureSpace(target);
       target = ::_pbi::WireFormatLite::WriteDoubleToArray(
@@ -626,7 +800,7 @@ PROTOBUF_NOINLINE void TimeResponse::Clear() {
   }
 
   // int32 active_nodes = 3;
-  if (CheckHasBit(cached_has_bits, 0x00000008U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000040U)) {
     if (this_._internal_active_nodes() != 0) {
       target =
           ::google::protobuf::internal::WireFormatLite::WriteInt32ToArrayWithField<3>(
@@ -635,11 +809,48 @@ PROTOBUF_NOINLINE void TimeResponse::Clear() {
   }
 
   // double projected_drift_ppm = 4;
-  if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+  if (CheckHasBit(cached_has_bits, 0x00000020U)) {
     if (::absl::bit_cast<::uint64_t>(this_._internal_projected_drift_ppm()) != 0) {
       target = stream->EnsureSpace(target);
       target = ::_pbi::WireFormatLite::WriteDoubleToArray(
           4, this_._internal_projected_drift_ppm(), target);
+    }
+  }
+
+  // string node_id = 5;
+  if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+    if (!this_._internal_node_id().empty()) {
+      const ::std::string& _s = this_._internal_node_id();
+      ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "quorumtime.TimeResponse.node_id");
+      target = stream->WriteStringMaybeAliased(5, _s, target);
+    }
+  }
+
+  // bytes signature = 6;
+  if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+    if (!this_._internal_signature().empty()) {
+      const ::std::string& _s = this_._internal_signature();
+      target = stream->WriteBytesMaybeAliased(6, _s, target);
+    }
+  }
+
+  // string request_id = 7;
+  if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+    if (!this_._internal_request_id().empty()) {
+      const ::std::string& _s = this_._internal_request_id();
+      ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+          _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "quorumtime.TimeResponse.request_id");
+      target = stream->WriteStringMaybeAliased(7, _s, target);
+    }
+  }
+
+  // uint32 protocol_version = 8;
+  if (CheckHasBit(cached_has_bits, 0x00000080U)) {
+    if (this_._internal_protocol_version() != 0) {
+      target = stream->EnsureSpace(target);
+      target = ::_pbi::WireFormatLite::WriteUInt32ToArray(
+          8, this_._internal_protocol_version(), target);
     }
   }
 
@@ -668,31 +879,59 @@ PROTOBUF_NOINLINE void TimeResponse::Clear() {
 
   ::_pbi::Prefetch5LinesFrom7Lines(&this_);
   cached_has_bits = this_._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000000fU)) {
-    // int64 unix_time_ms = 1;
+  if (BatchCheckHasBit(cached_has_bits, 0x000000ffU)) {
+    // string node_id = 5;
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+      if (!this_._internal_node_id().empty()) {
+        total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                        this_._internal_node_id());
+      }
+    }
+    // bytes signature = 6;
+    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+      if (!this_._internal_signature().empty()) {
+        total_size += 1 + ::google::protobuf::internal::WireFormatLite::BytesSize(
+                                        this_._internal_signature());
+      }
+    }
+    // string request_id = 7;
+    if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+      if (!this_._internal_request_id().empty()) {
+        total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
+                                        this_._internal_request_id());
+      }
+    }
+    // int64 unix_time_ms = 1;
+    if (CheckHasBit(cached_has_bits, 0x00000008U)) {
       if (this_._internal_unix_time_ms() != 0) {
         total_size += ::_pbi::WireFormatLite::Int64SizePlusOne(
             this_._internal_unix_time_ms());
       }
     }
     // double confidence_interval_ms = 2;
-    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       if (::absl::bit_cast<::uint64_t>(this_._internal_confidence_interval_ms()) != 0) {
         total_size += 9;
       }
     }
     // double projected_drift_ppm = 4;
-    if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
       if (::absl::bit_cast<::uint64_t>(this_._internal_projected_drift_ppm()) != 0) {
         total_size += 9;
       }
     }
     // int32 active_nodes = 3;
-    if (CheckHasBit(cached_has_bits, 0x00000008U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000040U)) {
       if (this_._internal_active_nodes() != 0) {
         total_size += ::_pbi::WireFormatLite::Int32SizePlusOne(
             this_._internal_active_nodes());
+      }
+    }
+    // uint32 protocol_version = 8;
+    if (CheckHasBit(cached_has_bits, 0x00000080U)) {
+      if (this_._internal_protocol_version() != 0) {
+        total_size += ::_pbi::WireFormatLite::UInt32SizePlusOne(
+            this_._internal_protocol_version());
       }
     }
   }
@@ -714,25 +953,57 @@ void TimeResponse::MergeImpl(::google::protobuf::MessageLite& to_msg,
   (void)cached_has_bits;
 
   cached_has_bits = from._impl_._has_bits_[0];
-  if (BatchCheckHasBit(cached_has_bits, 0x0000000fU)) {
+  if (BatchCheckHasBit(cached_has_bits, 0x000000ffU)) {
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
+      if (!from._internal_node_id().empty()) {
+        _this->_internal_set_node_id(from._internal_node_id());
+      } else {
+        if (_this->_impl_.node_id_.IsDefault()) {
+          _this->_internal_set_node_id("");
+        }
+      }
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+      if (!from._internal_signature().empty()) {
+        _this->_internal_set_signature(from._internal_signature());
+      } else {
+        if (_this->_impl_.signature_.IsDefault()) {
+          _this->_internal_set_signature("");
+        }
+      }
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+      if (!from._internal_request_id().empty()) {
+        _this->_internal_set_request_id(from._internal_request_id());
+      } else {
+        if (_this->_impl_.request_id_.IsDefault()) {
+          _this->_internal_set_request_id("");
+        }
+      }
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000008U)) {
       if (from._internal_unix_time_ms() != 0) {
         _this->_impl_.unix_time_ms_ = from._impl_.unix_time_ms_;
       }
     }
-    if (CheckHasBit(cached_has_bits, 0x00000002U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000010U)) {
       if (::absl::bit_cast<::uint64_t>(from._internal_confidence_interval_ms()) != 0) {
         _this->_impl_.confidence_interval_ms_ = from._impl_.confidence_interval_ms_;
       }
     }
-    if (CheckHasBit(cached_has_bits, 0x00000004U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000020U)) {
       if (::absl::bit_cast<::uint64_t>(from._internal_projected_drift_ppm()) != 0) {
         _this->_impl_.projected_drift_ppm_ = from._impl_.projected_drift_ppm_;
       }
     }
-    if (CheckHasBit(cached_has_bits, 0x00000008U)) {
+    if (CheckHasBit(cached_has_bits, 0x00000040U)) {
       if (from._internal_active_nodes() != 0) {
         _this->_impl_.active_nodes_ = from._impl_.active_nodes_;
+      }
+    }
+    if (CheckHasBit(cached_has_bits, 0x00000080U)) {
+      if (from._internal_protocol_version() != 0) {
+        _this->_impl_.protocol_version_ = from._impl_.protocol_version_;
       }
     }
   }
@@ -751,11 +1022,16 @@ void TimeResponse::CopyFrom(const TimeResponse& from) {
 
 void TimeResponse::InternalSwap(TimeResponse* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
   using ::std::swap;
+  auto* arena = GetArena();
+  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.node_id_, &other->_impl_.node_id_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.signature_, &other->_impl_.signature_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.request_id_, &other->_impl_.request_id_, arena);
   ::google::protobuf::internal::memswap<
-      PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.active_nodes_)
-      + sizeof(TimeResponse::_impl_.active_nodes_)
+      PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.protocol_version_)
+      + sizeof(TimeResponse::_impl_.protocol_version_)
       - PROTOBUF_FIELD_OFFSET(TimeResponse, _impl_.unix_time_ms_)>(
           reinterpret_cast<char*>(&_impl_.unix_time_ms_),
           reinterpret_cast<char*>(&other->_impl_.unix_time_ms_));

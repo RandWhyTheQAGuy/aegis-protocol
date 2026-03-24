@@ -1,5 +1,5 @@
 #include "uml001/crypto/crypto_facade.h"
-#include "uml001/crypto_utils.h"
+#include "uml001/crypto/crypto_utils.h"
 #include <stdexcept>
 
 namespace uml001 {

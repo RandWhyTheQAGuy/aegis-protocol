@@ -168,6 +168,19 @@ aegis_e2e/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_e2e.dir/build.make CMakeFiles/aegis_e2e.dir/build
 .PHONY : aegis_e2e/fast
 
+#=============================================================================
+# Target rules for targets named test_passport_flow
+
+# Build rule for target.
+test_passport_flow: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_passport_flow
+.PHONY : test_passport_flow
+
+# fast build rule for target.
+test_passport_flow/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_passport_flow.dir/build.make CMakeFiles/test_passport_flow.dir/build
+.PHONY : test_passport_flow/fast
+
 clock_service.grpc.pb.o: clock_service.grpc.pb.cc.o
 .PHONY : clock_service.grpc.pb.o
 
@@ -287,6 +300,30 @@ src/core/passport.s: src/core/passport.cpp.s
 src/core/passport.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/core/passport.cpp.s
 .PHONY : src/core/passport.cpp.s
+
+src/core/remote_quorum_clock.o: src/core/remote_quorum_clock.cpp.o
+.PHONY : src/core/remote_quorum_clock.o
+
+# target to build an object file
+src/core/remote_quorum_clock.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o
+.PHONY : src/core/remote_quorum_clock.cpp.o
+
+src/core/remote_quorum_clock.i: src/core/remote_quorum_clock.cpp.i
+.PHONY : src/core/remote_quorum_clock.i
+
+# target to preprocess a source file
+src/core/remote_quorum_clock.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.i
+.PHONY : src/core/remote_quorum_clock.cpp.i
+
+src/core/remote_quorum_clock.s: src/core/remote_quorum_clock.cpp.s
+.PHONY : src/core/remote_quorum_clock.s
+
+# target to generate assembly for a file
+src/core/remote_quorum_clock.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.s
+.PHONY : src/core/remote_quorum_clock.cpp.s
 
 src/core/transparency_log.o: src/core/transparency_log.cpp.o
 .PHONY : src/core/transparency_log.o
@@ -528,6 +565,30 @@ src/sidecar/aegis_guard.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/sidecar/aegis_guard.cpp.s
 .PHONY : src/sidecar/aegis_guard.cpp.s
 
+tests/test_passport_flow.o: tests/test_passport_flow.cpp.o
+.PHONY : tests/test_passport_flow.o
+
+# target to build an object file
+tests/test_passport_flow.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_passport_flow.dir/build.make CMakeFiles/test_passport_flow.dir/tests/test_passport_flow.cpp.o
+.PHONY : tests/test_passport_flow.cpp.o
+
+tests/test_passport_flow.i: tests/test_passport_flow.cpp.i
+.PHONY : tests/test_passport_flow.i
+
+# target to preprocess a source file
+tests/test_passport_flow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_passport_flow.dir/build.make CMakeFiles/test_passport_flow.dir/tests/test_passport_flow.cpp.i
+.PHONY : tests/test_passport_flow.cpp.i
+
+tests/test_passport_flow.s: tests/test_passport_flow.cpp.s
+.PHONY : tests/test_passport_flow.s
+
+# target to generate assembly for a file
+tests/test_passport_flow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_passport_flow.dir/build.make CMakeFiles/test_passport_flow.dir/tests/test_passport_flow.cpp.s
+.PHONY : tests/test_passport_flow.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -540,6 +601,7 @@ help:
 	@echo "... aegis_daemon"
 	@echo "... aegis_e2e"
 	@echo "... clock_proto"
+	@echo "... test_passport_flow"
 	@echo "... clock_service.grpc.pb.o"
 	@echo "... clock_service.grpc.pb.i"
 	@echo "... clock_service.grpc.pb.s"
@@ -555,6 +617,9 @@ help:
 	@echo "... src/core/passport.o"
 	@echo "... src/core/passport.i"
 	@echo "... src/core/passport.s"
+	@echo "... src/core/remote_quorum_clock.o"
+	@echo "... src/core/remote_quorum_clock.i"
+	@echo "... src/core/remote_quorum_clock.s"
 	@echo "... src/core/transparency_log.o"
 	@echo "... src/core/transparency_log.i"
 	@echo "... src/core/transparency_log.s"
@@ -585,6 +650,9 @@ help:
 	@echo "... src/sidecar/aegis_guard.o"
 	@echo "... src/sidecar/aegis_guard.i"
 	@echo "... src/sidecar/aegis_guard.s"
+	@echo "... tests/test_passport_flow.o"
+	@echo "... tests/test_passport_flow.i"
+	@echo "... tests/test_passport_flow.s"
 .PHONY : help
 
 
