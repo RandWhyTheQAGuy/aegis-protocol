@@ -106,15 +106,17 @@ endif()
 # ============================================================
 
 set(AEGIS_CORE_SOURCES
+    src/globals.cpp
     src/core/passport.cpp
     src/core/policy.cpp
     src/core/session.cpp
     src/core/temporal_state.cpp
     src/core/pulse_manager.cpp
     src/core/quorum_pulse_manager.cpp
-    src/security/transparency_log.cpp  # Corrected Path
+    src/security/transparency_log.cpp
     src/security/revocation.cpp
     src/security/key_manager.cpp
+    src/security/vault.cpp
     src/crypto/crypto_utils.cpp
     src/crypto/crypto_facade.cpp
     src/crypto/hash_provider.cpp
@@ -134,8 +136,8 @@ if (AEGIS_ENABLE_REDIS)
 endif()
 
 # Always safe providers
+# Note: datadog_logger is excluded due to missing uml001::IEventLogger interface
 list(APPEND AEGIS_CORE_SOURCES
-    src/providers/datadog_logger.cpp
     src/providers/memory_clock_store.cpp
 )
 
@@ -167,9 +169,6 @@ endif()
 
 add_executable(aegis_daemon src/main_aegis_protocol.cpp)
 target_link_libraries(aegis_daemon PRIVATE aegis_core)
-
-add_executable(aegis_e2e src/e2e-example.cpp)
-target_link_libraries(aegis_e2e PRIVATE aegis_core)
 
 # Pointing to the specific test file in your tree
 add_executable(test_passport_flow tests/test_passport_flow.cpp)

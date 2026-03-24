@@ -1,72 +1,64 @@
 #pragma once
-
-#include "uml001/core/policy.h"
 #include <string>
 #include <vector>
 #include <deque>
 #include <functional>
-#include <atomic>
+#include "uml001/core/policy.h"
 
 namespace uml001 {
 
-enum class SessionState {
-    INIT,
-    ACTIVE,
-    SUSPECT,      // Warp Score > Threshold 1
-    QUARANTINE,   // Warp Score > Threshold 2 (Fail-Closed)
-    FLUSHING,     // Entropy Reset in progress
-    RESYNC,       // Recovering from Clock Drift
-    CLOSED
+enum class SessionState { INIT, ACTIVE, SUSPECT, QUARANTINE, FLUSHING, RESYNC, CLOSED };
+
+struct SessionEvent {
+    uint64_t timestamp;
+    std::string type;
+    std::string payload_hash;
+    std::string detail;
 };
 
-// [E-8] Warp Weights for State Transitions
-static constexpr float WARP_WEIGHT_ALLOW   = -0.1f; // Successful clean ops reduce score
-static constexpr float WARP_WEIGHT_FLAG    =  0.5f;
-static constexpr float WARP_WEIGHT_DENY    =  1.0f;
-static constexpr float WARP_WEIGHT_MFA     =  0.2f;
+// Flush callback: (session_id, incident_id, tainted_payload_hashes)
+using FlushCallback = std::function<void(const std::string&, const std::string&, const std::vector<std::string>&)>;
+
+// Warp Score Weights (SECURITY CRITICAL)
+static constexpr float WARP_WEIGHT_ALLOW     = -0.1f;
+static constexpr float WARP_WEIGHT_FLAG      =  0.5f;
+static constexpr float WARP_WEIGHT_MFA       =  0.3f;
+static constexpr float WARP_WEIGHT_DENY      =  1.0f;
+static constexpr size_t MAX_BUFFER           = 1024;
 
 class Session {
 public:
-    using FlushCallback = std::function<void(const std::string&, const std::string&, const std::vector<std::string>&)>;
-
-    Session(std::string session_id,
-            std::string peer_model_id,
-            float       warp_threshold,
+    Session(std::string session_id, std::string peer_model_id, float warp_threshold, 
             FlushCallback on_flush);
 
     void activate();
-    
-    /**
-     * @brief Processes a policy decision and updates the Warp Score.
-     * If score exceeds threshold, transitions to SUSPECT or QUARANTINE.
-     */
     bool process_decision(const PolicyDecision& decision, uint64_t now_ms);
-    
-    void initiate_flush(uint64_t now_ms);
     void complete_flush();
+    void reactivate();
     void close();
 
-    // Accessors
-    bool is_active() const { return state_ == SessionState::ACTIVE || state_ == SessionState::SUSPECT; }
     SessionState state() const { return state_; }
     float warp_score() const { return warp_score_; }
+    bool is_active() const;
     
     static std::string state_str(SessionState s);
 
 private:
     void transition(SessionState next, const std::string& reason);
-    void log_event(const std::string& type, const std::string& detail, uint64_t ts);
+    void initiate_flush(uint64_t now_ms);
+    void require_state(SessionState expected, const std::string& op) const;
+    void log_event(const std::string& type, const std::string& detail, uint64_t ts, 
+                   const std::string& payload_hash = "");
 
     std::string session_id_;
     std::string peer_model_id_;
-    float       warp_threshold_; // Base threshold for SUSPECT
-    FlushCallback on_flush_;
-    
+    float warp_threshold_;
+    float warp_score_ = 0.0f;
     SessionState state_;
-    float        warp_score_;
     
-    std::deque<std::string>  payload_buffer_;
-    const size_t MAX_BUFFER = 100;
+    std::deque<std::string> payload_buffer_;
+    std::vector<SessionEvent> event_log_;
+    FlushCallback on_flush_;
 };
 
-} // namespace uml001
+}

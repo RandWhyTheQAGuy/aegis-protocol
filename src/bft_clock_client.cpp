@@ -38,4 +38,8 @@ BftTimeResponseData BftClockClient::do_grpc_request() const {
     return r;
 }
 
+std::string BftClockClient::source_id() const {
+    return "BFT-Quorum-" + cfg_.target_uri;
+}
+
 } // namespace uml001

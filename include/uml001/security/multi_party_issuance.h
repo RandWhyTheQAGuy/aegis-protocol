@@ -6,9 +6,9 @@
 //   - Uses length-prefixed concatenation for the composite signature to ensure
 //     cryptographic domain separation and prevent concatenation ambiguity.
 
-#include "passport.h"
-#include "transparency_log.h"
-#include "key_rotation.h"
+#include "uml001/core/passport.h"
+#include "uml001/security/transparency_log.h"
+#include "uml001/security/key_rotation.h"
 #include <map>
 #include <set>
 #include <vector>

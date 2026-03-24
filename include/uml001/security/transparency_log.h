@@ -76,12 +76,24 @@ public:
                 const std::string& payload_hash, 
                 const std::string& signer_id);
 
+    /**
+     * @brief Retrieves the full history of log entries.
+     * [E-7] Auditability: Complete chain for external verification
+     */
+    std::vector<TransparencyEntry> history() const;
+
+    /**
+     * @brief Verifies the integrity of the Merkle chain.
+     * [E-7] Chain Verification: Ensures no tampering by recomputing root
+     */
+    bool verify_chain() const;
+
     std::string get_root_hash() const;
     LogState state() const { return current_state_; }
 
 private:
     std::shared_ptr<MerkleNode> compute_recursive(
-        const std::vector<std::shared_ptr<MerkleNode>>& level);
+        const std::vector<std::shared_ptr<MerkleNode>>& level) const;
     
     void rebuild_tree();
 
@@ -89,6 +101,7 @@ private:
     TransparencyMode mode_;
     LogState current_state_;
 
+    std::vector<TransparencyEntry> entries_;
     std::vector<std::shared_ptr<MerkleNode>> leaves_;
     std::shared_ptr<MerkleNode> root_;
 };

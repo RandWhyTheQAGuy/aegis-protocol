@@ -7,13 +7,15 @@
 
 #include "uml001/core/bft_clock_client.h"
 #include "uml001/core/clock.h"
+#include "uml001/core/mock_clock.h"
 #include "uml001/core/passport.h"
 #include "uml001/core/session.h"
 #include "uml001/core/policy.h"
 #include "uml001/core/temporal_state.h"
 #include "uml001/security/multi_party_issuance.h"
 #include "uml001/security/transparency_log.h"
-#include "uml001/vault.h"
+#include "uml001/security/vault.h"
+#include "uml001/globals.h"
 #include "uml001/crypto/crypto_utils.h"
 #include "uml001/crypto/simple_hash_provider.h"
 
@@ -22,6 +24,7 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
+#include <cstdlib>
 
 using namespace uml001;
 
@@ -35,16 +38,6 @@ static constexpr uint32_t PASSPORT_TTL_S = 86400;
 // Warp thresholds co-located with weights [E-8]
 static constexpr float WARP_SUSPECT_THRESH    = 1.0f;
 static constexpr float WARP_QUARANTINE_THRESH = 3.0f;
-
-// =============================================================================
-// CI/CD Mock Clock Implementation
-// =============================================================================
-class MockClock : public IClock {
-public:
-    uint64_t now_unix() const override { return 1740000000ULL; }
-    uint64_t now_ms() const { return 1740000000000ULL; }
-    ClockStatus status() const override { return ClockStatus::SYNCHRONIZED; }
-};
 
 // =============================================================================
 // Helper: Vault Logging with BFT Provenance [E-7]

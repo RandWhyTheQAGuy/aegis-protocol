@@ -37,10 +37,8 @@ std::string Policy::compute_hash() const {
     std::stringstream ss;
     ss << policy_id << ":" << version << "|";
     
-    for (const auto& constraint : constraints) {
-        ss << constraint.resource_id << ":" 
-           << constraint.action << ":" 
-           << (constraint.allowed ? "1" : "0") << ";";
+    for (const auto& meta_entry : metadata) {
+        ss << meta_entry.first << ":" << meta_entry.second << ";";
     }
     
     return sha256_hex(ss.str());
