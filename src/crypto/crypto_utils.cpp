@@ -1,4 +1,21 @@
+/*
+ * Copyright 2026 Aegis Protocol Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
+
 #include "uml001/crypto/crypto_utils.h"
+#include <vector>
+#include <cstdint>
+#include <string>
+#include <sstream>
+#include <iomanip>
+#include <stdexcept>
+#include <algorithm>
 
 #include <openssl/evp.h>
 #include <openssl/rand.h>
@@ -6,29 +23,30 @@
 #include <openssl/bio.h>
 #include <openssl/buffer.h>
 
-#include <sstream>
-#include <iomanip>
-#include <stdexcept>
-
 namespace uml001 {
 
 // ---------------- HEX ----------------
 static std::string bytes_to_hex(const std::vector<uint8_t>& bytes) {
     std::ostringstream oss;
-    for (auto b : bytes)
-        oss << std::hex << std::setw(2) << std::setfill('0') << (int)b;
+    oss << std::hex << std::setfill('0');
+    for (auto b : bytes) {
+        oss << std::setw(2) << static_cast<int>(b);
+    }
     return oss.str();
 }
 
 // ---------------- SHA256 ----------------
 std::vector<uint8_t> sha256_raw(const std::vector<uint8_t>& data) {
     EVP_MD_CTX* ctx = EVP_MD_CTX_new();
-    if (!ctx) throw std::runtime_error("EVP ctx failed");
+    if (!ctx) throw std::runtime_error("EVP ctx allocation failed");
 
-    EVP_DigestInit_ex(ctx, EVP_sha256(), nullptr);
-    EVP_DigestUpdate(ctx, data.data(), data.size());
+    if (EVP_DigestInit_ex(ctx, EVP_sha256(), nullptr) != 1 ||
+        EVP_DigestUpdate(ctx, data.data(), data.size()) != 1) {
+        EVP_MD_CTX_free(ctx);
+        throw std::runtime_error("EVP digest update failed");
+    }
 
-    std::vector<uint8_t> digest(32);
+    std::vector<uint8_t> digest(EVP_MD_size(EVP_sha256()));
     unsigned int len = 0;
 
     EVP_DigestFinal_ex(ctx, digest.data(), &len);
@@ -39,14 +57,15 @@ std::vector<uint8_t> sha256_raw(const std::vector<uint8_t>& data) {
 }
 
 std::string sha256_hex(const std::string& input) {
-    return bytes_to_hex({sha256_raw({input.begin(), input.end()})});
+    std::vector<uint8_t> data(input.begin(), input.end());
+    return bytes_to_hex(sha256_raw(data));
 }
 
 // ---------------- RANDOM ----------------
 std::vector<uint8_t> secure_random_bytes(std::size_t length) {
     std::vector<uint8_t> out(length);
-    if (RAND_bytes(out.data(), length) != 1)
-        throw std::runtime_error("RAND_bytes failed");
+    if (RAND_bytes(out.data(), static_cast<int>(length)) != 1)
+        throw std::runtime_error("OpenSSL RAND_bytes failed");
     return out;
 }
 
@@ -64,8 +83,8 @@ std::string base64_encode(const std::vector<uint8_t>& data) {
     BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
     bio = BIO_push(b64, bio);
 
-    BIO_write(bio, data.data(), data.size());
-    BIO_flush(bio);
+    BIO_write(bio, data.data(), static_cast<int>(data.size()));
+    (void)BIO_flush(bio);
     BIO_get_mem_ptr(bio, &bufferPtr);
 
     std::string result(bufferPtr->data, bufferPtr->length);
@@ -78,15 +97,15 @@ std::vector<uint8_t> base64_decode(const std::string& input) {
     std::vector<uint8_t> buffer(input.size());
 
     b64 = BIO_new(BIO_f_base64());
-    bio = BIO_new_mem_buf(input.data(), input.size());
+    bio = BIO_new_mem_buf(input.data(), static_cast<int>(input.size()));
     BIO_set_flags(b64, BIO_FLAGS_BASE64_NO_NL);
     bio = BIO_push(b64, bio);
 
-    int len = BIO_read(bio, buffer.data(), input.size());
+    int len = BIO_read(bio, buffer.data(), static_cast<int>(input.size()));
     BIO_free_all(bio);
 
     if (len < 0) return {};
-    buffer.resize(len);
+    buffer.resize(static_cast<std::size_t>(len));
     return buffer;
 }
 
@@ -110,17 +129,14 @@ bool ed25519_verify(const std::vector<uint8_t>& pub,
 
     EVP_PKEY* pkey = EVP_PKEY_new_raw_public_key(
         EVP_PKEY_ED25519, nullptr, pub.data(), pub.size());
+    if (!pkey) return false;
 
     EVP_MD_CTX* ctx = EVP_MD_CTX_new();
-
-    bool ok =
-        EVP_DigestVerifyInit(ctx, nullptr, nullptr, nullptr, pkey) == 1 &&
-        EVP_DigestVerify(ctx, sig.data(), sig.size(),
-                         msg.data(), msg.size()) == 1;
+    bool ok = (EVP_DigestVerifyInit(ctx, nullptr, nullptr, nullptr, pkey) == 1) &&
+              (EVP_DigestVerify(ctx, sig.data(), sig.size(), msg.data(), msg.size()) == 1);
 
     EVP_MD_CTX_free(ctx);
     EVP_PKEY_free(pkey);
-
     return ok;
 }
 
@@ -129,21 +145,22 @@ std::vector<uint8_t> ed25519_sign(const std::vector<uint8_t>& priv,
 
     EVP_PKEY* pkey = EVP_PKEY_new_raw_private_key(
         EVP_PKEY_ED25519, nullptr, priv.data(), priv.size());
+    if (!pkey) throw std::runtime_error("PKEY raw key creation failed");
 
     EVP_MD_CTX* ctx = EVP_MD_CTX_new();
-
     size_t siglen = 64;
     std::vector<uint8_t> sig(siglen);
 
-    EVP_DigestSignInit(ctx, nullptr, nullptr, nullptr, pkey);
-    EVP_DigestSign(ctx, sig.data(), &siglen,
-                   msg.data(), msg.size());
+    if (EVP_DigestSignInit(ctx, nullptr, nullptr, nullptr, pkey) != 1 ||
+        EVP_DigestSign(ctx, sig.data(), &siglen, msg.data(), msg.size()) != 1) {
+        EVP_MD_CTX_free(ctx);
+        EVP_PKEY_free(pkey);
+        throw std::runtime_error("EVP sign failed");
+    }
 
     sig.resize(siglen);
-
     EVP_MD_CTX_free(ctx);
     EVP_PKEY_free(pkey);
-
     return sig;
 }
 

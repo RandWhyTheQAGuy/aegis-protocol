@@ -1,48 +1,33 @@
+/*
+ * Copyright 2026 Aegis Protocol Authors
+ */
+
 #include "uml001/security/revocation.h"
 
 namespace uml001 {
 
-void MultiPartyRevocationController::propose_revocation(const RevocationRecord& rec, IClock& clock) {
-    if (proposals_.count(rec.passport_id)) return;
-
-    ProposalState state;
-    state.record = rec;
-    proposals_[rec.passport_id] = state;
-
+void RevocationList::propose_revocation(const std::string& model_id, 
+                                        const std::string& reason) {
+    // TransparencyLog::append(type, event_type, payload, signer)
     log_.append(TransparencyEntry::Type::REVOCATION_PROPOSED, 
-                "REVOCATION_PROPOSAL", 
-                rec.evidence_hash, 
-                rec.revoked_by, 
-                clock);
+                "CERT_REVOKE_PROPOSAL", 
+                model_id, 
+                reason);
 }
 
-void MultiPartyRevocationController::approve_revocation(const std::string& passport_id, 
-                                                       const std::string& approver_id, 
-                                                       IClock& clock) {
-    if (!proposals_.count(passport_id)) return;
-    
-    auto& prop = proposals_[passport_id];
-    if (prop.finalized) return;
-
-    prop.approvers.insert(approver_id);
-
+void RevocationList::approve_revocation(const std::string& proposal_id) {
     log_.append(TransparencyEntry::Type::REVOCATION_APPROVED, 
-                "REVOCATION_APPROVAL", 
-                prop.record.evidence_hash, 
-                approver_id, 
-                clock);
+                "CERT_REVOKE_APPROVAL", 
+                proposal_id, 
+                "SYSTEM_QUORUM");
+}
 
-    if (prop.approvers.size() >= threshold_) {
-        prop.finalized = true;
-        prop.record.revoked_at = clock.now_unix();
-        list_.add_revocation(prop.record);
-
-        log_.append(TransparencyEntry::Type::REVOCATION_FINALIZED, 
-                    "REVOCATION_FINALIZED", 
-                    prop.record.evidence_hash, 
-                    "SYSTEM_QUORUM", 
-                    clock);
-    }
+void RevocationList::finalize_revocation(const std::string& model_id) {
+    revoked_models_.insert(model_id);
+    log_.append(TransparencyEntry::Type::REVOCATION_FINALIZED, 
+                "CERT_REVOKE_FINAL", 
+                model_id, 
+                "COMMIT_SUCCESS");
 }
 
 } // namespace uml001

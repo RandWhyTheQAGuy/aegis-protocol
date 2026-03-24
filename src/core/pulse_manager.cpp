@@ -1,36 +1,67 @@
-/ ============================================================
+/*
+ * Copyright 2026 Aegis Protocol Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
+
+#include "uml001/core/clock.h"
+#include "uml001/core/temporal_state.h"
+#include <thread>
+#include <chrono>
+#include <cstdint>
+#include <atomic>
+#include <vector>
+
+namespace uml001 {
+
+// Forward declaration of the clock type used by PulseManager
+class RemoteQuorumClock;
+
+/**
+ * @brief PulseManager maintains the heartbeat of the BFT Quorum connection.
+ * It periodically polls the clock and updates the TemporalStateMachine.
+ */
+class PulseManager {
 public:
-    PulseManager(RemoteQuorumClock& clock)
+    PulseManager(IClock& clock)
         : clock_(clock)
     {}
 
-    void start()
-    {
+    ~PulseManager() {
+        stop();
+    }
+
+    void start() {
+        if (running_) return;
         running_ = true;
-        thread_ = std::thread([this]() { loop(); });
+        thread_ = std::thread([this]() { this->loop(); });
     }
 
-    void stop()
-    {
+    void stop() {
         running_ = false;
-        if (thread_.joinable())
+        if (thread_.joinable()) {
             thread_.join();
+        }
     }
 
-    TemporalState current_state() const
-    {
+    TemporalState current_state() const {
         return tsm_.state();
     }
 
 private:
-    void loop()
-    {
+    void loop() {
         while (running_) {
             try {
+                // Poll the clock to verify synchronization
                 clock_.now_unix();
                 last_success_ = now_ms();
             } catch (...) {
-                // ignore, state will degrade
+                // On failure, we don't update last_success_, 
+                // causing the TSM to eventually degrade.
             }
 
             uint64_t delta = now_ms() - last_success_;
@@ -40,13 +71,12 @@ private:
         }
     }
 
-    uint64_t now_ms() const
-    {
+    uint64_t now_ms() const {
         return std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::steady_clock::now().time_since_epoch()).count();
     }
 
-    RemoteQuorumClock& clock_;
+    IClock& clock_;
     TemporalStateMachine tsm_;
 
     std::atomic<bool> running_{false};

@@ -16,9 +16,9 @@
 #include <pistache/endpoint.h>
 #include <pistache/router.h>
 
-#include "uml001/bft_clock_client.h"          // ✅ NEW CLOCK CLIENT
+#include "uml001/core/bft_clock_client.h"
 #include "uml001/vault.h"
-#include "uml001/simple_file_vault_backend.h"
+#include "uml001/security/ivault_backend.h"
 #include "uml001/simple_hash_provider.h"
 #include "uml001/strong_clock.h"
 #include "uml001/crypto/crypto_utils.h"

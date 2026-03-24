@@ -1,14 +1,24 @@
-#include "uml001/core/transparency_log.h"
+/*
+ * Copyright 2026 Aegis Protocol Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
+
+#include "uml001/security/transparency_log.h"
+#include "uml001/crypto/crypto_utils.h"
 #include <algorithm>
 #include <stdexcept>
 
 namespace uml001 {
 
 TransparencyLog::TransparencyLog(std::shared_ptr<IClock> clock, TransparencyMode mode)
-    : clock_(clock), current_state_(LogState::IDLE), mode_(mode), root_(nullptr) {
-    // Security check: Ensure the log is never created without a trusted clock
+    : clock_(clock), mode_(mode), current_state_(LogState::IDLE), root_(nullptr) {
     if (!clock_) {
-        throw std::invalid_argument("TransparencyLog requires a valid IClock instance for trusted timestamps.");
+        throw std::invalid_argument("TransparencyLog requires a valid IClock instance.");
     }
 }
 
@@ -23,10 +33,9 @@ bool TransparencyLog::append(TransparencyEntry::Type type,
     entry.event_type = event_type_str;
     entry.payload_hash = payload_hash;
     entry.signer_id = signer_id;
-    
-    // Pull the timestamp directly from our secure, internal clock
     entry.timestamp = clock_->now_unix(); 
 
+    // Generate unique ID for this log entry
     entry.entry_id = sha256_hex(payload_hash + "|" + std::to_string(entry.timestamp));
 
     auto node = std::make_shared<MerkleNode>();
@@ -49,6 +58,7 @@ void TransparencyLog::rebuild_tree() {
 std::shared_ptr<MerkleNode> TransparencyLog::compute_recursive(
     const std::vector<std::shared_ptr<MerkleNode>>& level) {
     
+    if (level.empty()) return nullptr;
     if (level.size() == 1) return level[0];
 
     std::vector<std::shared_ptr<MerkleNode>> next_level;
@@ -59,8 +69,9 @@ std::shared_ptr<MerkleNode> TransparencyLog::compute_recursive(
             parent->right = level[i+1];
             parent->hash = sha256_hex(level[i]->hash + level[i+1]->hash);
         } else {
+            // Odd number of nodes: promote the last node hash upward
             parent->left = level[i];
-            parent->hash = level[i]->hash; // Odd leaf promotion
+            parent->hash = level[i]->hash; 
         }
         next_level.push_back(parent);
     }

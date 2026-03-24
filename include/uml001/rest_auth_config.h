@@ -1,2 +1,2 @@
 #pragma once
-#include "uml001/core/rest_auth_config.h"
+#include "uml001/rest_auth_config.h"

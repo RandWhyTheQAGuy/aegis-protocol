@@ -1,6 +1,6 @@
 #pragma once
 
-#include "uml001/core/iclock.h"
+#include "uml001/clock.h"
 #include "clock_service.grpc.pb.h"
 
 #include <grpcpp/grpcpp.h>

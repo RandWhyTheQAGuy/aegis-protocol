@@ -1,58 +1,27 @@
 #pragma once
 
 #include "uml001/security/transparency_log.h"
-#include "uml001/core/clock.h"
 #include <string>
-#include <vector>
-#include <map>
 #include <set>
 
 namespace uml001 {
 
-enum class RevocationReason { 
-    COMPROMISED_KEY = 0, 
-    USER_REQUEST, 
-    POLICY_VIOLATION, 
-    MULTI_PARTY_DECISION, 
-    OTHER 
-};
-
-struct RevocationRecord {
-    std::string passport_id;
-    uint64_t    revoked_at = 0;
-    RevocationReason reason = RevocationReason::OTHER;
-    std::string evidence_hash;
-    std::string revoked_by;
-};
-
-struct ProposalState {
-    RevocationRecord record;
-    std::set<std::string> approvers;
-    bool finalized = false;
-};
-
 class RevocationList {
 public:
-    void add_revocation(const RevocationRecord& rec) { records_[rec.passport_id] = rec; }
-    bool is_revoked(const std::string& id) const { return records_.find(id) != records_.end(); }
+    // We pass by reference to ensure the list is tied to a specific log instance
+    explicit RevocationList(TransparencyLog& log) : log_(log) {}
 
-private:
-    std::map<std::string, RevocationRecord> records_;
-};
+    void propose_revocation(const std::string& model_id, const std::string& reason);
+    void approve_revocation(const std::string& proposal_id);
+    void finalize_revocation(const std::string& model_id);
 
-class MultiPartyRevocationController {
-public:
-    MultiPartyRevocationController(TransparencyLog& log, RevocationList& list, std::size_t threshold)
-        : log_(log), list_(list), threshold_(threshold) {}
-
-    void propose_revocation(const RevocationRecord& rec, IClock& clock);
-    void approve_revocation(const std::string& passport_id, const std::string& approver_id, IClock& clock);
+    bool is_revoked(const std::string& model_id) const {
+        return revoked_models_.find(model_id) != revoked_models_.end();
+    }
 
 private:
     TransparencyLog& log_;
-    RevocationList&  list_;
-    std::size_t      threshold_;
-    std::map<std::string, ProposalState> proposals_;
+    std::set<std::string> revoked_models_;
 };
 
 } // namespace uml001

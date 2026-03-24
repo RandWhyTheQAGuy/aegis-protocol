@@ -1,2 +1,2 @@
 #pragma once
-#include "uml001/core/rest_handlers.h"
+#include "uml001/rest_handlers.h"
