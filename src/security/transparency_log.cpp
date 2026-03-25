@@ -1,4 +1,5 @@
-#include "uml001/core/transparency_log.h"
+#include "uml001/crypto/crypto_utils.h"
+#include "uml001/security/transparency_log.h"
 #include <algorithm>
 #include <stdexcept>
 
@@ -27,10 +28,10 @@ bool TransparencyLog::append(TransparencyEntry::Type type,
     // Pull the timestamp directly from our secure, internal clock
     entry.timestamp = clock_->now_unix(); 
 
-    entry.entry_id = sha256_hex(payload_hash + "|" + std::to_string(entry.timestamp));
+    entry.entry_id = uml001::sha256_hex(payload_hash + "|" + std::to_string(entry.timestamp));
 
     auto node = std::make_shared<MerkleNode>();
-    node->hash = sha256_hex(entry.serialize_for_hash());
+    node->hash = uml001::sha256_hex(entry.serialize_for_hash());
     leaves_.push_back(node);
 
     if (mode_ == TransparencyMode::IMMEDIATE) {
@@ -57,7 +58,7 @@ std::shared_ptr<MerkleNode> TransparencyLog::compute_recursive(
         if (i + 1 < level.size()) {
             parent->left = level[i];
             parent->right = level[i+1];
-            parent->hash = sha256_hex(level[i]->hash + level[i+1]->hash);
+            parent->hash = uml001::sha256_hex(level[i]->hash + level[i+1]->hash);
         } else {
             parent->left = level[i];
             parent->hash = level[i]->hash; // Odd leaf promotion

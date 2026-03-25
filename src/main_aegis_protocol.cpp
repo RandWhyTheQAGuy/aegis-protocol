@@ -161,6 +161,24 @@ using namespace uml001;
 // These are REQUIRED because your code uses them but they are not guaranteed
 // to exist depending on header versions.
 
+static std::shared_ptr<uml001::IClock> g_global_clock;
+
+static void init_clock(std::shared_ptr<uml001::IClock> clock)
+{
+    if (!clock) {
+        throw std::runtime_error("init_clock: clock is null");
+    }
+    g_global_clock = std::move(clock);
+}
+
+static std::shared_ptr<uml001::IClock> get_clock()
+{
+    if (!g_global_clock) {
+        throw std::runtime_error("get_clock: global clock not initialized");
+    }
+    return g_global_clock;
+}
+
 static inline uint64_t now_unix()
 {
     return get_clock()->now_unix();
@@ -333,7 +351,9 @@ int main()
         // REGISTRY
         // =========================================================================
 
-        PassportRegistry registry(ROOT_KEY, REG_VERSION, get_clock());
+        uml001::TransparencyLog tlog(get_clock(), uml001::TransparencyMode::IMMEDIATE);
+        uml001::RevocationList revocation_list;
+        PassportRegistry registry(tlog, revocation_list, *get_clock());
 
         // =========================================================================
         // BASIC FLOW TEST (minimal but VALID)
@@ -342,13 +362,12 @@ int main()
         Capabilities caps;
         caps.classifier_authority = true;
 
-        auto passport = registry.issue(
+        auto passport = registry.issue_model_passport(
             "agent-alpha",
             "1.0.0",
             caps,
             sha256_hex("policy"),
-            NOW,
-            PASSPORT_TTL_S
+            1
         );
 
         auto vr = registry.verify(passport);

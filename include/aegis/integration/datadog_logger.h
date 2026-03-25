@@ -4,17 +4,26 @@
 #include <string>
 #include <vector>
 
-namespace aegis::integration {
+namespace aegis {
+namespace integration {
 
-// DatadogLogger implements the core IEventLogger interface
-class DatadogLogger : public uml001::IEventLogger {
+/**
+ * @brief DatadogLogger provides observability integration for Aegis Protocol
+ * 
+ * Logs security events and transparency entries to Datadog agent via UDP
+ */
+class DatadogLogger {
 public:
     DatadogLogger(const std::string& agent_host, int agent_port);
-    ~DatadogLogger() override = default;
+    ~DatadogLogger() = default;
 
-    // Implementation of the virtual method defined in transparency_log.h
-    void log_event(uml001::LogDestination dest, 
-                   const std::string& message) override;
+    /**
+     * @brief Log a security event to Datadog
+     * @param event_type The type of security event
+     * @param message The event message  
+     */
+    void log_event(const std::string& event_type,
+                   const std::string& message);
 
 private:
     std::string host_;
@@ -22,4 +31,5 @@ private:
     void send_udp(const std::string& payload);
 };
 
-} // namespace aegis::integration
+} // namespace integration
+} // namespace aegis

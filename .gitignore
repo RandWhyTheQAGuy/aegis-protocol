@@ -1,0 +1,81 @@
+# -------------------------
+# OS / Editor Noise
+# -------------------------
+.DS_Store
+.vscode/
+.*
+
+# Ignore ALL hidden dot-files except the ones we explicitly keep
+.*
+!.gitignore
+!.github/
+!.env.example
+
+# -------------------------
+# Python Artifacts
+# -------------------------
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+dist/
+build_python/
+sdks/python/**/build/
+sdks/python/**/dist/
+
+# -------------------------
+# CMake Build Artifacts
+# -------------------------
+build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.cmake
+*.o
+*.a
+*.d
+
+# Ninja (if used)
+*.ninja
+.ninja_deps
+.ninja_log
+
+# -------------------------
+# Protobuf / gRPC Generated
+# -------------------------
+*.pb.cc
+*.pb.h
+*.grpc.pb.cc
+*.grpc.pb.h
+src/bindings/*.pb.*
+build/**/*.pb.*
+
+# -------------------------
+# Compiled Extensions / Binaries
+# -------------------------
+*.so
+test_passport_flow
+aegis_daemon
+aegis_core
+clock_proto
+lib*.a
+
+# -------------------------
+# Project Metadata
+# -------------------------
+aegis-protocol.code-workspace
+project_structure.txt
+
+# -------------------------
+# Logs / Runtime
+# -------------------------
+*.log
+
+# -------------------------
+# Legacy / Accidental Files
+# -------------------------
+bindings/.CMakeLists.txt
+.main.py
+.test_aegis.py
+.aegisSDK.py

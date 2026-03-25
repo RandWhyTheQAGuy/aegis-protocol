@@ -1,3 +1,4 @@
+#include "uml001/crypto/crypto_utils.h"
 #include "uml001/bft/remote_quorum_clock.h"
 
 #include <algorithm>
@@ -28,16 +29,16 @@ RemoteQuorumClock::RemoteQuorumClock(
         NodeClient c;
         c.endpoint = n.endpoint;
         c.node_id = n.node_id;
-        c.pubkey = base64_decode(n.pubkey_base64);
+        c.pubkey = uml001::base64_decode(n.pubkey_base64);
         c.stub = quorumtime::ClockService::NewStub(channel);
 
         clients_.push_back(std::move(c));
     }
 }
 
-uint64_t RemoteQuorumClock::now_unix() {
+uint64_t RemoteQuorumClock::now_unix() const {
     // 1. Generate a unique ID for this request to prevent "Replay Attacks"
-    std::string request_id = generate_random_bytes_hex(16);
+    std::string request_id = uml001::generate_random_bytes_hex(16);
 
     std::vector<int64_t> times;
     std::vector<double> confs;
@@ -47,7 +48,7 @@ uint64_t RemoteQuorumClock::now_unix() {
     last_proof_ = {};
 
     // 2. Poll every node in the cluster
-    for (auto& c : clients_) {
+    for (const auto& c : clients_) {
         quorumtime::TimeResponse r;
 
         if (!query_node(c, request_id, r)) continue;
@@ -60,7 +61,7 @@ uint64_t RemoteQuorumClock::now_unix() {
         // Store evidence for the QuorumProof
         last_proof_.node_ids.push_back(c.node_id);
         last_proof_.signatures_b64.push_back(
-            base64_encode(std::vector<uint8_t>(r.signature().begin(), r.signature().end()))
+            uml001::base64_encode(std::vector<uint8_t>(r.signature().begin(), r.signature().end()))
         );
     }
 
@@ -93,7 +94,7 @@ uint64_t RemoteQuorumClock::now_unix() {
     return static_cast<uint64_t>(median);
 }
 
-bool RemoteQuorumClock::query_node(NodeClient& client, const std::string& request_id, quorumtime::TimeResponse& out) {
+bool RemoteQuorumClock::query_node(const NodeClient& client, const std::string& request_id, quorumtime::TimeResponse& out) const {
     quorumtime::TimeRequest req;
     req.set_client_id("aegis");
     req.set_request_id(request_id);
@@ -106,7 +107,7 @@ bool RemoteQuorumClock::query_node(NodeClient& client, const std::string& reques
     return client.stub->GetQuorumTime(&ctx, req, &out).ok();
 }
 
-bool RemoteQuorumClock::validate_response(const NodeClient& client, const quorumtime::TimeResponse& r, const std::string& request_id) {
+bool RemoteQuorumClock::validate_response(const NodeClient& client, const quorumtime::TimeResponse& r, const std::string& request_id) const {
     // Verify request pairing
     if (r.request_id() != request_id) return false;
     if (r.node_id() != client.node_id) return false;
@@ -115,7 +116,7 @@ bool RemoteQuorumClock::validate_response(const NodeClient& client, const quorum
     auto payload = canonical_payload(r);
     auto sig = std::vector<uint8_t>(r.signature().begin(), r.signature().end());
 
-    if (!ed25519_verify(client.pubkey, std::vector<uint8_t>(payload.begin(), payload.end()), sig)) {
+    if (!uml001::ed25519_verify(client.pubkey, std::vector<uint8_t>(payload.begin(), payload.end()), sig)) {
         return false;
     }
 
@@ -135,7 +136,7 @@ bool RemoteQuorumClock::validate_response(const NodeClient& client, const quorum
     return true;
 }
 
-std::string RemoteQuorumClock::canonical_payload(const quorumtime::TimeResponse& r) {
+std::string RemoteQuorumClock::canonical_payload(const quorumtime::TimeResponse& r) const {
     // Create a predictable string for hashing/signing
     std::ostringstream ss;
     ss << r.unix_time_ms() << "|"
@@ -147,15 +148,15 @@ std::string RemoteQuorumClock::canonical_payload(const quorumtime::TimeResponse&
     return ss.str();
 }
 
-int64_t RemoteQuorumClock::compute_median(std::vector<int64_t>& v) {
+int64_t RemoteQuorumClock::compute_median(std::vector<int64_t>& v) const {
     std::sort(v.begin(), v.end());
     return v[v.size() / 2];
 }
 
-void RemoteQuorumClock::enforce_monotonic(int64_t t) {
+void RemoteQuorumClock::enforce_monotonic(int64_t t) const {
     int64_t prev = monotonic_floor_.load();
     // Atomic Compare-and-Swap to update floor safely across threads
-    while (t > prev && !monotonic_floor_.compare_exchange_weak(prev, t)) {}
+    while (t > prev && !monotonic_floor_.compare_exchange_weak(prev, t, std::memory_order_release, std::memory_order_relaxed)) {}
     
     if (t < prev) {
         throw std::runtime_error("Security Alert: Trusted Time rollback detected");
@@ -167,5 +168,37 @@ double RemoteQuorumClock::get_confidence_ms() const { return confidence_; }
 int RemoteQuorumClock::get_active_nodes() const { return active_nodes_; }
 double RemoteQuorumClock::get_projected_drift() const { return drift_; }
 const QuorumProof& RemoteQuorumClock::last_proof() const { return last_proof_; }
+
+// IClock Interface Methods
+uint64_t RemoteQuorumClock::now_ms() const {
+    // Convert seconds to milliseconds
+    uint64_t sec_time = now_unix();
+    return sec_time * 1000;
+}
+
+bool RemoteQuorumClock::is_synchronized() const {
+    return current_status_ == ClockStatus::SYNCHRONIZED;
+}
+
+uint64_t RemoteQuorumClock::last_sync_unix() const {
+    return last_sync_time_;
+}
+
+ClockStatus RemoteQuorumClock::status() const {
+    // Update status based on active nodes and confidence
+    if (active_nodes_ == 0) {
+        return ClockStatus::FAULT;
+    } else if (active_nodes_ < static_cast<int>(quorum_threshold_)) {
+        return ClockStatus::DEGRADED;
+    } else if (drift_ > max_drift_ppm_ * 0.8) {
+        return ClockStatus::DEGRADED;
+    } else {
+        return ClockStatus::SYNCHRONIZED;
+    }
+}
+
+std::string RemoteQuorumClock::source_id() const {
+    return "BFT-Quorum";
+}
 
 } // namespace uml001

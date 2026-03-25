@@ -12,8 +12,7 @@ void MultiPartyRevocationController::propose_revocation(const RevocationRecord& 
     log_.append(TransparencyEntry::Type::REVOCATION_PROPOSED, 
                 "REVOCATION_PROPOSAL", 
                 rec.evidence_hash, 
-                rec.revoked_by, 
-                clock);
+                rec.revoked_by);
 }
 
 void MultiPartyRevocationController::approve_revocation(const std::string& passport_id, 
@@ -29,8 +28,7 @@ void MultiPartyRevocationController::approve_revocation(const std::string& passp
     log_.append(TransparencyEntry::Type::REVOCATION_APPROVED, 
                 "REVOCATION_APPROVAL", 
                 prop.record.evidence_hash, 
-                approver_id, 
-                clock);
+                approver_id);
 
     if (prop.approvers.size() >= threshold_) {
         prop.finalized = true;
@@ -40,8 +38,7 @@ void MultiPartyRevocationController::approve_revocation(const std::string& passp
         log_.append(TransparencyEntry::Type::REVOCATION_FINALIZED, 
                     "REVOCATION_FINALIZED", 
                     prop.record.evidence_hash, 
-                    "SYSTEM_QUORUM", 
-                    clock);
+                    "SYSTEM_QUORUM");
     }
 }
 
