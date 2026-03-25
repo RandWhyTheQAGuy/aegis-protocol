@@ -427,7 +427,6 @@
 |   |   |-- TargetDirectories.txt
 |   |   |-- aegis_core.dir
 |   |   |-- aegis_daemon.dir
-|   |   |-- aegis_e2e.dir
 |   |   |-- clock_proto.dir
 |   |   |-- cmake.check_cache
 |   |   |-- pkgRedirects
@@ -553,7 +552,10 @@
 |   |   |-- crypto_utils.cpp
 |   |   |-- hash_provider.cpp
 |   |   `-- simple_hash_provider.cpp
+<<<<<<< HEAD
 
+=======
+>>>>>>> e5773cf (Production: audit and fix time usage, policy iteration, and ensure clean build. No new dependencies. Architecture preserved.)
 |   |-- main_aegis_protocol.cpp
 |   |-- providers
 |   |   |-- datadog_logger.cpp

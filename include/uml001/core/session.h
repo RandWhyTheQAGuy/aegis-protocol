@@ -61,7 +61,18 @@ static constexpr float WARP_WEIGHT_FLAG    =  0.5f;
 static constexpr float WARP_WEIGHT_DENY    =  1.0f;
 static constexpr float WARP_WEIGHT_MFA     =  0.2f;
 
->>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
+// [E-8] Warp Score Bounds and Decay
+static constexpr float WARP_SCORE_MAX      = 100.0f; // Prevent unbounded growth
+static constexpr float WARP_DECAY_RATE     = 0.01f;  // 1% decay per decision
+static constexpr uint64_t WARP_DECAY_TIME_MS = 60000; // Decay every minute
+
+struct SessionEvent {
+    uint64_t timestamp;
+    std::string type;
+    std::string payload_hash;
+    std::string details;
+};
+
 class Session {
 public:
     using FlushCallback = std::function<void(const std::string&, const std::string&, const std::vector<std::string>&)>;
@@ -87,6 +98,7 @@ public:
 >>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
     void initiate_flush(uint64_t now_ms);
     void complete_flush();
+    void reactivate();
     void close();
 
     // Accessors
@@ -103,8 +115,7 @@ public:
 private:
     void transition(SessionState next, const std::string& reason);
     void log_event(const std::string& type, const std::string& detail, uint64_t ts);
-<<<<<<< HEAD
-=======
+    void require_state(SessionState expected, const std::string& op) const;
 
     std::string session_id_;
     std::string peer_model_id_;
@@ -154,8 +165,10 @@ private:
     
     SessionState state_;
     float        warp_score_;
+    uint64_t     last_decision_time_ms_; // For time-based decay
     
     std::deque<std::string>  payload_buffer_;
+    std::vector<SessionEvent> event_log_;
     const size_t MAX_BUFFER = 100;
 };
 

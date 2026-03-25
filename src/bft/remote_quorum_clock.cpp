@@ -251,8 +251,8 @@ bool RemoteQuorumClock::validate_response(const NodeClient& client, const quorum
     std::vector<uint8_t> sig(r.signature().begin(), r.signature().end());
     if (!ed25519_verify(client.pubkey, std::vector<uint8_t>(payload.begin(), payload.end()), sig)) return false;
 
-    int64_t now_ms = std::chrono::duration_cast<std::chrono::milliseconds>(
-        std::chrono::system_clock::now().time_since_epoch()).count();
+    // Use injected clock for time instead of std::chrono
+    int64_t now_ms = clock_.now_ms();
     return std::abs(now_ms - r.unix_time_ms()) <= max_skew_ms_;
 }
 
