@@ -39,7 +39,6 @@
 |   |   |-- TargetDirectories.txt
 |   |   |-- aegis_core.dir
 |   |   |-- aegis_daemon.dir
-|   |   |-- aegis_e2e.dir
 |   |   |-- clock_proto.dir
 |   |   |-- cmake.check_cache
 |   |   |-- pkgRedirects
@@ -165,7 +164,6 @@
 |   |   |-- crypto_utils.cpp
 |   |   |-- hash_provider.cpp
 |   |   `-- simple_hash_provider.cpp
-|   |-- e2e-example.cpp
 |   |-- main_aegis_protocol.cpp
 |   |-- providers
 |   |   |-- datadog_logger.cpp

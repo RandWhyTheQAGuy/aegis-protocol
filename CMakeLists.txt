@@ -168,9 +168,6 @@ endif()
 add_executable(aegis_daemon src/main_aegis_protocol.cpp)
 target_link_libraries(aegis_daemon PRIVATE aegis_core)
 
-add_executable(aegis_e2e src/e2e-example.cpp)
-target_link_libraries(aegis_e2e PRIVATE aegis_core)
-
 # Pointing to the specific test file in your tree
 add_executable(test_passport_flow tests/test_passport_flow.cpp)
 target_link_libraries(test_passport_flow PRIVATE aegis_core)

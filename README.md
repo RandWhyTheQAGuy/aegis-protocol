@@ -24,6 +24,6 @@ All time-dependent authorization decisions are bound to a trusted, injected IClo
 
 **Intended Use**
 
-This framework is intended for developers building multi-agent systems, AI orchestrators, or agentic platforms where cryptographic accountability, semantic policy enforcement, and post-incident forensic auditability are mission-critical. It serves as the security layer that sits between raw model inference and external action execution, and is designed to compose beneath existing orchestration frameworks (LangChain, AutoGen, OpenAI Agents SDK) without replacing them. Compile the reference integration with: g++ -std=c++17 -O2 e2e-example.cpp -lssl -lcrypto -o e2e-example
+This framework is intended for developers building multi-agent systems, AI orchestrators, or agentic platforms where cryptographic accountability, semantic policy enforcement, and post-incident forensic auditability are mission-critical. It serves as the security layer that sits between raw model inference and external action execution, and is designed to compose beneath existing orchestration frameworks (LangChain, AutoGen, OpenAI Agents SDK) without replacing them. Compile the reference integration with: g++ -std=c++17 -O2 src/main_aegis_protocol.cpp -lssl -lcrypto -o aegis_daemon
 
 **Standards alignment:** NIST AI RMF 1.0 (MEASURE / GOVERN), NIST SP 800-53 Rev 5 (IA / AC / AU / IR / SC), NIST SP 800-218A, DoD Zero Trust Reference Architecture v2.0, OWASP LLM Top 10 v2025 (LLM01 / LLM05 / LLM08), ISA/IEC 62443-3-3, NERC CIP-007/010. License: Apache 2.0.
