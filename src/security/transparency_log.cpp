@@ -39,7 +39,7 @@ bool TransparencyLog::append(TransparencyEntry::Type type,
     entry.entry_id = sha256_hex(payload_hash + "|" + std::to_string(entry.timestamp));
 
     auto node = std::make_shared<MerkleNode>();
-    node->hash = sha256_hex(entry.serialize_for_hash());
+    node->hash = uml001::sha256_hex(entry.serialize_for_hash());
     leaves_.push_back(node);
 
     if (mode_ == TransparencyMode::IMMEDIATE) {
@@ -67,7 +67,7 @@ std::shared_ptr<MerkleNode> TransparencyLog::compute_recursive(
         if (i + 1 < level.size()) {
             parent->left = level[i];
             parent->right = level[i+1];
-            parent->hash = sha256_hex(level[i]->hash + level[i+1]->hash);
+            parent->hash = uml001::sha256_hex(level[i]->hash + level[i+1]->hash);
         } else {
             // Odd number of nodes: promote the last node hash upward
             parent->left = level[i];

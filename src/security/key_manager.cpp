@@ -9,7 +9,7 @@ namespace security {
     KeyManager::~KeyManager() {
         std::lock_guard<std::mutex> lock(mutex_);
         for (auto& pair : keys_) {
-            ::uml001::secure_zero(pair.second);
+            ::uml001::secure_zero(pair.second.data(), pair.second.size());
         }
         keys_.clear();
     }
@@ -38,7 +38,7 @@ namespace security {
         std::lock_guard<std::mutex> lock(mutex_);
         auto it = keys_.find(key_id);
         if (it != keys_.end()) {
-            ::uml001::secure_zero(it->second); // Zeroize before destruction
+            ::uml001::secure_zero(it->second.data(), it->second.size()); // Zeroize before destruction
             keys_.erase(it);
             return true;
         }

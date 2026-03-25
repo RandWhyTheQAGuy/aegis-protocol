@@ -23,6 +23,10 @@ struct BftClockClientConfig {
     std::string target_uri = "unix:///var/run/uml001/bft-clock.sock";
     std::string client_id  = "aegis";
 
+    std::string daemon_pubkey_hex;
+    std::string socket_path = "/var/run/uml001/bft-clock.sock";
+    uint64_t max_skew_s = 5;
+
     uint64_t connect_timeout_ms = 2000;
     uint64_t cache_ttl_ms       = 200;
 
@@ -51,6 +55,9 @@ public:
     double last_confidence_ms() const { return cached_confidence_ms_; }
     int    last_active_nodes() const { return cached_active_nodes_; }
     double last_projected_drift_ppm() const { return cached_drift_ppm_; }
+
+    uint64_t last_uncertainty_s() const { return static_cast<uint64_t>(cached_confidence_ms_ / 1000.0); }
+    uint64_t last_issued_at() const { return cached_unix_time_s_; }
 
 private:
     BftTimeResponseData do_grpc_request() const;

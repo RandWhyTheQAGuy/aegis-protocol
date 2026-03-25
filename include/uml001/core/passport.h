@@ -30,6 +30,37 @@ enum class PassportStatus {
     REVOKED
 };
 
+// VerifyResult: Contains information about passport verification
+enum class VerifyStatus {
+    OK = 0,
+    EXPIRED = 1,
+    REVOKED = 2,
+    INVALID_SIGNATURE = 3,
+    INCOMPATIBLE = 4
+};
+
+struct VerifyResult {
+    VerifyStatus status = VerifyStatus::OK;
+    uint32_t verified_key_id = 0;
+    bool recovered = false;
+    float confidence = 0.0f;
+    
+    bool ok() const {
+        return status == VerifyStatus::OK;
+    }
+    
+    std::string status_str() const {
+        switch (status) {
+            case VerifyStatus::OK: return "OK";
+            case VerifyStatus::EXPIRED: return "EXPIRED";
+            case VerifyStatus::REVOKED: return "REVOKED";
+            case VerifyStatus::INVALID_SIGNATURE: return "INVALID_SIGNATURE";
+            case VerifyStatus::INCOMPATIBLE: return "INCOMPATIBLE";
+        }
+        return "UNKNOWN";
+    }
+};
+
 struct Capabilities {
     bool classifier_authority = false;
     bool classifier_sensitivity = false;
@@ -58,6 +89,34 @@ struct Passport {
     uint32_t signing_key_id = 0;
     std::string signature;
     std::optional<std::string> recovery_token;
+    
+    // Cryptographic material for HMAC operations
+    std::string signing_key_material;
+    
+    // Registry version this passport was issued under
+    std::string registry_version;
+    
+    // Check if this passport has been recovered
+    bool is_recovered() const {
+        return recovery_token.has_value();
+    }
+    
+    // Check if this passport is still valid at the given time
+    bool is_valid(uint64_t now) const {
+        return status == PassportStatus::ACTIVE && 
+               now >= issued_at && 
+               now < expires_at;
+    }
+    
+    // Compute a canonical representation for signing/HMAC operations
+    std::string canonical_body() const {
+        return model_id + "|" + model_version + "|" + 
+               capabilities.serialize() + "|" + 
+               policy_hash + "|" + 
+               std::to_string(issued_at) + "|" + 
+               std::to_string(expires_at) + "|" + 
+               registry_version;
+    }
 
     /**
      * @brief Transitions passport to ACTIVE and sets timing bounds.
@@ -77,6 +136,10 @@ struct Passport {
     }
 };
 
+// SemanticPassport: A read-only view of passport data for handshake & serialization
+// Maps to Passport but provides a cleaner interface for external use
+using SemanticPassport = Passport;
+
 class PassportRegistry {
 public:
     PassportRegistry(TransparencyLog& log, RevocationList& list, IClock& clock)
@@ -90,7 +153,7 @@ public:
         uint32_t key_id
     );
     
-    bool verify(const Passport& passport);
+    VerifyResult verify(const Passport& passport) const;
 
 private:
     TransparencyLog& log_;

@@ -1,0 +1,6 @@
+/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles/clock_proto.dir
+/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles/aegis_core.dir
+/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles/aegis_daemon.dir
+/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles/test_passport_flow.dir
+/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles/edit_cache.dir
+/Users/rspickler/Documents/GitHub/aegis-protocol/build/CMakeFiles/rebuild_cache.dir

@@ -9,13 +9,14 @@
 
 namespace uml001 {
 
-enum class PolicyAction { ALLOW, DENY, FLAG };
+enum class PolicyAction { ALLOW, DENY, FLAG, REQUIRE_MFA };
 
 inline std::string action_str(PolicyAction a) {
     switch (a) {
-        case PolicyAction::ALLOW: return "ALLOW";
-        case PolicyAction::DENY:  return "DENY";
-        case PolicyAction::FLAG:  return "FLAG";
+        case PolicyAction::ALLOW:      return "ALLOW";
+        case PolicyAction::DENY:       return "DENY";
+        case PolicyAction::FLAG:       return "FLAG";
+        case PolicyAction::REQUIRE_MFA: return "REQUIRE_MFA";
     }
     return "UNKNOWN";
 }

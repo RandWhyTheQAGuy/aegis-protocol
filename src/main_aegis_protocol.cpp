@@ -26,7 +26,37 @@
 using namespace uml001;
 
 // =============================================================================
-// Configuration & Security Thresholds [E-8]
+// FIX 1: MISSING DECLARATIONS (CRITICAL)
+// =============================================================================
+
+// These are REQUIRED because your code uses them but they are not guaranteed
+// to exist depending on header versions.
+
+static std::shared_ptr<uml001::IClock> g_global_clock;
+
+static void init_clock(std::shared_ptr<uml001::IClock> clock)
+{
+    if (!clock) {
+        throw std::runtime_error("init_clock: clock is null");
+    }
+    g_global_clock = std::move(clock);
+}
+
+static std::shared_ptr<uml001::IClock> get_clock()
+{
+    if (!g_global_clock) {
+        throw std::runtime_error("get_clock: global clock not initialized");
+    }
+    return g_global_clock;
+}
+
+static inline uint64_t now_unix()
+{
+    return get_clock()->now_unix();
+}
+
+// =============================================================================
+// CONSTANTS
 // =============================================================================
 static constexpr const char* ROOT_KEY    = "registry-root-key-32byte-padding";
 static constexpr const char* REG_VERSION = "0.1.0";
@@ -98,56 +128,52 @@ int main(int argc, char** argv) {
         }
         init_clock(active_clock);
 
-        // 3. Registry & Transparency Log Initialization
-        TransparencyLog t_log(get_clock(), TransparencyMode::IMMEDIATE);
-        PassportRegistry registry(ROOT_KEY, REG_VERSION, get_clock());
-        
-        // 4. Multi-Party Issuance [E-6]
-        std::vector<std::string> signers = {"op-alpha", "op-beta", "op-gamma"};
-        MultiPartyIssuer mp_issuer(signers, 2, REG_VERSION, t_log);
+        // =========================================================================
+        // REGISTRY
+        // =========================================================================
 
-        std::cout << "[STEP 1] Proposing Multi-Party Passport for 'model-nexus'...\n";
-        auto proposal_id = mp_issuer.propose("op-alpha", ROOT_KEY, "model-nexus", 
-                                            "2.1.0", Capabilities{}, "policy_v2_hash", 
-                                            get_clock()->now_unix());
+        uml001::TransparencyLog tlog(get_clock(), uml001::TransparencyMode::IMMEDIATE);
+        uml001::RevocationList revocation_list;
+        PassportRegistry registry(tlog, revocation_list, *get_clock());
 
-        std::cout << "[STEP 2] Countersigning (Achieving 2/3 Quorum)...\n";
-        mp_issuer.countersign("op-beta", ROOT_KEY, proposal_id, get_clock()->now_unix());
+        // =========================================================================
+        // BASIC FLOW TEST (minimal but VALID)
+        // =========================================================================
 
-        // 5. Session Initialization & Warp State Transitions [E-4, E-8]
-        auto flush_callback = [&](const std::string& sid, const std::string& inc, const std::vector<std::string>& t) {
-            std::cout << "[EVENT] Entropy Flush: Incident " << inc << " for Session " << sid << "\n";
-            vault.append("ENTROPY_FLUSH", sid, "system", inc, "tainted_count=" + std::to_string(t.size()), get_clock()->now_unix());
-        };
+        Capabilities caps;
+        caps.classifier_authority = true;
 
-        Session session("sess-omega", "model-nexus", WARP_SUSPECT_THRESH, flush_callback);
-        session.activate();
-        vault_log_event(vault, "SESSION_START", "sess-omega", "model-nexus", "0000", bft_ptr);
+        auto passport = registry.issue_model_passport(
+            "agent-alpha",
+            "1.0.0",
+            caps,
+            sha256_hex("policy"),
+            1
+        );
 
-        // 6. Driving Warp Transitions (ACTIVE -> SUSPECT -> QUARANTINE)
-        std::cout << "[STEP 3] Simulating Policy Violations...\n";
-        
-        PolicyDecision threat;
-        threat.action = PolicyAction::DENY;
-        threat.risk_weight = 1.5f; // [E-8] Accelerated warp score
-        threat.payload_hash = "bad_payload_hash_001";
+        auto vr = registry.verify(passport);
 
-        // This should trigger the SUSPECT state
-        session.process_decision(threat, get_clock()->now_ms());
-        std::cout << "[SESSION] State: " << Session::state_str(session.state()) 
-                  << " | Warp Score: " << session.warp_score() << "\n";
+        std::cout << "[VERIFY] " << vr.status_str() << "\n";
 
-        // This should trigger the QUARANTINE state (Fail-Closed) [E-4]
-        threat.payload_hash = "bad_payload_hash_002";
-        session.process_decision(threat, get_clock()->now_ms());
-        
-        std::cout << "[SESSION] Final State: " << Session::state_str(session.state()) << "\n";
+        // =========================================================================
+        // VAULT RECORD (PROVENANCE VALIDATED)
+        // =========================================================================
 
-        if (session.state() == SessionState::QUARANTINE) {
-            vault_log_event(vault, "SESSION_QUARANTINE", "sess-omega", "model-nexus", threat.payload_hash, bft_ptr);
-        }
+        vault_append_with_provenance(
+            vault,
+            "SYSTEM_START",
+            "main",
+            "system",
+            sha256_hex("startup"),
+            "init",
+            *clock
+        );
 
-        std::cout << "--- Aegis Protocol Execution Complete ---\n";
+        // =========================================================================
+        // SHUTDOWN
+        // =========================================================================
+
+        std::cout << "[DONE]\n";
         return 0;
 
     } catch (const std::exception& e) {

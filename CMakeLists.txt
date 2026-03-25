@@ -116,6 +116,11 @@ set(AEGIS_CORE_SOURCES
     src/security/revocation.cpp
     src/security/key_manager.cpp
     src/crypto/crypto_utils.cpp
+<<<<<<< HEAD
+=======
+    src/bft/remote_quorum_clock.cpp
+    src/bft_clock_client.cpp
+>>>>>>> ace921b (Remove now_unix wrapper and standardize on quorum clock access (#8))
     src/crypto/crypto_facade.cpp
     src/crypto/hash_provider.cpp
     src/crypto/simple_hash_provider.cpp
@@ -168,7 +173,11 @@ endif()
 add_executable(aegis_daemon src/main_aegis_protocol.cpp)
 target_link_libraries(aegis_daemon PRIVATE aegis_core)
 
+<<<<<<< HEAD
 # Pointing to the specific test file in your tree
+=======
+# NEW: The Passport Flow Test from PR 3
+>>>>>>> ace921b (Remove now_unix wrapper and standardize on quorum clock access (#8))
 add_executable(test_passport_flow tests/test_passport_flow.cpp)
 target_link_libraries(test_passport_flow PRIVATE aegis_core)
 

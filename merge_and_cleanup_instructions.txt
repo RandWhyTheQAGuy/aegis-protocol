@@ -1,0 +1,123 @@
+# How to Merge All Changes and Keep Only the Main Branch
+
+This guide will walk you through merging all your changes, resolving any issues, and making sure only the "main" branch exists on your computer and on GitHub. You do not need to know how to code—just follow each step exactly as written.
+
+---
+
+## 1. Open Your Terminal
+- On Mac, open the "Terminal" app (you can find it in Applications > Utilities).
+- Make sure you are in your project folder. If not, use:
+  ```bash
+  cd /Users/rspickler/Documents/GitHub/aegis-protocol
+  ```
+
+---
+
+## 2. See Which Files Have Problems
+- Run this command to see files with conflicts:
+  ```bash
+  git status
+  ```
+- Look for files marked as "both modified" or "unmerged".
+
+---
+
+## 3. Resolve All Conflicts
+- For each file listed as having conflicts:
+  1. Open the file in VS Code or any text editor.
+  2. Look for lines with `<<<<<<<`, `=======`, and `>>>>>>>`.
+  3. Decide which version to keep (usually the one that works or is most recent).
+  4. Delete the conflict markers and unwanted code.
+  5. Save the file.
+- After fixing a file, mark it as resolved:
+  ```bash
+  git add <filename>
+  ```
+  (Replace `<filename>` with the actual file name, for example: `git add src/crypto/crypto_utils.cpp`)
+
+---
+
+## 4. Continue the Merge or Rebase
+- After all files are fixed and added, run:
+  ```bash
+  git rebase --continue
+  ```
+  or, if you were merging:
+  ```bash
+  git merge --continue
+  ```
+- If you see more conflicts, repeat steps 2 and 3 until the process finishes.
+
+---
+
+## 5. Test That Everything Works
+- Build and test your project:
+  ```bash
+  cmake --build build
+  ctest --test-dir build
+  ```
+- If you see errors, fix them as needed (ask for help if you get stuck).
+
+---
+
+## 6. Push Your Changes to GitHub
+- Make sure you are on your working branch (for example, `fix/production-final`).
+- Push your changes:
+  ```bash
+  git push origin fix/production-final --force
+  ```
+
+---
+
+## 7. Merge Your Branch Into Main
+- Switch to the main branch:
+  ```bash
+  git checkout main
+  ```
+- Merge your changes:
+  ```bash
+  git merge fix/production-final
+  ```
+- Push main to GitHub:
+  ```bash
+  git push origin main
+  ```
+
+---
+
+## 8. Delete All Other Branches
+- Delete your working branch locally:
+  ```bash
+  git branch -d fix/production-final
+  ```
+- Delete your working branch on GitHub:
+  ```bash
+  git push origin --delete fix/production-final
+  ```
+- (Repeat for any other branches you want to remove.)
+
+---
+
+## 9. Clean Up Old Branches
+- Remove any old references:
+  ```bash
+  git fetch --prune
+  ```
+
+---
+
+## 10. Confirm Only Main Remains
+- List your local branches:
+  ```bash
+  git branch
+  ```
+- List remote branches:
+  ```bash
+  git branch -r
+  ```
+- Only `main` should be listed.
+
+---
+
+## Done!
+You have now merged all changes and made sure only the main branch exists, both on your computer and on GitHub. If you get stuck, ask for help and show them this document.
