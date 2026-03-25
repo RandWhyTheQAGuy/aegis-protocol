@@ -26,37 +26,7 @@
 using namespace uml001;
 
 // =============================================================================
-// FIX 1: MISSING DECLARATIONS (CRITICAL)
-// =============================================================================
-
-// These are REQUIRED because your code uses them but they are not guaranteed
-// to exist depending on header versions.
-
-static std::shared_ptr<uml001::IClock> g_global_clock;
-
-static void init_clock(std::shared_ptr<uml001::IClock> clock)
-{
-    if (!clock) {
-        throw std::runtime_error("init_clock: clock is null");
-    }
-    g_global_clock = std::move(clock);
-}
-
-static std::shared_ptr<uml001::IClock> get_clock()
-{
-    if (!g_global_clock) {
-        throw std::runtime_error("get_clock: global clock not initialized");
-    }
-    return g_global_clock;
-}
-
-static inline uint64_t now_unix()
-{
-    return get_clock()->now_unix();
-}
-
-// =============================================================================
-// CONSTANTS
+// Configuration & Security Thresholds [E-8]
 // =============================================================================
 static constexpr const char* ROOT_KEY    = "registry-root-key-32byte-padding";
 static constexpr const char* REG_VERSION = "0.1.0";

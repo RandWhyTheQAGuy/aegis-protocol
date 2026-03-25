@@ -1,6 +1,6 @@
 #pragma once
 
-#include "uml001/core/clock.h"
+#include "uml001/clock.h"
 #include "clock_service.grpc.pb.h"
 
 #include <grpcpp/grpcpp.h>
@@ -63,14 +63,15 @@ public:
     /**
      * @brief Returns UNIX time in milliseconds
      */
-    uint64_t now_ms() const;
+    uint64_t now_ms() const override;
 
     /**
      * @brief Health / state
      */
-    bool is_synchronized() const;
-    uint64_t last_sync_unix() const;
+    bool is_synchronized() const override;
+    uint64_t last_sync_unix() const override;
     ClockStatus status() const override;
+    std::string source_id() const override;
 
 private:
     BftTimeResponseData do_grpc_request() const;

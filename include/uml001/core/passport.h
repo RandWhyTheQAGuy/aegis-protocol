@@ -136,10 +136,6 @@ struct Passport {
     }
 };
 
-// SemanticPassport: A read-only view of passport data for handshake & serialization
-// Maps to Passport but provides a cleaner interface for external use
-using SemanticPassport = Passport;
-
 class PassportRegistry {
 public:
     PassportRegistry(TransparencyLog& log, RevocationList& list, IClock& clock)
@@ -153,7 +149,7 @@ public:
         uint32_t key_id
     );
     
-    VerifyResult verify(const Passport& passport) const;
+    bool verify(const Passport& passport);
 
 private:
     TransparencyLog& log_;

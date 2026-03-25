@@ -33,16 +33,11 @@ enum class TransparencyMode { IMMEDIATE, PERIODIC_SEALING };
 
 struct TransparencyEntry {
     enum class Type {
-        ENTRY_UNKNOWN,           ///< Unknown/uninitialized entry
-        REVOCATION_PROPOSED,     ///< Key revocation proposed
-        REVOCATION_APPROVED,     ///< Key revocation approved by quorum
-        REVOCATION_FINALIZED,    ///< Key revocation finalized
-        AUDIT_LOG_ENTRY,         ///< Audit log entry
-        SECURITY_EVENT,          ///< Security-relevant event
-        STATE_TRANSITION,        ///< State machine transition
-        WARP_SCORE_UPDATE,       ///< Warp score threshold breach
-        ENTROPY_FLUSH,           ///< Entropy flush operation
-        PASSPORT_ISSUED          ///< Passport issuance event
+        GENERIC,
+        POLICY_UPDATE,
+        REVOCATION_PROPOSED,
+        REVOCATION_APPROVED,
+        REVOCATION_FINALIZED
     };
 
     Type type = Type::ENTRY_UNKNOWN;
@@ -97,6 +92,18 @@ public:
                 const std::string& payload_hash, 
                 const std::string& signer_id);
 
+    /**
+     * @brief Retrieves the full history of log entries.
+     * [E-7] Auditability: Complete chain for external verification
+     */
+    std::vector<TransparencyEntry> history() const;
+
+    /**
+     * @brief Verifies the integrity of the Merkle chain.
+     * [E-7] Chain Verification: Ensures no tampering by recomputing root
+     */
+    bool verify_chain() const;
+
     std::string get_root_hash() const;
     LogState state() const { return current_state_; }
 
@@ -107,7 +114,6 @@ private:
     void rebuild_tree();
 
     std::shared_ptr<IClock> clock_;
-    LogState current_state_ = LogState::IDLE;
     TransparencyMode mode_;
     
     TransparencyMode mode_;
@@ -115,10 +121,6 @@ private:
 
     std::vector<std::shared_ptr<MerkleNode>> leaves_;
     std::shared_ptr<MerkleNode> root_;
-
-    void rebuild_tree();
-    std::shared_ptr<MerkleNode> compute_recursive(
-        const std::vector<std::shared_ptr<MerkleNode>>& level);
 };
 
 } // namespace uml001

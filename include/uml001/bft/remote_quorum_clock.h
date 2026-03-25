@@ -13,13 +13,6 @@
 #include "uml001/core/clock.h"
 #include <string>
 #include <memory>
-#include <unordered_map>
-#include <atomic>
-
-#include <grpcpp/grpcpp.h>
-#include "clock_service.grpc.pb.h"
-
-#include "uml001/core/clock.h"
 
 namespace uml001 {
 
@@ -28,20 +21,10 @@ namespace uml001 {
  */
 class RemoteQuorumClock : public IClock {
 public:
-    struct NodeConfig {
-        std::string endpoint;
-        std::string node_id;
-        std::string pubkey_base64;
-    };
+    RemoteQuorumClock(const std::string& quorum_address);
+    virtual ~RemoteQuorumClock() = default;
 
-    RemoteQuorumClock(
-        const std::vector<NodeConfig>& nodes,
-        size_t quorum_threshold,
-        int64_t max_skew_ms = 5000,
-        double max_drift_ppm = 100.0
-    );
-
-    // IClock interface implementation
+    // Interface Implementation (Fixes the 'abstract class' and 'hidden virtual' errors)
     uint64_t now_unix() const override;
     uint64_t now_ms() const override;
     bool is_synchronized() const override;
