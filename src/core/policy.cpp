@@ -36,11 +36,11 @@ bool allow_read(TemporalState state) {
 std::string Policy::compute_hash() const {
     std::stringstream ss;
     ss << policy_id << ":" << version << "|";
-    
+
     for (const auto& meta_entry : metadata) {
         ss << meta_entry.first << ":" << meta_entry.second << ";";
     }
-    
+
     return sha256_hex(ss.str());
 }
 
