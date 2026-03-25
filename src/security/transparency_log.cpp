@@ -36,7 +36,10 @@ bool TransparencyLog::append(TransparencyEntry::Type type,
     entry.timestamp = clock_->now_unix(); 
 
     // Generate unique ID for this log entry
+    // Generate unique ID for this log entry
     entry.entry_id = sha256_hex(payload_hash + "|" + std::to_string(entry.timestamp));
+
+    entries_.push_back(entry);
 
     entries_.push_back(entry);
 
@@ -71,12 +74,32 @@ bool TransparencyLog::verify_chain() const {
     return recomputed->hash == root_->hash;
 }
 
+std::vector<TransparencyEntry> TransparencyLog::history() const {
+    return entries_;
+}
+
+bool TransparencyLog::verify_chain() const {
+    if (leaves_.empty()) {
+        return true;
+    }
+    
+    // Recompute the root hash
+    auto recomputed = compute_recursive(leaves_);
+    if (!recomputed || !root_) {
+        return false;
+    }
+    
+    // Verify hashes match
+    return recomputed->hash == root_->hash;
+}
+
 void TransparencyLog::rebuild_tree() {
     if (leaves_.empty()) return;
     root_ = compute_recursive(leaves_);
 }
 
 std::shared_ptr<MerkleNode> TransparencyLog::compute_recursive(
+    const std::vector<std::shared_ptr<MerkleNode>>& level) const {
     const std::vector<std::shared_ptr<MerkleNode>>& level) const {
     
     if (level.empty()) return nullptr;

@@ -118,9 +118,14 @@ struct Passport {
                registry_version;
     }
 
-    // The function the compiler was looking for
-    void issue(std::shared_ptr<IClock> clock);
+    /**
+     * @brief Transitions passport to ACTIVE and sets timing bounds.
+     */
+    void issue(std::shared_ptr<IClock> clock, uint64_t duration_sec = 3600);
 
+    /**
+     * @brief Generates a unique hash of the passport metadata for signing/verification.
+     */
     std::string content_hash() const {
         std::string raw = model_id + "|" + model_version + "|" + 
                           capabilities.serialize() + "|" + 

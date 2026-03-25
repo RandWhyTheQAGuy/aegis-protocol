@@ -11,6 +11,7 @@
 #pragma once
 
 #include "uml001/core/clock.h"
+
 #include "uml001/crypto/crypto_utils.h"
 #include <string>
 #include <vector>
@@ -39,6 +40,16 @@ struct TransparencyEntry {
         REVOCATION_FINALIZED
     };
 
+    Type type = Type::ENTRY_UNKNOWN;
+    std::string event_type;      ///< Human-readable event description
+    enum class Type {
+        GENERIC,
+        POLICY_UPDATE,
+        REVOCATION_PROPOSED,
+        REVOCATION_APPROVED,
+        REVOCATION_FINALIZED
+    };
+
     Type type = Type::GENERIC;
     std::string event_type; // e.g., "CERT_REVOKE"
     std::string entry_id;
@@ -48,6 +59,8 @@ struct TransparencyEntry {
     QuorumProof quorum;
 
     std::string serialize_for_hash() const {
+        return entry_id + "|" + std::to_string(timestamp) + "|" +
+               payload_hash + "|" + signer_id + "|" + event_type;
         return std::to_string(static_cast<int>(type)) + "|" +
                event_type + "|" +
                entry_id + "|" + 
@@ -68,6 +81,9 @@ public:
     explicit TransparencyLog(std::shared_ptr<IClock> clock,
                              TransparencyMode mode = TransparencyMode::IMMEDIATE);
 
+    bool append(TransparencyEntry::Type type,
+                const std::string& event_type_str,
+                const std::string& payload_hash,
     /**
      * @brief Appends a new security event to the Merkle Tree.
      */
@@ -93,9 +109,19 @@ public:
 
 private:
     std::shared_ptr<MerkleNode> compute_recursive(
-        const std::vector<std::shared_ptr<MerkleNode>>& level) const;
+        const std::vector<std::shared_ptr<MerkleNode>>& level);
     
     void rebuild_tree();
+
+    std::shared_ptr<IClock> clock_;
+    TransparencyMode mode_;
+    
+    TransparencyMode mode_;
+    LogState current_state_;
+
+    std::vector<TransparencyEntry> entries_;
+    std::vector<std::shared_ptr<MerkleNode>> leaves_;
+    std::shared_ptr<MerkleNode> root_;
 
     std::shared_ptr<IClock> clock_;
     TransparencyMode mode_;

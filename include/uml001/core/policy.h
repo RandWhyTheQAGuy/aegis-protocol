@@ -4,6 +4,8 @@
 #include <vector>
 #include <map>
 #include <cstdint>
+#include <optional>
+#include "uml001/security/zk_proofs.h"
 
 namespace uml001 {
 
@@ -34,6 +36,10 @@ struct PolicyDecision {
     
     std::string payload_hash;
     std::string matched_rule_id;
+    
+    // ZK proof for confidential evaluation
+    std::optional<std::vector<uint8_t>> zk_proof;
+    security::ZkProofType proof_type = security::ZkProofType::RANGE_PROOF;
 };
 
 struct Policy {

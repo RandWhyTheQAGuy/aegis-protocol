@@ -1,47 +1,48 @@
+/*
+ * Copyright 2026 Aegis Protocol Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
+
+#include "uml001/bft/remote_quorum_clock.h"
 #include <thread>
 #include <atomic>
-#include <chrono>
-#include "uml001/bft/remote_quorum_clock.h"
 
 namespace uml001 {
 
 class QuorumPulseManager {
 public:
-    QuorumPulseManager(const std::string& endpoint)
-        : clock_(endpoint), running_(true) {}
+    QuorumPulseManager(RemoteQuorumClock& clock) : clock_(clock), running_(false) {}
 
     void start() {
-        thread_ = std::thread([this]() {
+        running_ = true;
+        pulse_thread_ = std::thread([this]() {
             while (running_) {
                 try {
-                    last_time_ = clock_.get_time_ms();
-                    last_update_ = std::chrono::steady_clock::now();
+                    // Standardized to now_ms() per IClock interface
+                    last_time_ = clock_.now_ms();
                 } catch (...) {
-                    // ignore, handled by TSLQ
+                    // Handle sync failure
                 }
-
-                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
         });
     }
 
-    double get_tslq_seconds() {
-        auto now = std::chrono::steady_clock::now();
-        return std::chrono::duration<double>(now - last_update_).count();
-    }
-
     void stop() {
         running_ = false;
-        if (thread_.joinable()) thread_.join();
+        if (pulse_thread_.joinable()) pulse_thread_.join();
     }
 
 private:
-    RemoteQuorumClock clock_;
-    std::thread thread_;
+    RemoteQuorumClock& clock_;
     std::atomic<bool> running_;
-
-    int64_t last_time_;
-    std::chrono::steady_clock::time_point last_update_;
+    std::thread pulse_thread_;
+    uint64_t last_time_ = 0;
 };
 
-}
+} // namespace uml001

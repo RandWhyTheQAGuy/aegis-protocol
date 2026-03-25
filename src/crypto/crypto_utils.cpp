@@ -1,4 +1,27 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+
+=======
+>>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
+/*
+ * Copyright 2026 Aegis Protocol Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+<<<<<<< HEAD
+ */
+
 #include "uml001/crypto/crypto_utils.h"
+#include <vector>
+#include <cstdint>
+#include <string>
+#include <sstream>
+#include <iomanip>
+#include <stdexcept>
+#include <algorithm>
 
 #include <openssl/evp.h>
 #include <openssl/rand.h>

@@ -1,2 +1,0 @@
-# Hashes of file build rules.
-d86897ffe6a89a775acfc5837d419c26 clock_service.pb.cc

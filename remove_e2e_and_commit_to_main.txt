@@ -1,0 +1,25 @@
+# Remove all references to e2e-example and commit changes to main
+
+# 1. Ensure you are in your project directory
+cd /Users/rspickler/Documents/GitHub/aegis-protocol
+
+# 2. Remove all references to e2e-example in CMakeLists.txt, README.md, and any other files
+# (You can use grep to confirm no references remain)
+
+
+# 3. Stage all changes
+git add CMakeLists.txt README.md
+# (Add any other files you edited)
+
+# 4. Commit the changes
+git commit -m "Remove all references to e2e-example; main_aegis_protocol.cpp is now the sole app entrypoint."
+
+# 5. Switch to main and merge your changes
+git checkout main
+git merge fix/production-final
+
+# 6. Push the updated main branch
+git push origin main
+
+# 7. Confirm your environment is clean
+git status

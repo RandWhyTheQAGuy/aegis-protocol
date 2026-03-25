@@ -24,7 +24,6 @@ find_package(Threads REQUIRED)
 # ============================================================
 
 if (AEGIS_ENABLE_REDIS)
-
     message(STATUS "Redis support ENABLED")
 
     find_path(REDIS_PLUS_PLUS_INCLUDE_DIR
@@ -45,7 +44,6 @@ if (AEGIS_ENABLE_REDIS)
     if (NOT REDIS_PLUS_PLUS_INCLUDE_DIR OR NOT REDIS_PLUS_PLUS_LIBRARY OR NOT HIREDIS_LIBRARY)
         message(FATAL_ERROR "Redis requested but not found.")
     endif()
-
 endif()
 
 # ============================================================
@@ -109,15 +107,34 @@ endif()
 
 set(AEGIS_CORE_SOURCES
     src/core/passport.cpp
-    src/security/transparency_log.cpp
+    src/core/policy.cpp
+    src/core/session.cpp
+    src/core/temporal_state.cpp
+    src/core/pulse_manager.cpp
+    src/core/quorum_pulse_manager.cpp
+    src/security/transparency_log.cpp  # Corrected Path
     src/security/revocation.cpp
+    src/security/key_manager.cpp
     src/crypto/crypto_utils.cpp
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
     src/bft/remote_quorum_clock.cpp
     src/bft_clock_client.cpp
+>>>>>>> ace921b (Remove now_unix wrapper and standardize on quorum clock access (#8))
+=======
+    src/bft/remote_quorum_clock.cpp
+    src/bft_clock_client.cpp
+=======
+>>>>>>> cc5bbf5 (WIP: continued clean integration and BFT hardening updates)
+>>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
     src/crypto/crypto_facade.cpp
-    src/security/key_manager.cpp  # Note: ensure this exists or update path
+    src/crypto/hash_provider.cpp
+    src/crypto/simple_hash_provider.cpp
+    src/bft/remote_quorum_clock.cpp
     src/sidecar/aegis_guard.cpp
     src/classifier.cpp
+    src/bft_clock_client.cpp
 )
 
 # Add Redis providers ONLY if enabled
@@ -153,7 +170,6 @@ if (AEGIS_ENABLE_REDIS)
         ${REDIS_PLUS_PLUS_LIBRARY}
         ${HIREDIS_LIBRARY}
     )
-
     target_compile_definitions(aegis_core PUBLIC AEGIS_ENABLE_REDIS=1)
 endif()
 
@@ -161,20 +177,33 @@ endif()
 # EXECUTABLES & TESTS
 # ============================================================
 
-# The main daemon
 add_executable(aegis_daemon src/main_aegis_protocol.cpp)
 target_link_libraries(aegis_daemon PRIVATE aegis_core)
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+# Pointing to the specific test file in your tree
+=======
 # NEW: The Passport Flow Test from PR 3
+>>>>>>> ace921b (Remove now_unix wrapper and standardize on quorum clock access (#8))
+=======
+# NEW: The Passport Flow Test from PR 3
+=======
+
+target_link_libraries(aegis_e2e PRIVATE aegis_core)
+
+# Pointing to the specific test file in your tree
+>>>>>>> cc5bbf5 (WIP: continued clean integration and BFT hardening updates)
+>>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
 add_executable(test_passport_flow tests/test_passport_flow.cpp)
 target_link_libraries(test_passport_flow PRIVATE aegis_core)
 
 # ============================================================
-# Disable legacy files
+# Legacy Cleanup
 # ============================================================
-
-set_source_files_properties(
-    src/core/strong_clock.cpp
-    src/core/background_sync.cpp
-    PROPERTIES HEADER_FILE_ONLY TRUE
-)
+# Commenting out as these are not in your current 'ls' tree
+# set_source_files_properties(
+#     src/core/strong_clock.cpp
+#     src/core/background_sync.cpp
+#     PROPERTIES HEADER_FILE_ONLY TRUE
+# )

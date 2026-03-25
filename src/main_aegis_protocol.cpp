@@ -7,15 +7,13 @@
 
 #include "uml001/core/bft_clock_client.h"
 #include "uml001/core/clock.h"
-#include "uml001/core/mock_clock.h"
 #include "uml001/core/passport.h"
 #include "uml001/core/session.h"
 #include "uml001/core/policy.h"
 #include "uml001/core/temporal_state.h"
 #include "uml001/security/multi_party_issuance.h"
 #include "uml001/security/transparency_log.h"
-#include "uml001/security/vault.h"
-#include "uml001/globals.h"
+#include "uml001/vault.h"
 #include "uml001/crypto/crypto_utils.h"
 #include "uml001/crypto/simple_hash_provider.h"
 
@@ -24,7 +22,13 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
 #include <cstdlib>
+=======
+>>>>>>> cc5bbf5 (WIP: continued clean integration and BFT hardening updates)
+>>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
 
 using namespace uml001;
 
@@ -40,8 +44,36 @@ static constexpr float WARP_SUSPECT_THRESH    = 1.0f;
 static constexpr float WARP_QUARANTINE_THRESH = 3.0f;
 
 // =============================================================================
+<<<<<<< HEAD
+// CI/CD Mock Clock Implementation
+// =============================================================================
+class MockClock : public IClock {
+public:
+    uint64_t now_unix() const override { return 1740000000ULL; }
+    uint64_t now_ms() const { return 1740000000000ULL; }
+    ClockStatus status() const override { return ClockStatus::SYNCHRONIZED; }
+};
+
+// =============================================================================
+=======
+<<<<<<< HEAD
+>>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
 // Helper: Vault Logging with BFT Provenance [E-7]
 // =============================================================================
+=======
+// CI/CD Mock Clock Implementation
+// =============================================================================
+class MockClock : public IClock {
+public:
+    uint64_t now_unix() const override { return 1740000000ULL; }
+    uint64_t now_ms() const { return 1740000000000ULL; }
+    ClockStatus status() const override { return ClockStatus::SYNCHRONIZED; }
+};
+
+// =============================================================================
+// Helper: Vault Logging with BFT Provenance [E-7]
+// =============================================================================
+>>>>>>> cc5bbf5 (WIP: continued clean integration and BFT hardening updates)
 static void vault_log_event(ColdVault& vault, 
                             const std::string& type, 
                             const std::string& sess, 
@@ -91,56 +123,52 @@ int main(int argc, char** argv) {
         }
         init_clock(active_clock);
 
-        // 3. Registry & Transparency Log Initialization
-        TransparencyLog t_log(get_clock(), TransparencyMode::IMMEDIATE);
-        PassportRegistry registry(ROOT_KEY, REG_VERSION, get_clock());
-        
-        // 4. Multi-Party Issuance [E-6]
-        std::vector<std::string> signers = {"op-alpha", "op-beta", "op-gamma"};
-        MultiPartyIssuer mp_issuer(signers, 2, REG_VERSION, t_log);
+        // =========================================================================
+        // REGISTRY
+        // =========================================================================
 
-        std::cout << "[STEP 1] Proposing Multi-Party Passport for 'model-nexus'...\n";
-        auto proposal_id = mp_issuer.propose("op-alpha", ROOT_KEY, "model-nexus", 
-                                            "2.1.0", Capabilities{}, "policy_v2_hash", 
-                                            get_clock()->now_unix());
+        uml001::TransparencyLog tlog(get_clock(), uml001::TransparencyMode::IMMEDIATE);
+        uml001::RevocationList revocation_list;
+        PassportRegistry registry(tlog, revocation_list, *get_clock());
 
-        std::cout << "[STEP 2] Countersigning (Achieving 2/3 Quorum)...\n";
-        mp_issuer.countersign("op-beta", ROOT_KEY, proposal_id, get_clock()->now_unix());
+        // =========================================================================
+        // BASIC FLOW TEST (minimal but VALID)
+        // =========================================================================
 
-        // 5. Session Initialization & Warp State Transitions [E-4, E-8]
-        auto flush_callback = [&](const std::string& sid, const std::string& inc, const std::vector<std::string>& t) {
-            std::cout << "[EVENT] Entropy Flush: Incident " << inc << " for Session " << sid << "\n";
-            vault.append("ENTROPY_FLUSH", sid, "system", inc, "tainted_count=" + std::to_string(t.size()), get_clock()->now_unix());
-        };
+        Capabilities caps;
+        caps.classifier_authority = true;
 
-        Session session("sess-omega", "model-nexus", WARP_SUSPECT_THRESH, flush_callback);
-        session.activate();
-        vault_log_event(vault, "SESSION_START", "sess-omega", "model-nexus", "0000", bft_ptr);
+        auto passport = registry.issue_model_passport(
+            "agent-alpha",
+            "1.0.0",
+            caps,
+            sha256_hex("policy"),
+            1
+        );
 
-        // 6. Driving Warp Transitions (ACTIVE -> SUSPECT -> QUARANTINE)
-        std::cout << "[STEP 3] Simulating Policy Violations...\n";
-        
-        PolicyDecision threat;
-        threat.action = PolicyAction::DENY;
-        threat.risk_weight = 1.5f; // [E-8] Accelerated warp score
-        threat.payload_hash = "bad_payload_hash_001";
+        auto vr = registry.verify(passport);
 
-        // This should trigger the SUSPECT state
-        session.process_decision(threat, get_clock()->now_ms());
-        std::cout << "[SESSION] State: " << Session::state_str(session.state()) 
-                  << " | Warp Score: " << session.warp_score() << "\n";
+        std::cout << "[VERIFY] " << vr.status_str() << "\n";
 
-        // This should trigger the QUARANTINE state (Fail-Closed) [E-4]
-        threat.payload_hash = "bad_payload_hash_002";
-        session.process_decision(threat, get_clock()->now_ms());
-        
-        std::cout << "[SESSION] Final State: " << Session::state_str(session.state()) << "\n";
+        // =========================================================================
+        // VAULT RECORD (PROVENANCE VALIDATED)
+        // =========================================================================
 
-        if (session.state() == SessionState::QUARANTINE) {
-            vault_log_event(vault, "SESSION_QUARANTINE", "sess-omega", "model-nexus", threat.payload_hash, bft_ptr);
-        }
+        vault_append_with_provenance(
+            vault,
+            "SYSTEM_START",
+            "main",
+            "system",
+            sha256_hex("startup"),
+            "init",
+            *clock
+        );
 
-        std::cout << "--- Aegis Protocol Execution Complete ---\n";
+        // =========================================================================
+        // SHUTDOWN
+        // =========================================================================
+
+        std::cout << "[DONE]\n";
         return 0;
 
     } catch (const std::exception& e) {

@@ -36,12 +36,31 @@ bool allow_read(TemporalState state) {
 std::string Policy::compute_hash() const {
     std::stringstream ss;
     ss << policy_id << ":" << version << "|";
-
-    for (const auto& meta_entry : metadata) {
-        ss << meta_entry.first << ":" << meta_entry.second << ";";
+<<<<<<< HEAD
+    
+    // Iterate over metadata map instead of undefined constraints
+    for (const auto& [key, value] : metadata) {
+        ss << key << ":" << value << ";";
+=======
+    for (const auto& constraint : constraints) {
+        ss << constraint.resource_id << ":"
+           << constraint.action << ":"
+           << (constraint.allowed ? "1" : "0") << ";";
+>>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
     }
-
+    
     return sha256_hex(ss.str());
+}
+
+bool evaluate_policy_with_zk(const Policy& policy, 
+                           const PolicyDecision& decision,
+                           const std::string& context) {
+    if (!decision.zk_proof.has_value()) {
+        return false;  // ZK proof required for zero-trust evaluation
+    }
+    
+    auto prover = security::ZkProofFactory::create_prover(decision.proof_type);
+    return prover->verify(context, *decision.zk_proof);
 }
 
 } // namespace uml001
