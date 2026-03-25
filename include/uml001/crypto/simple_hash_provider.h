@@ -1,41 +1,34 @@
 #pragma once
 #include "uml001/crypto/hash_provider.h"
-#include "uml001/crypto/crypto_utils.h"
+#include <string>
+#include <vector>
+#include <cstdint>
 
 namespace uml001 {
 namespace crypto {
 
-    class SimpleHashProvider : public IHashProvider {
-    public:
-        static SimpleHashProvider& instance() {
-            static SimpleHashProvider inst;
-            return inst;
-        }
+class SimpleHashProvider : public IHashProvider {
+public:
+    static SimpleHashProvider& instance();
 
-        std::string sha256(const std::string& input) override {
-            return ::uml001::sha256_hex(input);
-        }
+    // Overrides from IHashProvider
+    std::string sha256(const std::string& input) override;
+    std::vector<uint8_t> sha256_raw(const std::vector<uint8_t>& input) override;
+    std::string sha512(const std::string& input) override;
+    std::string sha3_256(const std::string& input) override;
 
-        std::vector<uint8_t> sha256_raw(const std::vector<uint8_t>& input) override {
-            return ::uml001::sha256_raw(input);
-        }
+    // Extended functionality (Removed the invalid 'override' keywords)
+    std::vector<uint8_t> sha512_raw(const std::vector<uint8_t>& input);
+    std::string sha3_512(const std::string& input);
+    std::vector<uint8_t> sha3_256_raw(const std::vector<uint8_t>& input);
+    std::vector<uint8_t> sha3_512_raw(const std::vector<uint8_t>& input);
 
-        std::string sha512(const std::string& input) override {
-            // Note: Add sha512_hex to crypto_utils if missing, or implement here using OpenSSL
-            return ""; // Placeholder until sha512 is confirmed in crypto_utils
-        }
-
-        std::string sha3_256(const std::string& input) override {
-             // Note: Add sha3_256_hex to crypto_utils if missing
-            return ""; 
-        }
-
-    private:
-        SimpleHashProvider() = default;
-        ~SimpleHashProvider() override = default;
-        SimpleHashProvider(const SimpleHashProvider&) = delete;
-        SimpleHashProvider& operator=(const SimpleHashProvider&) = delete;
-    };
+private:
+    SimpleHashProvider() = default;
+    ~SimpleHashProvider() override = default;
+    SimpleHashProvider(const SimpleHashProvider&) = delete;
+    SimpleHashProvider& operator=(const SimpleHashProvider&) = delete;
+};
 
 } // namespace crypto
 } // namespace uml001

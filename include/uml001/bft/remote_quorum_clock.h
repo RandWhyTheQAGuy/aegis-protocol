@@ -1,40 +1,30 @@
+/*
+ * Copyright 2026 Aegis Protocol Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
+
 #pragma once
 
-#include <string>
-#include <vector>
-#include <memory>
-#include <unordered_map>
-#include <atomic>
-
-#include <grpcpp/grpcpp.h>
-#include "clock_service.grpc.pb.h"
-
 #include "uml001/core/clock.h"
+#include <string>
+#include <memory>
 
 namespace uml001 {
 
-struct QuorumProof {
-    std::vector<std::string> node_ids;
-    std::vector<std::string> signatures_b64;
-    int64_t median_time_ms = 0;
-};
-
+/**
+ * @brief Implementation of IClock that fetches time from the BFT Quorum.
+ */
 class RemoteQuorumClock : public IClock {
 public:
-    struct NodeConfig {
-        std::string endpoint;
-        std::string node_id;
-        std::string pubkey_base64;
-    };
+    RemoteQuorumClock(const std::string& quorum_address);
+    virtual ~RemoteQuorumClock() = default;
 
-    RemoteQuorumClock(
-        const std::vector<NodeConfig>& nodes,
-        size_t quorum_threshold,
-        int64_t max_skew_ms = 5000,
-        double max_drift_ppm = 100.0
-    );
-
-    // IClock interface implementation
+    // Interface Implementation (Fixes the 'abstract class' and 'hidden virtual' errors)
     uint64_t now_unix() const override;
     uint64_t now_ms() const override;
     bool is_synchronized() const override;

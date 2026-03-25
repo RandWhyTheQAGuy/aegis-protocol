@@ -42,8 +42,15 @@ public:
         double max_drift_ppm = 100.0
     );
 
-    // Core requirement for IClock interface
-    uint64_t now_unix() override;
+    // ------------------------------------------------------------------------
+    // Core requirements for IClock interface (All strict const signatures)
+    // ------------------------------------------------------------------------
+    uint64_t now_unix() const override;
+    uint64_t now_ms() const override;
+    bool is_synchronized() const override;
+    uint64_t last_sync_unix() const override;
+    ClockStatus status() const override;
+    std::string source_id() const override;
 
     // Metric accessors
     double get_confidence_ms() const;
@@ -73,6 +80,9 @@ private:
     int active_nodes_{0};
     double drift_{0.0};
     QuorumProof last_proof_;
+
+    // Private mutative helper to execute the BFT query 
+    int64_t perform_sync();
 
     // Private helper methods for the BFT algorithm
     bool query_node(NodeClient& client, const std::string& request_id, quorumtime::TimeResponse& out);

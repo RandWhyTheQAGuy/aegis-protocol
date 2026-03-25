@@ -1,31 +1,23 @@
 #pragma once
 
-#include <string>
-#include <memory>
 #include "uml001/core/passport.h"
 #include "uml001/security/vault.h"
+#include <memory>
+#include <string>
 
-namespace aegis {
+namespace aegis::sidecar {
 
-/**
- * @brief The AegisGuard acts as a security proxy for the AI agent.
- */
 class AegisGuard {
 public:
-    struct Config {
-        std::string agent_id;      // This fixes the 'config_agent_id' error
-        std::string vault_path;
-        bool enforcement_enabled = true;
-    };
+    AegisGuard(const std::string& agent_id,
+               std::shared_ptr<uml001::ColdVault> vault);
 
-    explicit AegisGuard(Config config, std::shared_ptr<uml001::Vault> vault);
-
-    bool validate_action(const std::string& action_type, const std::string& resource);
-    std::string get_agent_id() const { return config_.agent_id; }
+    bool validate_request(const std::string& request_payload,
+                         const uml001::Passport& passport);
 
 private:
-    Config config_;
-    std::shared_ptr<uml001::Vault> vault_;
+    std::string agent_id_;
+    std::shared_ptr<uml001::ColdVault> vault_;
 };
 
-} // namespace aegis
+} // namespace aegis::sidecar

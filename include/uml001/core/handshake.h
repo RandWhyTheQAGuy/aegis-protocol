@@ -475,9 +475,9 @@ public:
         }
 
         // Passport validity
-        VerifyResult vr = registry_.verify(msg.passport);
+        VerifyResult vr = registry_.verify(msg.passport, now_);
         if (!vr.ok()) {
-            res.reject_reason = "REJECT_INVALID_PASSPORT:" + vr.status_str();
+            res.reject_reason = "REJECT_INVALID_PASSPORT:" + verify_status_str(vr.status);
             return res;
         }
 
