@@ -156,19 +156,6 @@ aegis_daemon/fast:
 .PHONY : aegis_daemon/fast
 
 #=============================================================================
-# Target rules for targets named aegis_e2e
-
-# Build rule for target.
-aegis_e2e: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 aegis_e2e
-.PHONY : aegis_e2e
-
-# fast build rule for target.
-aegis_e2e/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_e2e.dir/build.make CMakeFiles/aegis_e2e.dir/build
-.PHONY : aegis_e2e/fast
-
-#=============================================================================
 # Target rules for targets named test_passport_flow
 
 # Build rule for target.
@@ -228,6 +215,30 @@ clock_service.pb.s: clock_service.pb.cc.s
 clock_service.pb.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/clock_proto.dir/build.make CMakeFiles/clock_proto.dir/clock_service.pb.cc.s
 .PHONY : clock_service.pb.cc.s
+
+src/bft/remote_quorum_clock.o: src/bft/remote_quorum_clock.cpp.o
+.PHONY : src/bft/remote_quorum_clock.o
+
+# target to build an object file
+src/bft/remote_quorum_clock.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/bft/remote_quorum_clock.cpp.o
+.PHONY : src/bft/remote_quorum_clock.cpp.o
+
+src/bft/remote_quorum_clock.i: src/bft/remote_quorum_clock.cpp.i
+.PHONY : src/bft/remote_quorum_clock.i
+
+# target to preprocess a source file
+src/bft/remote_quorum_clock.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/bft/remote_quorum_clock.cpp.i
+.PHONY : src/bft/remote_quorum_clock.cpp.i
+
+src/bft/remote_quorum_clock.s: src/bft/remote_quorum_clock.cpp.s
+.PHONY : src/bft/remote_quorum_clock.s
+
+# target to generate assembly for a file
+src/bft/remote_quorum_clock.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/bft/remote_quorum_clock.cpp.s
+.PHONY : src/bft/remote_quorum_clock.cpp.s
 
 src/bft_clock_client.o: src/bft_clock_client.cpp.o
 .PHONY : src/bft_clock_client.o
@@ -301,54 +312,6 @@ src/core/passport.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/core/passport.cpp.s
 .PHONY : src/core/passport.cpp.s
 
-src/core/remote_quorum_clock.o: src/core/remote_quorum_clock.cpp.o
-.PHONY : src/core/remote_quorum_clock.o
-
-# target to build an object file
-src/core/remote_quorum_clock.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.o
-.PHONY : src/core/remote_quorum_clock.cpp.o
-
-src/core/remote_quorum_clock.i: src/core/remote_quorum_clock.cpp.i
-.PHONY : src/core/remote_quorum_clock.i
-
-# target to preprocess a source file
-src/core/remote_quorum_clock.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.i
-.PHONY : src/core/remote_quorum_clock.cpp.i
-
-src/core/remote_quorum_clock.s: src/core/remote_quorum_clock.cpp.s
-.PHONY : src/core/remote_quorum_clock.s
-
-# target to generate assembly for a file
-src/core/remote_quorum_clock.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/core/remote_quorum_clock.cpp.s
-.PHONY : src/core/remote_quorum_clock.cpp.s
-
-src/core/transparency_log.o: src/core/transparency_log.cpp.o
-.PHONY : src/core/transparency_log.o
-
-# target to build an object file
-src/core/transparency_log.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/core/transparency_log.cpp.o
-.PHONY : src/core/transparency_log.cpp.o
-
-src/core/transparency_log.i: src/core/transparency_log.cpp.i
-.PHONY : src/core/transparency_log.i
-
-# target to preprocess a source file
-src/core/transparency_log.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/core/transparency_log.cpp.i
-.PHONY : src/core/transparency_log.cpp.i
-
-src/core/transparency_log.s: src/core/transparency_log.cpp.s
-.PHONY : src/core/transparency_log.s
-
-# target to generate assembly for a file
-src/core/transparency_log.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/core/transparency_log.cpp.s
-.PHONY : src/core/transparency_log.cpp.s
-
 src/crypto/crypto_facade.o: src/crypto/crypto_facade.cpp.o
 .PHONY : src/crypto/crypto_facade.o
 
@@ -396,30 +359,6 @@ src/crypto/crypto_utils.s: src/crypto/crypto_utils.cpp.s
 src/crypto/crypto_utils.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.s
 .PHONY : src/crypto/crypto_utils.cpp.s
-
-src/e2e-example.o: src/e2e-example.cpp.o
-.PHONY : src/e2e-example.o
-
-# target to build an object file
-src/e2e-example.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_e2e.dir/build.make CMakeFiles/aegis_e2e.dir/src/e2e-example.cpp.o
-.PHONY : src/e2e-example.cpp.o
-
-src/e2e-example.i: src/e2e-example.cpp.i
-.PHONY : src/e2e-example.i
-
-# target to preprocess a source file
-src/e2e-example.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_e2e.dir/build.make CMakeFiles/aegis_e2e.dir/src/e2e-example.cpp.i
-.PHONY : src/e2e-example.cpp.i
-
-src/e2e-example.s: src/e2e-example.cpp.s
-.PHONY : src/e2e-example.s
-
-# target to generate assembly for a file
-src/e2e-example.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_e2e.dir/build.make CMakeFiles/aegis_e2e.dir/src/e2e-example.cpp.s
-.PHONY : src/e2e-example.cpp.s
 
 src/main_aegis_protocol.o: src/main_aegis_protocol.cpp.o
 .PHONY : src/main_aegis_protocol.o
@@ -541,6 +480,30 @@ src/security/revocation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/security/revocation.cpp.s
 .PHONY : src/security/revocation.cpp.s
 
+src/security/transparency_log.o: src/security/transparency_log.cpp.o
+.PHONY : src/security/transparency_log.o
+
+# target to build an object file
+src/security/transparency_log.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/security/transparency_log.cpp.o
+.PHONY : src/security/transparency_log.cpp.o
+
+src/security/transparency_log.i: src/security/transparency_log.cpp.i
+.PHONY : src/security/transparency_log.i
+
+# target to preprocess a source file
+src/security/transparency_log.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/security/transparency_log.cpp.i
+.PHONY : src/security/transparency_log.cpp.i
+
+src/security/transparency_log.s: src/security/transparency_log.cpp.s
+.PHONY : src/security/transparency_log.s
+
+# target to generate assembly for a file
+src/security/transparency_log.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/security/transparency_log.cpp.s
+.PHONY : src/security/transparency_log.cpp.s
+
 src/sidecar/aegis_guard.o: src/sidecar/aegis_guard.cpp.o
 .PHONY : src/sidecar/aegis_guard.o
 
@@ -599,7 +562,6 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... aegis_core"
 	@echo "... aegis_daemon"
-	@echo "... aegis_e2e"
 	@echo "... clock_proto"
 	@echo "... test_passport_flow"
 	@echo "... clock_service.grpc.pb.o"
@@ -608,6 +570,9 @@ help:
 	@echo "... clock_service.pb.o"
 	@echo "... clock_service.pb.i"
 	@echo "... clock_service.pb.s"
+	@echo "... src/bft/remote_quorum_clock.o"
+	@echo "... src/bft/remote_quorum_clock.i"
+	@echo "... src/bft/remote_quorum_clock.s"
 	@echo "... src/bft_clock_client.o"
 	@echo "... src/bft_clock_client.i"
 	@echo "... src/bft_clock_client.s"
@@ -617,21 +582,12 @@ help:
 	@echo "... src/core/passport.o"
 	@echo "... src/core/passport.i"
 	@echo "... src/core/passport.s"
-	@echo "... src/core/remote_quorum_clock.o"
-	@echo "... src/core/remote_quorum_clock.i"
-	@echo "... src/core/remote_quorum_clock.s"
-	@echo "... src/core/transparency_log.o"
-	@echo "... src/core/transparency_log.i"
-	@echo "... src/core/transparency_log.s"
 	@echo "... src/crypto/crypto_facade.o"
 	@echo "... src/crypto/crypto_facade.i"
 	@echo "... src/crypto/crypto_facade.s"
 	@echo "... src/crypto/crypto_utils.o"
 	@echo "... src/crypto/crypto_utils.i"
 	@echo "... src/crypto/crypto_utils.s"
-	@echo "... src/e2e-example.o"
-	@echo "... src/e2e-example.i"
-	@echo "... src/e2e-example.s"
 	@echo "... src/main_aegis_protocol.o"
 	@echo "... src/main_aegis_protocol.i"
 	@echo "... src/main_aegis_protocol.s"
@@ -647,6 +603,9 @@ help:
 	@echo "... src/security/revocation.o"
 	@echo "... src/security/revocation.i"
 	@echo "... src/security/revocation.s"
+	@echo "... src/security/transparency_log.o"
+	@echo "... src/security/transparency_log.i"
+	@echo "... src/security/transparency_log.s"
 	@echo "... src/sidecar/aegis_guard.o"
 	@echo "... src/sidecar/aegis_guard.i"
 	@echo "... src/sidecar/aegis_guard.s"

@@ -2,7 +2,6 @@ CMakeFiles/aegis_core.dir/src/core/passport.cpp.o: \
   /Users/rspickler/Documents/GitHub/aegis-protocol/src/core/passport.cpp \
   /Users/rspickler/Documents/GitHub/aegis-protocol/include/uml001/core/passport.h \
   /Users/rspickler/Documents/GitHub/aegis-protocol/include/uml001/crypto/crypto_utils.h \
-  /Users/rspickler/Documents/GitHub/aegis-protocol/include/uml001/crypto/crypto_utils.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/string \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__config \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__config_site \
@@ -366,10 +365,8 @@ CMakeFiles/aegis_core.dir/src/core/passport.cpp.o: \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__bit_reference \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__split_buffer \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/optional \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/map \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__functional/is_transparent.h \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__node_handle \
-  /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__tree \
+  /Users/rspickler/Documents/GitHub/aegis-protocol/include/uml001/security/transparency_log.h \
+  /Users/rspickler/Documents/GitHub/aegis-protocol/include/uml001/core/clock.h \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/iostream \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/ios \
   /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include/c++/v1/__locale \

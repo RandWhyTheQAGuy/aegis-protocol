@@ -18,14 +18,14 @@ public:
         bool enforcement_enabled = true;
     };
 
-    explicit AegisGuard(Config config, std::shared_ptr<uml001::IVault> vault);
+    explicit AegisGuard(Config config, std::shared_ptr<uml001::Vault> vault);
 
     bool validate_action(const std::string& action_type, const std::string& resource);
     std::string get_agent_id() const { return config_.agent_id; }
 
 private:
     Config config_;
-    std::shared_ptr<uml001::IVault> vault_;
+    std::shared_ptr<uml001::Vault> vault_;
 };
 
 } // namespace aegis

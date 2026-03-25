@@ -3,7 +3,7 @@
 
 namespace aegis {
 
-AegisGuard::AegisGuard(Config config, std::shared_ptr<uml001::IVault> vault)
+AegisGuard::AegisGuard(Config config, std::shared_ptr<uml001::Vault> vault)
     : config_(config), vault_(vault) {
     if (config_.agent_id.empty()) {
         throw std::runtime_error("AegisGuard Error: agent_id must be specified in config.");

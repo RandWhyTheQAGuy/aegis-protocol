@@ -1,5 +1,6 @@
 // classifier.h
     #pragma once
+    #include "uml001/crypto/crypto_utils.h"
     #include "passport.h"   // for sha256_hex
     #include <functional>
     #include <stdexcept>

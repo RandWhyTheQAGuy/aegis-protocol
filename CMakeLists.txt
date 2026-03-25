@@ -113,6 +113,7 @@ set(AEGIS_CORE_SOURCES
     src/security/revocation.cpp
     src/crypto/crypto_utils.cpp
     src/bft/remote_quorum_clock.cpp
+    src/bft_clock_client.cpp
     src/crypto/crypto_facade.cpp
     src/security/key_manager.cpp  # Note: ensure this exists or update path
     src/sidecar/aegis_guard.cpp
@@ -163,10 +164,6 @@ endif()
 # The main daemon
 add_executable(aegis_daemon src/main_aegis_protocol.cpp)
 target_link_libraries(aegis_daemon PRIVATE aegis_core)
-
-# The existing E2E example
-add_executable(aegis_e2e src/e2e-example.cpp)
-target_link_libraries(aegis_e2e PRIVATE aegis_core)
 
 # NEW: The Passport Flow Test from PR 3
 add_executable(test_passport_flow tests/test_passport_flow.cpp)

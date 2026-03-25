@@ -86,6 +86,9 @@
                 case PolicyAction::ALLOW:
                     warp_score_ = std::max(0.0f, warp_score_ - 0.1f);
                     break;
+                case PolicyAction::REQUIRE_MFA:
+                    warp_score_ += 0.3f;  // MFA requirement is moderate concern
+                    break;
             }
 
             log_event({ now, "DECISION", decision.payload_hash,

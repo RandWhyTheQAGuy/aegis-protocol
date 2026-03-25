@@ -158,6 +158,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/clock_proto.dir/DependInfo.cmake"
   "CMakeFiles/aegis_core.dir/DependInfo.cmake"
   "CMakeFiles/aegis_daemon.dir/DependInfo.cmake"
-  "CMakeFiles/aegis_e2e.dir/DependInfo.cmake"
   "CMakeFiles/test_passport_flow.dir/DependInfo.cmake"
   )

@@ -5,17 +5,20 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
-namespace aegis::integration {
+namespace aegis {
+namespace integration {
 
 DatadogLogger::DatadogLogger(const std::string& agent_host, int agent_port)
     : host_(agent_host), port_(agent_port) {}
 
-void DatadogLogger::log_event(uml001::LogDestination dest, const std::string& message) {
-    if (dest == uml001::LogDestination::STDOUT) {
-        std::cout << "[DATADOG-LOG] " << message << std::endl;
-    } else if (dest == uml001::LogDestination::DATADOG_UDP) {
-        // Wrap message in Datadog-friendly JSON or DogStatsD format
-        std::string payload = "_e{5,15}:Event|" + message + "|h:" + host_;
+void DatadogLogger::log_event(const std::string& event_type, const std::string& message) {
+    // Log to stdout for development
+    std::cout << "[DATADOG-LOG] " << event_type << ": " << message << std::endl;
+    
+    // Send to Datadog agent if configured
+    if (!host_.empty() && port_ > 0) {
+        // Wrap message in Datadog-friendly DogStatsD format
+        std::string payload = "aegis.event:" + event_type + "|" + message;
         send_udp(payload);
     }
 }
@@ -35,4 +38,5 @@ void DatadogLogger::send_udp(const std::string& payload) {
     close(sock);
 }
 
-} // namespace aegis::integration
+} // namespace integration
+} // namespace aegis
