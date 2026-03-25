@@ -64,7 +64,6 @@ private:
 
     mutable QuorumProof last_proof_;
 
-private:
     bool query_node(const NodeClient& client,
                     const std::string& request_id,
                     quorumtime::TimeResponse& out) const;

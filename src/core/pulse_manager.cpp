@@ -72,8 +72,13 @@ private:
     }
 
     uint64_t now_ms() const {
+<<<<<<< HEAD
         // Use injected clock for time instead of std::chrono
         return clock_->now_ms();
+=======
+        return std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::steady_clock::now().time_since_epoch()).count();
+>>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
     }
 
     IClock& clock_;

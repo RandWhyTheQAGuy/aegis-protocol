@@ -121,6 +121,14 @@ private:
 
     std::vector<std::shared_ptr<MerkleNode>> leaves_;
     std::shared_ptr<MerkleNode> root_;
+
+    std::shared_ptr<IClock> clock_;
+    TransparencyMode mode_;
+    LogState current_state_;
+
+    std::vector<TransparencyEntry> entries_;
+    std::vector<std::shared_ptr<MerkleNode>> leaves_;
+    std::shared_ptr<MerkleNode> root_;
 };
 
 } // namespace uml001

@@ -1,5 +1,6 @@
 .
 <<<<<<< HEAD
+<<<<<<< HEAD
 |-- .DS_Store
 |-- .aegisSDK.py
 |-- .gitignore
@@ -190,6 +191,8 @@
 
 48 directories, 142 files
 =======
+=======
+>>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
 ├── .DS_Store
 ├── .aegisSDK.py
 ├── .gitignore
@@ -380,4 +383,200 @@
 └── third_party
 
 46 directories, 143 files
+<<<<<<< HEAD
 >>>>>>> ace921b (Remove now_unix wrapper and standardize on quorum clock access (#8))
+=======
+=======
+|-- .DS_Store
+|-- .aegisSDK.py
+|-- .gitignore
+|-- .main.py
+|-- .test_aegis.py
+|-- .vscode
+|   `-- settings.json
+|-- CMakeLists.txt
+|-- LICENSE
+|-- README.md
+|-- __pycache__
+|   |-- aegis_adapter.cpython-314-pytest-9.0.2.pyc
+|   |-- aegis_adapter.cpython-314.pyc
+|   |-- aegis_autogen_integration.cpython-314-pytest-9.0.2.pyc
+|   |-- aegis_crewai_integration.cpython-314-pytest-9.0.2.pyc
+|   |-- aegis_langgraph_integration.cpython-314-pytest-9.0.2.pyc
+|   |-- aegis_protocol_memory_integration.cpython-314-pytest-9.0.2.pyc
+|   |-- aegis_protocol_nemo_integration.cpython-314-pytest-9.0.2.pyc
+|   |-- test_aegis_adapter.cpython-314-pytest-9.0.2.pyc
+|   |-- test_aegis_core.cpython-314-pytest-9.0.2.pyc
+|   `-- test_aegis_optional_modules.cpython-314-pytest-9.0.2.pyc
+|-- aegis-protocol.code-workspace
+|-- bindings
+|   |-- .CMakeLists.txt
+|   `-- aegis_protocol_bindings.cpp
+|-- build
+|   |-- CMakeCache.txt
+|   |-- CMakeFiles
+|   |   |-- 4.3.0
+|   |   |-- CMakeConfigureLog.yaml
+|   |   |-- CMakeDirectoryInformation.cmake
+|   |   |-- CMakeRuleHashes.txt
+|   |   |-- CMakeScratch
+|   |   |-- InstallScripts.json
+|   |   |-- Makefile.cmake
+|   |   |-- Makefile2
+|   |   |-- Progress
+|   |   |-- TargetDirectories.txt
+|   |   |-- aegis_core.dir
+|   |   |-- aegis_daemon.dir
+|   |   |-- aegis_e2e.dir
+|   |   |-- clock_proto.dir
+|   |   |-- cmake.check_cache
+|   |   |-- pkgRedirects
+|   |   |-- progress.marks
+|   |   `-- test_passport_flow.dir
+|   |-- Makefile
+|   |-- clock_service.grpc.pb.cc
+|   |-- clock_service.grpc.pb.h
+|   |-- clock_service.pb.cc
+|   |-- clock_service.pb.h
+|   |-- cmake_install.cmake
+|   `-- libclock_proto.a
+|-- canonical_payload.md
+|-- include
+|   |-- .DS_Store
+|   |-- aegis
+|   |   |-- core
+|   |   |-- integration
+|   |   `-- sidecar
+|   |-- aegis_protocol.h
+|   |-- classifier.h
+|   |-- crypto_utils.h
+|   |-- transparency_log.h
+|   `-- uml001
+|       |-- bft
+|       |-- bft_clock_client.h
+|       |-- classifier.h
+|       |-- clock.h
+|       |-- core
+|       |-- crypto
+|       |-- crypto_facade.h
+|       |-- crypto_mode.h
+|       |-- handshake.h
+|       |-- hash_provider.h
+|       |-- key_rotation.h
+|       |-- key_rotation_manager.h
+|       |-- memory_clock_store.h
+|       |-- multi_party_issuance.h
+|       |-- ntp_observation_fetcher.h
+|       |-- passport.h
+|       |-- platform.h
+|       |-- policy.h
+|       |-- redis_shared_store.h
+|       |-- remote_quorum_clock.h
+|       |-- rest_auth_config.h
+|       |-- rest_handlers.h
+|       |-- revocation.h
+|       |-- security
+|       |-- session.h
+|       |-- shared_state.h
+|       |-- simple_hash_provider.h
+|       |-- strong_clock.h
+|       |-- temporal_state.h
+|       `-- vault.h
+|-- key_management.md
+|-- legacy
+|   |-- aegis_core.cpp
+|   `-- uml001_bindings.cpp
+|-- project_structure.txt
+|-- proto
+|   `-- clock_service.proto
+|-- pubkey_rotation_policy.md
+|-- python
+|   `-- aegis_protocol
+|       |-- adapters
+|       `-- integrations
+|-- schemas
+|   |-- aegis_protocol.schema.json
+|   |-- audit-vault.schema.json
+|   |-- bft_client_config.schema.json
+|   |-- bft_clock_client_config.schema.json
+|   |-- bft_clock_request.schema.json
+|   |-- bft_clock_response.schema.json
+|   |-- bft_time_request.schema.json
+|   |-- bft_time_response.schema.json
+|   |-- canonical_payload.schema.json
+|   |-- crypto_envelope.schema.json
+|   |-- daemon_config.schema.json
+|   |-- error_response.schema.json
+|   |-- handshake.schema.json
+|   |-- ipc_request.schema.json
+|   |-- ipc_response.schema.json
+|   |-- ipc_response_hmac.schema.json
+|   |-- kms_key_record.schema.json
+|   |-- passport.schema.json
+|   |-- policy-rule.schema.json
+|   |-- policy.schema.json
+|   |-- registry.schema.json
+|   |-- revocation-record.schema.json
+|   |-- semantic-score.schema.json
+|   |-- sidecar_api_response.schema.json
+|   |-- sidecar_health.schema.json
+|   |-- sidecar_response.schema.json
+|   |-- transparency_entry.schema.json
+|   `-- vault-entry.schema.json
+|-- sdks
+|   |-- .DS_Store
+|   `-- python
+|       |-- .DS_Store
+|       |-- aegis_protocol
+|       `-- aegis_protocol_sdk
+|-- src
+|   |-- .DS_Store
+|   |-- bft
+|   |   `-- remote_quorum_clock.cpp
+|   |-- bft_clock_client.cpp
+|   |-- bindings
+|   |   |-- clock_service.grpc.pb.cc
+|   |   |-- clock_service.grpc.pb.h
+|   |   |-- clock_service.pb.cc
+|   |   |-- clock_service.pb.h
+|   |   `-- main_bindings.cpp
+|   |-- classifier.cpp
+|   |-- core
+|   |   |-- passport.cpp
+|   |   |-- policy.cpp
+|   |   |-- pulse_manager.cpp
+|   |   |-- quorum_pulse_manager.cpp
+|   |   |-- session.cpp
+|   |   `-- temporal_state.cpp
+|   |-- crypto
+|   |   |-- crypto_facade.cpp
+|   |   |-- crypto_utils.cpp
+|   |   |-- hash_provider.cpp
+|   |   `-- simple_hash_provider.cpp
+
+|   |-- main_aegis_protocol.cpp
+|   |-- providers
+|   |   |-- datadog_logger.cpp
+|   |   |-- memory_clock_store.cpp
+|   |   |-- redis_shared_store.cpp
+|   |   `-- redis_vault_backend.cpp
+|   |-- python
+|   |-- rest_server.cpp
+|   |-- security
+|   |   |-- key_manager.cpp
+|   |   |-- revocation.cpp
+|   |   `-- transparency_log.cpp
+|   `-- sidecar
+|       `-- aegis_guard.cpp
+|-- tests
+|   |-- aegis_protocol_v2_tests.py
+|   |-- pytest
+|   |-- test_aegis_adapter.py
+|   |-- test_aegis_core.py
+|   |-- test_aegis_optional_modules.py
+|   `-- test_passport_flow.cpp
+`-- third_party
+
+48 directories, 142 files
+>>>>>>> cc5bbf5 (WIP: continued clean integration and BFT hardening updates)
+>>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)

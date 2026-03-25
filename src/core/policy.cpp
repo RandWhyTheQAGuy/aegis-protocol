@@ -36,10 +36,17 @@ bool allow_read(TemporalState state) {
 std::string Policy::compute_hash() const {
     std::stringstream ss;
     ss << policy_id << ":" << version << "|";
+<<<<<<< HEAD
     
     // Iterate over metadata map instead of undefined constraints
     for (const auto& [key, value] : metadata) {
         ss << key << ":" << value << ";";
+=======
+    for (const auto& constraint : constraints) {
+        ss << constraint.resource_id << ":"
+           << constraint.action << ":"
+           << (constraint.allowed ? "1" : "0") << ";";
+>>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
     }
     
     return sha256_hex(ss.str());

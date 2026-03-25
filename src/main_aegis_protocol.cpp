@@ -22,6 +22,13 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+#include <cstdlib>
+=======
+>>>>>>> cc5bbf5 (WIP: continued clean integration and BFT hardening updates)
+>>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
 
 using namespace uml001;
 
@@ -37,6 +44,23 @@ static constexpr float WARP_SUSPECT_THRESH    = 1.0f;
 static constexpr float WARP_QUARANTINE_THRESH = 3.0f;
 
 // =============================================================================
+<<<<<<< HEAD
+// CI/CD Mock Clock Implementation
+// =============================================================================
+class MockClock : public IClock {
+public:
+    uint64_t now_unix() const override { return 1740000000ULL; }
+    uint64_t now_ms() const { return 1740000000000ULL; }
+    ClockStatus status() const override { return ClockStatus::SYNCHRONIZED; }
+};
+
+// =============================================================================
+=======
+<<<<<<< HEAD
+>>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
+// Helper: Vault Logging with BFT Provenance [E-7]
+// =============================================================================
+=======
 // CI/CD Mock Clock Implementation
 // =============================================================================
 class MockClock : public IClock {
@@ -49,6 +73,7 @@ public:
 // =============================================================================
 // Helper: Vault Logging with BFT Provenance [E-7]
 // =============================================================================
+>>>>>>> cc5bbf5 (WIP: continued clean integration and BFT hardening updates)
 static void vault_log_event(ColdVault& vault, 
                             const std::string& type, 
                             const std::string& sess, 

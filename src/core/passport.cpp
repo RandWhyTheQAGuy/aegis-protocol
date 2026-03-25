@@ -26,7 +26,38 @@ void Passport::issue(std::shared_ptr<IClock> clock, uint64_t duration_sec) {
     this->status = PassportStatus::ACTIVE;
     
     std::cout << "[Passport] Issued new passport for model " << model_id 
-              << " at BFT Time: " << this->issued_at << std::endl;
+              << " at BFT Time: " << this->issued_at 
+              << " (Expires: " << this->expires_at << ")" << std::endl;
+}
+
+Passport PassportRegistry::issue_model_passport(
+    const std::string& model_id,
+    const std::string& version,
+    const Capabilities& caps,
+    const std::string& policy_hash,
+    uint32_t key_id) {
+    
+    Passport p;
+    p.model_id = model_id;
+    p.model_version = version;
+    p.capabilities = caps;
+    p.policy_hash = policy_hash;
+    p.signing_key_id = key_id;
+    
+    // Auto-issue upon registration using the registry's clock
+    // We wrap the reference in a shared_ptr with a no-op deleter for the issue call
+    auto clock_ptr = std::shared_ptr<IClock>(&clock_, [](IClock*){});
+    p.issue(clock_ptr);
+    
+    return p;
+}
+
+bool PassportRegistry::verify(const Passport& passport) {
+    if (passport.status != PassportStatus::ACTIVE) return false;
+    if (clock_.now_unix() > passport.expires_at) return false;
+    
+    // Cryptographic signature verification logic would go here
+    return true;
 }
 
 VerifyResult PassportRegistry::verify(const Passport& passport) const {
