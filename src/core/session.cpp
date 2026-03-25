@@ -15,6 +15,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <iostream>
+#include <cmath>
 
 namespace uml001 {
 
@@ -27,7 +28,8 @@ Session::Session(std::string session_id,
     , warp_threshold_(warp_threshold)
     , on_flush_(std::move(on_flush))
     , state_(SessionState::INIT)
-    , warp_score_(0.0f) {}
+    , warp_score_(0.0f)
+    , last_decision_time_ms_(0) {}
 
 void Session::activate() {
     require_state(SessionState::INIT, "activate");
@@ -42,7 +44,19 @@ bool Session::process_decision(const PolicyDecision& decision, uint64_t now_ms) 
         return false;
     }
 
-    // 1. Warp Score Calculation [E-8]
+    // 1. Time-based decay [E-8] - Apply exponential decay over time
+    if (last_decision_time_ms_ > 0) {
+        uint64_t time_delta_ms = now_ms - last_decision_time_ms_;
+        if (time_delta_ms >= WARP_DECAY_TIME_MS) {
+            // Apply decay: score *= (1 - WARP_DECAY_RATE) for each decay period
+            uint64_t decay_periods = time_delta_ms / WARP_DECAY_TIME_MS;
+            float decay_factor = std::pow(1.0f - WARP_DECAY_RATE, static_cast<float>(decay_periods));
+            warp_score_ *= decay_factor;
+        }
+    }
+    last_decision_time_ms_ = now_ms;
+
+    // 2. Warp Score Calculation [E-8]
     float base_weight = 0.0f;
     switch (decision.action) {
         case PolicyAction::DENY:        base_weight = WARP_WEIGHT_DENY; break;
@@ -54,15 +68,15 @@ bool Session::process_decision(const PolicyDecision& decision, uint64_t now_ms) 
 
     // Apply risk multiplier from policy metadata
     float delta = base_weight * decision.risk_weight;
-    warp_score_ = std::max(0.0f, warp_score_ + delta);
+    warp_score_ = std::max(0.0f, std::min(WARP_SCORE_MAX, warp_score_ + delta));
 
-    // 2. Buffer payload for Entropy Management
+    // 3. Buffer payload for Entropy Management
     payload_buffer_.push_back(decision.payload_hash);
     if (payload_buffer_.size() > MAX_BUFFER) {
         payload_buffer_.pop_front();
     }
 
-    // 3. State Transition Logic
+    // 4. State Transition Logic
     // Quarantine is triggered at 3x the threshold for absolute fail-stop
     if (warp_score_ >= (warp_threshold_ * 3.0f)) {
         transition(SessionState::QUARANTINE, "warp_critical_threshold");
@@ -80,9 +94,10 @@ bool Session::process_decision(const PolicyDecision& decision, uint64_t now_ms) 
 
     // Log the event for audit/transparency
     log_event({ now_ms, "POLICY_DECISION", decision.payload_hash,
-                action_str(decision.action) + " weight=" + std::to_string(delta) });
+                action_str(decision.action) + " weight=" + std::to_string(delta) + 
+                " score=" + std::to_string(warp_score_) });
 
-    // 4. Entropy Flush Trigger
+    // 5. Entropy Flush Trigger
     // We flush on any DENY or when the entropy buffer is full to prevent probing
     if (decision.action == PolicyAction::DENY || payload_buffer_.size() >= MAX_BUFFER) {
         initiate_flush(now_ms);
@@ -122,6 +137,7 @@ void Session::complete_flush() {
 void Session::reactivate() {
     require_state(SessionState::RESYNC, "reactivate");
     warp_score_ = 0.0f; // Reset health on successful re-authentication
+    last_decision_time_ms_ = 0; // Reset decay timer
     payload_buffer_.clear();
     transition(SessionState::ACTIVE, "resync_successful");
 }
@@ -151,7 +167,8 @@ void Session::require_state(SessionState expected, const std::string& op) const 
     }
 }
 
-void Session::log_event(SessionEvent e) {
+void Session::log_event(const std::string& type, const std::string& detail, uint64_t ts) {
+    SessionEvent e{ts, type, "", detail};
     event_log_.push_back(std::move(e));
 }
 
