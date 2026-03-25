@@ -1,3 +1,13 @@
+/*
+ * Copyright 2026 Aegis Protocol Authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ */
+
 #pragma once
 
 #include "uml001/crypto/crypto_utils.h"
@@ -5,12 +15,14 @@
 #include <vector>
 #include <optional>
 #include <cstdint>
-#include <memory> // Added for std::shared_ptr
+#include <memory>
 
 namespace uml001 {
 
-// Forward declaration of the clock interface
+// Forward declarations to break circular dependencies
 class IClock;
+class TransparencyLog;
+class RevocationList;
 
 enum class PassportStatus {
     INACTIVE,
@@ -56,8 +68,8 @@ struct Capabilities {
     bool entropy_flush = false;
 
     std::string serialize() const {
-        return std::string(classifier_authority ? "1" : "0") +
-               (classifier_sensitivity ? "1" : "0") +
+        return (classifier_authority ? "1" : "0") +
+               std::string(classifier_sensitivity ? "1" : "0") +
                (bft_consensus ? "1" : "0") +
                (entropy_flush ? "1" : "0");
     }
@@ -69,7 +81,7 @@ struct Passport {
     Capabilities capabilities;
     std::string policy_hash;
     
-    // Updated to match the logic in passport.cpp
+    // Core timing and status fields
     uint64_t issued_at = 0; 
     uint64_t expires_at = 0;
     PassportStatus status = PassportStatus::INACTIVE; 
@@ -119,14 +131,9 @@ struct Passport {
     }
 };
 
-// SemanticPassport: A read-only view of passport data for handshake & serialization
-// Maps to Passport but provides a cleaner interface for external use
-using SemanticPassport = Passport;
-
 class PassportRegistry {
 public:
-    // Using references here as per your original design
-    PassportRegistry(class TransparencyLog& log, class RevocationList& list, class IClock& clock)
+    PassportRegistry(TransparencyLog& log, RevocationList& list, IClock& clock)
         : log_(log), revocation_list_(list), clock_(clock) {}
 
     Passport issue_model_passport(
@@ -137,12 +144,12 @@ public:
         uint32_t key_id
     );
     
-    VerifyResult verify(const Passport& passport) const;
+    bool verify(const Passport& passport);
 
 private:
-    class TransparencyLog& log_;
-    class RevocationList&  revocation_list_;
-    class IClock&          clock_;
+    TransparencyLog& log_;
+    RevocationList&  revocation_list_;
+    IClock&          clock_;
 };
 
 } // namespace uml001

@@ -6,7 +6,7 @@
 //   - Uses length-prefixed concatenation for the composite signature to ensure
 //     cryptographic domain separation and prevent concatenation ambiguity.
 
-#include "uml001/passport.h"
+#include "uml001/core/passport.h"
 #include "uml001/security/transparency_log.h"
 #include "uml001/security/key_rotation.h"
 #include <map>
@@ -109,10 +109,8 @@ public:
 
         proposals_[proposal_id] = std::move(rec);
 
-        log_.append(TransparencyEntry::Type::PASSPORT_ISSUED, 
-                    "PROPOSED id=" + proposal_id, 
-                    model_id,
-                    proposer_id);
+        log_.append(TransparencyEntry::PASSPORT_ISSUED, proposer_id, model_id, 0,
+                    "PROPOSED id=" + proposal_id, now);
 
         if (threshold_ == 1) finalize_locked(proposal_id, now);
 
@@ -197,7 +195,7 @@ private:
         auto& rec = proposals_.at(proposal_id);
         rec.proposed_passport.signature = build_composite(rec.partial_sigs, rec.proposed_passport.canonical_body());
         rec.state = QuorumState::FINALIZED;
-        log_.append(TransparencyEntry::Type::PASSPORT_ISSUED, "FINALIZED", rec.proposed_passport.model_id, "quorum");
+        log_.append(TransparencyEntry::PASSPORT_ISSUED, "quorum", rec.proposed_passport.model_id, 0, "FINALIZED", now);
     }
 
     // Helper stubs for brevity
