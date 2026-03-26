@@ -1,18 +1,24 @@
 # -------------------------
-# OS / Editor Noise
+# OS / Editor
 # -------------------------
 .DS_Store
 .vscode/
-.*
+.idea/
+*.swp
+*.swo
 
-# Ignore ALL hidden dot-files except the ones we explicitly keep
+# -------------------------
+# Hidden files (SAFE VERSION)
+# -------------------------
 .*
 !.gitignore
 !.github/
 !.env.example
+!.clang-format
+!.editorconfig
 
 # -------------------------
-# Python Artifacts
+# Python
 # -------------------------
 __pycache__/
 *.pyc
@@ -24,59 +30,62 @@ sdks/python/**/build/
 sdks/python/**/dist/
 
 # -------------------------
-# CMake Build Artifacts
+# CMake / Build
 # -------------------------
 build/
 CMakeFiles/
 CMakeCache.txt
+CMakePresets.json
+CMakeUserPresets.json
 cmake_install.cmake
 Makefile
-*.cmake
+compile_commands.json
 *.o
 *.a
 *.d
-
-# Ninja (if used)
 *.ninja
 .ninja_deps
 .ninja_log
 
 # -------------------------
-# Protobuf / gRPC Generated
+# Protobuf / gRPC
 # -------------------------
 *.pb.cc
 *.pb.h
 *.grpc.pb.cc
 *.grpc.pb.h
-src/bindings/*.pb.*
-build/**/*.pb.*
+*.pb.cpp
+*.pb.hpp
 
 # -------------------------
-# Compiled Extensions / Binaries
+# Binaries
 # -------------------------
 *.so
-test_passport_flow
+*.dylib
+*.dll
+*.exe
+
 aegis_daemon
 aegis_core
 clock_proto
-lib*.a
+test_passport_flow
 
 # -------------------------
-# Project Metadata
-# -------------------------
-aegis-protocol.code-workspace
-project_structure.txt
-
-# -------------------------
-# Logs / Runtime
+# Logs / runtime
 # -------------------------
 *.log
 
 # -------------------------
-# Legacy / Accidental Files
+# Project metadata
+# -------------------------
+*.code-workspace
+project_structure.txt
+missing_tests_report.txt
+
+# -------------------------
+# Legacy / accidental
 # -------------------------
 bindings/.CMakeLists.txt
 .main.py
 .test_aegis.py
 .aegisSDK.py
-missing_tests_report.txt
