@@ -30,6 +30,8 @@
  #pragma once
 
 #include "uml001/core/clock.h"
+#include "clock_service.grpc.pb.h"
+#include <grpcpp/grpcpp.h>
 #include <string>
 #include <vector>
 #include <memory>
@@ -53,11 +55,12 @@ class RemoteQuorumClock : public IClock {
 public:
     RemoteQuorumClock(const std::vector<NodeConfig>& nodes,
                       size_t quorum_threshold,
-                      int64_t max_skew_ms,
-                      double max_drift_ppm);
+                      int64_t max_skew_ms = 100,
+                      double max_drift_ppm = 50.0);
 
     ~RemoteQuorumClock() override = default;
 
+    // IClock Interface
     uint64_t now_unix() const override;
     uint64_t now_ms() const override;
     bool is_synchronized() const override;
@@ -65,21 +68,23 @@ public:
     ClockStatus status() const override;
     std::string source_id() const override;
 
+    // BFT Metadata
     double get_confidence_ms() const;
     int get_active_nodes() const;
     double get_projected_drift() const;
-
     const QuorumProof& last_proof() const;
 
 private:
     std::vector<NodeConfig> nodes_;
+    
+    // 🛠 THE FIX: Holds the live connections to the BFT network
+    mutable std::vector<std::unique_ptr<uml001::ClockService::Stub>> stubs_;
 
     size_t quorum_threshold_;
     int64_t max_skew_ms_;
     double max_drift_ppm_;
 
     mutable std::atomic<int64_t> monotonic_floor_{0};
-
     mutable int64_t last_time_ = 0;
     mutable int64_t last_sync_time_ = 0;
     mutable ClockStatus status_ = ClockStatus::UNKNOWN;

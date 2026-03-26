@@ -29,6 +29,7 @@
 #pragma once
 
 #include "uml001/crypto/crypto_utils.h"
+#include "uml001/vault.h" // 🛠 Fix: Required for Vault member definition
 #include <string>
 #include <vector>
 #include <optional>
@@ -37,7 +38,6 @@
 
 namespace uml001 {
 
-// Forward declarations to break circular dependencies
 class IClock;
 class TransparencyLog;
 class RevocationList;
@@ -62,9 +62,7 @@ struct VerifyResult {
     bool recovered = false;
     float confidence = 0.0f;
 
-    bool ok() const {
-        return status == VerifyStatus::OK;
-    }
+    bool ok() const { return status == VerifyStatus::OK; }
 
     std::string status_str() const {
         switch (status) {
@@ -106,29 +104,13 @@ struct Passport {
     std::string signature;
     std::optional<std::string> recovery_token;
 
-    std::string signing_key_material;
+    // Redundant but kept for v1.2 compatibility/caching
+    std::string signing_key_material; 
     std::string registry_version;
 
-    bool is_recovered() const {
-        return recovery_token.has_value();
-    }
+    bool is_recovered() const { return recovery_token.has_value(); }
 
-    bool is_valid(uint64_t now) const {
-        return status == PassportStatus::ACTIVE &&
-               now >= issued_at &&
-               now < expires_at;
-    }
-
-    std::string canonical_body() const {
-        return model_id + "|" + model_version + "|" +
-               capabilities.serialize() + "|" +
-               policy_hash + "|" +
-               std::to_string(issued_at) + "|" +
-               std::to_string(expires_at) + "|" +
-               registry_version;
-    }
-
-    void issue(std::shared_ptr<IClock> clock, uint64_t duration_sec = 3600);
+    void issue(std::shared_ptr<IClock> clock, uint64_t duration_sec = 86400);
 
     std::string content_hash() const {
         std::string raw = model_id + "|" + model_version + "|" +
@@ -142,10 +124,12 @@ struct Passport {
 
 class PassportRegistry {
 public:
+    // 🛠 Updated constructor to inject the Vault
     PassportRegistry(TransparencyLog& log,
                      RevocationList& list,
-                     IClock& clock)
-        : log_(log), revocation_list_(list), clock_(clock) {}
+                     IClock& clock,
+                     Vault& vault)
+        : log_(log), revocation_list_(list), clock_(clock), vault_(vault) {}
 
     Passport issue_model_passport(
         const std::string& model_id,
@@ -161,6 +145,7 @@ private:
     TransparencyLog& log_;
     RevocationList&  revocation_list_;
     IClock&          clock_;
+    Vault&           vault_; // Reference to the shared security vault
 };
 
 } // namespace uml001

@@ -31,6 +31,7 @@
 #include "uml001/security/revocation.h"
 #include "uml001/core/clock.h"
 #include "uml001/crypto/crypto_utils.h"
+#include "uml001/vault.h" 
 
 #include <iostream>
 #include <stdexcept>
@@ -38,6 +39,11 @@
 using uml001::hmac_sha256_hex;
 
 namespace uml001 {
+
+// Helper to convert Vault bytes to string for HMAC
+std::string vec_to_str(const std::vector<uint8_t>& vec) {
+    return std::string(vec.begin(), vec.end());
+}
 
 // -------------------- Passport --------------------
 void Passport::issue(std::shared_ptr<IClock> clock, uint64_t duration_sec) {
@@ -70,8 +76,14 @@ Passport PassportRegistry::issue_model_passport(
     p.capabilities   = caps;
     p.policy_hash    = policy_hash;
     p.signing_key_id = key_id;
-    p.signing_key_material = "default-signing-key"; // TODO: replace with vault/HSM
-    p.registry_version = "0.1.0";
+    p.registry_version = "1.2.0";
+
+    // 🛠 FIX: Align with Vault::retrieve()
+    auto key_opt = vault_.retrieve(std::to_string(key_id));
+    if (!key_opt) {
+        throw std::runtime_error("Vault Error: Signing key " + std::to_string(key_id) + " not found.");
+    }
+    p.signing_key_material = vec_to_str(*key_opt);
 
     // Use canonical issuance path
     p.issue(std::shared_ptr<IClock>(&clock_, [](IClock*){}), 86400);
@@ -96,30 +108,32 @@ Passport PassportRegistry::issue_model_passport(
 // -------------------- Verification --------------------
 VerifyResult PassportRegistry::verify(const Passport& passport) const {
     VerifyResult result;
-
     uint64_t now = clock_.now_unix();
 
-    // 1. Expiry check
     if (passport.expires_at < now) {
         result.status = VerifyStatus::EXPIRED;
         return result;
     }
 
-    // 2. Status check
     if (passport.status != PassportStatus::ACTIVE) {
         result.status = VerifyStatus::INCOMPATIBLE;
         return result;
     }
 
-    // 3. Revocation check (CRITICAL FIX)
     if (revocation_list_.is_revoked(passport.model_id)) {
         result.status = VerifyStatus::REVOKED;
         return result;
     }
 
-    // 4. Signature verification (CRITICAL FIX)
+    // 🛠 FIX: Align with Vault::retrieve()
+    auto internal_key_opt = vault_.retrieve(std::to_string(passport.signing_key_id));
+    if (!internal_key_opt) {
+        result.status = VerifyStatus::INVALID_SIGNATURE; 
+        return result;
+    }
+
     std::string expected_sig = hmac_sha256_hex(
-        passport.signing_key_material,
+        vec_to_str(*internal_key_opt),
         passport.content_hash()
     );
 
@@ -128,7 +142,6 @@ VerifyResult PassportRegistry::verify(const Passport& passport) const {
         return result;
     }
 
-    // 5. Success
     result.status = VerifyStatus::OK;
     result.verified_key_id = passport.signing_key_id;
     result.recovered = passport.is_recovered();

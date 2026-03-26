@@ -134,7 +134,7 @@ int main(int argc, char** argv) {
         RevocationList revocation_list(tlog);
 
         // 3. Then PassportRegistry (depends on both)
-        PassportRegistry registry(tlog, revocation_list, *get_clock());
+        PassportRegistry registry(tlog, revocation_list, *get_clock(), vault);
 
         // ==============================
         // Example Flow

@@ -8,22 +8,19 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * ------------------------------------------------------------------------
- * Design: IClock Interface (UML-001)
+ * Design: IClock Interface & Implementations (UML-001)
  * ------------------------------------------------------------------------
  * This interface decouples time-consumers (Vault, Passport, Sidecar) from
  * time-providers (NTP, BFT Quorum, OS Clock). 
  *
- * Security Requirements:
- * [R-1] Monotonicity: now_unix() must never return a value lower than a 
- * previous call during the same process lifetime.
- * [R-2] Integrity: Implementation must provide a 'synchronized' status 
- * to alert callers if the time source is currently untrusted.
  */
 
 #pragma once
 
 #include <cstdint>
 #include <string>
+#include <chrono>
+#include <atomic>
 
 namespace uml001 {
 
@@ -44,38 +41,50 @@ class IClock {
 public:
     virtual ~IClock() = default;
 
-    /**
-     * @brief Returns the current Unix timestamp in seconds.
-     * @return uint64_t Unix epoch time.
-     */
     virtual uint64_t now_unix() const = 0;
-
-    /**
-     * @brief Returns the current Unix timestamp in milliseconds for higher precision tasks.
-     * @return uint64_t Unix epoch time (ms).
-     */
     virtual uint64_t now_ms() const = 0;
-
-    /**
-     * @brief Check if the clock is currently synchronized with its trusted source.
-     * @return true if status is SYNCHRONIZED.
-     */
     virtual bool is_synchronized() const = 0;
-
-    /**
-     * @brief Returns the timestamp of the last successful synchronization event.
-     */
     virtual uint64_t last_sync_unix() const = 0;
-
-    /**
-     * @brief Returns the current status of the clock.
-     */
     virtual ClockStatus status() const = 0;
-
-    /**
-     * @brief Returns a human-readable identifier for the clock source (e.g., "BFT-Quorum", "OS-System").
-     */
     virtual std::string source_id() const = 0;
+};
+
+/**
+ * @brief Standard System Clock implementation for Dev/CI environments.
+ * Provides a stable fallback when BFT Quorum nodes are unavailable.
+ */
+class SystemClock : public IClock {
+public:
+    SystemClock() = default;
+
+    uint64_t now_unix() const override {
+        auto now = std::chrono::system_clock::now().time_since_epoch();
+        uint64_t current = std::chrono::duration_cast<std::chrono::seconds>(now).count();
+        return enforce_monotonic(current);
+    }
+
+    uint64_t now_ms() const override {
+        auto now = std::chrono::system_clock::now().time_since_epoch();
+        return std::chrono::duration_cast<std::chrono::milliseconds>(now).count();
+    }
+
+    bool is_synchronized() const override { return true; }
+    
+    uint64_t last_sync_unix() const override { return now_unix(); }
+
+    ClockStatus status() const override { return ClockStatus::SYNCHRONIZED; }
+
+    std::string source_id() const override { return "LOCAL_SYSTEM_CLOCK"; }
+
+private:
+    // [R-1] Monotonicity Enforcement
+    mutable std::atomic<uint64_t> floor_{0};
+
+    uint64_t enforce_monotonic(uint64_t t) const {
+        uint64_t prev = floor_.load();
+        while (t > prev && !floor_.compare_exchange_weak(prev, t)) {}
+        return (t < prev) ? prev : t;
+    }
 };
 
 } // namespace uml001
