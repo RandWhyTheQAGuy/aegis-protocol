@@ -29,7 +29,7 @@
 #pragma once
 
 #include "uml001/crypto/crypto_utils.h"
-#include "uml001/vault.h" // 🛠 Fix: Required for Vault member definition
+#include "uml001/vault.h"
 #include <string>
 #include <vector>
 #include <optional>
@@ -53,7 +53,8 @@ enum class VerifyStatus {
     EXPIRED = 1,
     REVOKED = 2,
     INVALID_SIGNATURE = 3,
-    INCOMPATIBLE = 4
+    INCOMPATIBLE = 4,
+    LOG_MISMATCH = 5  // Added for Step 3
 };
 
 struct VerifyResult {
@@ -71,6 +72,7 @@ struct VerifyResult {
             case VerifyStatus::REVOKED: return "REVOKED";
             case VerifyStatus::INVALID_SIGNATURE: return "INVALID_SIGNATURE";
             case VerifyStatus::INCOMPATIBLE: return "INCOMPATIBLE";
+            case VerifyStatus::LOG_MISMATCH: return "LOG_MISMATCH";
             default: return "UNKNOWN";
         }
     }
@@ -95,6 +97,9 @@ struct Passport {
     std::string model_version;
     Capabilities capabilities;
     std::string policy_hash;
+    
+    // 🛠 STEP 3: The Cryptographic Anchor (Merkle Root of Transparency Log)
+    std::string log_root_hash; 
 
     uint64_t issued_at = 0;
     uint64_t expires_at = 0;
@@ -104,7 +109,7 @@ struct Passport {
     std::string signature;
     std::optional<std::string> recovery_token;
 
-    // Redundant but kept for v1.2 compatibility/caching
+    // Internal metadata
     std::string signing_key_material; 
     std::string registry_version;
 
@@ -112,10 +117,15 @@ struct Passport {
 
     void issue(std::shared_ptr<IClock> clock, uint64_t duration_sec = 86400);
 
+    /**
+     * @brief Generates the canonical hash of the passport content.
+     * Includes the log_root_hash to ensure the passport is anchored to the ledger.
+     */
     std::string content_hash() const {
         std::string raw = model_id + "|" + model_version + "|" +
                           capabilities.serialize() + "|" +
                           policy_hash + "|" +
+                          log_root_hash + "|" + // 🛠 Bound to Log
                           std::to_string(issued_at) + "|" +
                           std::to_string(expires_at);
         return sha256_hex(raw);
@@ -124,7 +134,6 @@ struct Passport {
 
 class PassportRegistry {
 public:
-    // 🛠 Updated constructor to inject the Vault
     PassportRegistry(TransparencyLog& log,
                      RevocationList& list,
                      IClock& clock,
@@ -145,7 +154,7 @@ private:
     TransparencyLog& log_;
     RevocationList&  revocation_list_;
     IClock&          clock_;
-    Vault&           vault_; // Reference to the shared security vault
+    Vault&           vault_;
 };
 
 } // namespace uml001
