@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(AegisProtocol VERSION 2.0.0 LANGUAGES CXX)
+project(UML001 VERSION 2.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Options
 # ============================================================
 
-option(AEGIS_ENABLE_REDIS "Enable Redis backend support" OFF)
+option(UML001_ENABLE_REDIS "Enable Redis backend support" OFF)
 
 # ============================================================
 # Dependencies
@@ -23,7 +23,7 @@ find_package(Threads REQUIRED)
 # Redis (OPTIONAL)
 # ============================================================
 
-if (AEGIS_ENABLE_REDIS)
+if (UML001_ENABLE_REDIS)
     message(STATUS "Redis support ENABLED")
 
     find_path(REDIS_PLUS_PLUS_INCLUDE_DIR
@@ -94,66 +94,58 @@ target_link_libraries(clock_proto
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_BINARY_DIR}
-    ${OPENSSL_INCLUDE_DIR}
 )
 
-if (AEGIS_ENABLE_REDIS)
+if (UML001_ENABLE_REDIS)
     include_directories(${REDIS_PLUS_PLUS_INCLUDE_DIR})
 endif()
 
 # ============================================================
-# AEGIS CORE
+# UML001 CORE (internal engine)
 # ============================================================
 
-set(AEGIS_CORE_SOURCES
+set(UML001_CORE_SOURCES
     src/core/passport.cpp
     src/core/policy.cpp
     src/core/session.cpp
     src/core/temporal_state.cpp
     src/core/pulse_manager.cpp
     src/core/quorum_pulse_manager.cpp
-    src/security/transparency_log.cpp  # Corrected Path
+
+    src/security/transparency_log.cpp
     src/security/revocation.cpp
     src/security/key_manager.cpp
+    src/security/vault.cpp
+
     src/crypto/crypto_utils.cpp
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    src/bft/remote_quorum_clock.cpp
-    src/bft_clock_client.cpp
->>>>>>> ace921b (Remove now_unix wrapper and standardize on quorum clock access (#8))
-=======
-    src/bft/remote_quorum_clock.cpp
-    src/bft_clock_client.cpp
-=======
->>>>>>> cc5bbf5 (WIP: continued clean integration and BFT hardening updates)
->>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
     src/crypto/crypto_facade.cpp
     src/crypto/hash_provider.cpp
     src/crypto/simple_hash_provider.cpp
+
     src/bft/remote_quorum_clock.cpp
-    src/sidecar/aegis_guard.cpp
-    src/classifier.cpp
     src/bft_clock_client.cpp
+
+    src/sidecar/aegis_guard.cpp   # public-facing name, internal calls use uml001::
+    src/classifier.cpp
 )
 
-# Add Redis providers ONLY if enabled
-if (AEGIS_ENABLE_REDIS)
-    list(APPEND AEGIS_CORE_SOURCES
+# Optional Redis providers
+if (UML001_ENABLE_REDIS)
+    list(APPEND UML001_CORE_SOURCES
         src/providers/redis_shared_store.cpp
         src/providers/redis_vault_backend.cpp
     )
 endif()
 
-# Always safe providers
-list(APPEND AEGIS_CORE_SOURCES
+# Always included providers
+list(APPEND UML001_CORE_SOURCES
     src/providers/datadog_logger.cpp
     src/providers/memory_clock_store.cpp
 )
 
-add_library(aegis_core STATIC ${AEGIS_CORE_SOURCES})
+add_library(uml001_core STATIC ${UML001_CORE_SOURCES})
 
-target_link_libraries(aegis_core
+target_link_libraries(uml001_core
     PUBLIC
     OpenSSL::Crypto
     OpenSSL::SSL
@@ -163,47 +155,27 @@ target_link_libraries(aegis_core
     gRPC::grpc++
 )
 
-# Link Redis only if enabled
-if (AEGIS_ENABLE_REDIS)
-    target_link_libraries(aegis_core
+# Redis linking
+if (UML001_ENABLE_REDIS)
+    target_link_libraries(uml001_core
         PUBLIC
         ${REDIS_PLUS_PLUS_LIBRARY}
         ${HIREDIS_LIBRARY}
     )
-    target_compile_definitions(aegis_core PUBLIC AEGIS_ENABLE_REDIS=1)
+    target_compile_definitions(uml001_core PUBLIC UML001_ENABLE_REDIS=1)
 endif()
 
 # ============================================================
 # EXECUTABLES & TESTS
 # ============================================================
 
+# Public-facing daemon (still called aegis_protocol)
 add_executable(aegis_daemon src/main_aegis_protocol.cpp)
-target_link_libraries(aegis_daemon PRIVATE aegis_core)
+target_link_libraries(aegis_daemon PRIVATE uml001_core)
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-# Pointing to the specific test file in your tree
-=======
-# NEW: The Passport Flow Test from PR 3
->>>>>>> ace921b (Remove now_unix wrapper and standardize on quorum clock access (#8))
-=======
-# NEW: The Passport Flow Test from PR 3
-=======
-
-target_link_libraries(aegis_e2e PRIVATE aegis_core)
-
-# Pointing to the specific test file in your tree
->>>>>>> cc5bbf5 (WIP: continued clean integration and BFT hardening updates)
->>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
 add_executable(test_passport_flow tests/test_passport_flow.cpp)
-target_link_libraries(test_passport_flow PRIVATE aegis_core)
+target_link_libraries(test_passport_flow PRIVATE uml001_core)
 
 # ============================================================
-# Legacy Cleanup
+# End
 # ============================================================
-# Commenting out as these are not in your current 'ls' tree
-# set_source_files_properties(
-#     src/core/strong_clock.cpp
-#     src/core/background_sync.cpp
-#     PROPERTIES HEADER_FILE_ONLY TRUE
-# )

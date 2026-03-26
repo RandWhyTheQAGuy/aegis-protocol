@@ -25,30 +25,22 @@
  * This implementation is intended for research, verifiable systems design,
  * and deployment in security-critical distributed environments.
  */
-syntax = "proto3";
+#pragma once
+#include "uml001/ivault_backend.h"
+#include <sw/redis++/redis++.h> // redis-plus-plus as per plan
 
-package quorumtime;
+namespace uml001 {
 
-message TimeRequest {
-  string client_id = 1;
-  string request_id = 2;
-  int64 client_unix_time_ms = 3;
-}
+class RedisVaultBackend : public IVaultBackend {
+public:
+    explicit RedisVaultBackend(const std::string& connection_string);
+    
+    bool store_nonce(const std::string& key, uint64_t expiry_ms) override;
+    bool is_revoked(const std::string& passport_id) override;
+    void append_audit_raw(const std::string& serialized_entry) override;
 
-message TimeResponse {
-  int64 unix_time_ms = 1;
+private:
+    std::unique_ptr<sw::redis::Redis> redis_;
+};
 
-  double confidence_interval_ms = 2;
-  int32 active_nodes = 3;
-  double projected_drift_ppm = 4;
-
-  string node_id = 5;
-  bytes signature = 6;
-  string request_id = 7;
-
-  uint32 protocol_version = 8;
-}
-
-service ClockService {
-  rpc GetQuorumTime(TimeRequest) returns (TimeResponse);
-}
+} // namespace uml001

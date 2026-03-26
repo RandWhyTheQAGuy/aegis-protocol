@@ -25,30 +25,8 @@
  * This implementation is intended for research, verifiable systems design,
  * and deployment in security-critical distributed environments.
  */
-syntax = "proto3";
+#pragma once
 
-package quorumtime;
-
-message TimeRequest {
-  string client_id = 1;
-  string request_id = 2;
-  int64 client_unix_time_ms = 3;
-}
-
-message TimeResponse {
-  int64 unix_time_ms = 1;
-
-  double confidence_interval_ms = 2;
-  int32 active_nodes = 3;
-  double projected_drift_ppm = 4;
-
-  string node_id = 5;
-  bytes signature = 6;
-  string request_id = 7;
-
-  uint32 protocol_version = 8;
-}
-
-service ClockService {
-  rpc GetQuorumTime(TimeRequest) returns (TimeResponse);
-}
+#ifdef AEGIS_ENABLE_REDIS
+#include "uml001/redis_shared_store.h"
+#endif

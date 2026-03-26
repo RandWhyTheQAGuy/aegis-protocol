@@ -1,18 +1,30 @@
-/**
- * @file rest_server.cpp
- * @brief REST API server entry point for the UML-001 Trusted Time API.
+/*
+ * Aegis Protocol (Semantic Passport System)
+ * Copyright 2026 Gary Gray (github.com/<your-github-handle>)
  *
- * CLEAN VERSION (Post-BFT Extraction)
+ * The Aegis Protocol defines a distributed trust and identity framework
+ * based on cryptographically verifiable Semantic Passports, capability
+ * enforcement, and transparency logging for auditable system behavior.
  *
- * Key changes:
- *   - Removed ALL legacy BFT quorum clock usage
- *   - Replaced with BftClockClient (IPC → external daemon)
- *   - Fixed duplicate config variable issue
- *   - Removed invalid include placement
- *   - Added proper env-based configuration
- *   - Ensured deterministic, production-safe defaults
+ * Core components include:
+ *   - Semantic Passports: verifiable identity and capability attestations
+ *   - Transparency Log: append-only cryptographic audit trail of system events
+ *   - Revocation System: deterministic invalidation of compromised or expired identities
+ *   - Passport Registry: issuance and verification authority for trusted entities
+ *
+ * This framework is designed for open standardization, interoperability,
+ * and production-grade use in distributed identity, AI systems, and
+ * verifiable authorization infrastructures.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This implementation is intended for research, verifiable systems design,
+ * and deployment in security-critical distributed environments.
  */
-
 #include <pistache/endpoint.h>
 #include <pistache/router.h>
 

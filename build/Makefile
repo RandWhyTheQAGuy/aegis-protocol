@@ -130,17 +130,17 @@ clock_proto/fast:
 .PHONY : clock_proto/fast
 
 #=============================================================================
-# Target rules for targets named aegis_core
+# Target rules for targets named uml001_core
 
 # Build rule for target.
-aegis_core: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 aegis_core
-.PHONY : aegis_core
+uml001_core: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 uml001_core
+.PHONY : uml001_core
 
 # fast build rule for target.
-aegis_core/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/build
-.PHONY : aegis_core/fast
+uml001_core/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/build
+.PHONY : uml001_core/fast
 
 #=============================================================================
 # Target rules for targets named aegis_daemon
@@ -221,7 +221,7 @@ src/bft/remote_quorum_clock.o: src/bft/remote_quorum_clock.cpp.o
 
 # target to build an object file
 src/bft/remote_quorum_clock.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/bft/remote_quorum_clock.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/bft/remote_quorum_clock.cpp.o
 .PHONY : src/bft/remote_quorum_clock.cpp.o
 
 src/bft/remote_quorum_clock.i: src/bft/remote_quorum_clock.cpp.i
@@ -229,7 +229,7 @@ src/bft/remote_quorum_clock.i: src/bft/remote_quorum_clock.cpp.i
 
 # target to preprocess a source file
 src/bft/remote_quorum_clock.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/bft/remote_quorum_clock.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/bft/remote_quorum_clock.cpp.i
 .PHONY : src/bft/remote_quorum_clock.cpp.i
 
 src/bft/remote_quorum_clock.s: src/bft/remote_quorum_clock.cpp.s
@@ -237,7 +237,7 @@ src/bft/remote_quorum_clock.s: src/bft/remote_quorum_clock.cpp.s
 
 # target to generate assembly for a file
 src/bft/remote_quorum_clock.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/bft/remote_quorum_clock.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/bft/remote_quorum_clock.cpp.s
 .PHONY : src/bft/remote_quorum_clock.cpp.s
 
 src/bft_clock_client.o: src/bft_clock_client.cpp.o
@@ -245,7 +245,7 @@ src/bft_clock_client.o: src/bft_clock_client.cpp.o
 
 # target to build an object file
 src/bft_clock_client.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/bft_clock_client.cpp.o
 .PHONY : src/bft_clock_client.cpp.o
 
 src/bft_clock_client.i: src/bft_clock_client.cpp.i
@@ -253,7 +253,7 @@ src/bft_clock_client.i: src/bft_clock_client.cpp.i
 
 # target to preprocess a source file
 src/bft_clock_client.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/bft_clock_client.cpp.i
 .PHONY : src/bft_clock_client.cpp.i
 
 src/bft_clock_client.s: src/bft_clock_client.cpp.s
@@ -261,7 +261,7 @@ src/bft_clock_client.s: src/bft_clock_client.cpp.s
 
 # target to generate assembly for a file
 src/bft_clock_client.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/bft_clock_client.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/bft_clock_client.cpp.s
 .PHONY : src/bft_clock_client.cpp.s
 
 src/classifier.o: src/classifier.cpp.o
@@ -269,7 +269,7 @@ src/classifier.o: src/classifier.cpp.o
 
 # target to build an object file
 src/classifier.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/classifier.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/classifier.cpp.o
 .PHONY : src/classifier.cpp.o
 
 src/classifier.i: src/classifier.cpp.i
@@ -277,7 +277,7 @@ src/classifier.i: src/classifier.cpp.i
 
 # target to preprocess a source file
 src/classifier.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/classifier.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/classifier.cpp.i
 .PHONY : src/classifier.cpp.i
 
 src/classifier.s: src/classifier.cpp.s
@@ -285,7 +285,7 @@ src/classifier.s: src/classifier.cpp.s
 
 # target to generate assembly for a file
 src/classifier.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/classifier.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/classifier.cpp.s
 .PHONY : src/classifier.cpp.s
 
 src/core/passport.o: src/core/passport.cpp.o
@@ -293,7 +293,7 @@ src/core/passport.o: src/core/passport.cpp.o
 
 # target to build an object file
 src/core/passport.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/core/passport.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/passport.cpp.o
 .PHONY : src/core/passport.cpp.o
 
 src/core/passport.i: src/core/passport.cpp.i
@@ -301,7 +301,7 @@ src/core/passport.i: src/core/passport.cpp.i
 
 # target to preprocess a source file
 src/core/passport.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/core/passport.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/passport.cpp.i
 .PHONY : src/core/passport.cpp.i
 
 src/core/passport.s: src/core/passport.cpp.s
@@ -309,15 +309,135 @@ src/core/passport.s: src/core/passport.cpp.s
 
 # target to generate assembly for a file
 src/core/passport.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/core/passport.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/passport.cpp.s
 .PHONY : src/core/passport.cpp.s
+
+src/core/policy.o: src/core/policy.cpp.o
+.PHONY : src/core/policy.o
+
+# target to build an object file
+src/core/policy.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/policy.cpp.o
+.PHONY : src/core/policy.cpp.o
+
+src/core/policy.i: src/core/policy.cpp.i
+.PHONY : src/core/policy.i
+
+# target to preprocess a source file
+src/core/policy.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/policy.cpp.i
+.PHONY : src/core/policy.cpp.i
+
+src/core/policy.s: src/core/policy.cpp.s
+.PHONY : src/core/policy.s
+
+# target to generate assembly for a file
+src/core/policy.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/policy.cpp.s
+.PHONY : src/core/policy.cpp.s
+
+src/core/pulse_manager.o: src/core/pulse_manager.cpp.o
+.PHONY : src/core/pulse_manager.o
+
+# target to build an object file
+src/core/pulse_manager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/pulse_manager.cpp.o
+.PHONY : src/core/pulse_manager.cpp.o
+
+src/core/pulse_manager.i: src/core/pulse_manager.cpp.i
+.PHONY : src/core/pulse_manager.i
+
+# target to preprocess a source file
+src/core/pulse_manager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/pulse_manager.cpp.i
+.PHONY : src/core/pulse_manager.cpp.i
+
+src/core/pulse_manager.s: src/core/pulse_manager.cpp.s
+.PHONY : src/core/pulse_manager.s
+
+# target to generate assembly for a file
+src/core/pulse_manager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/pulse_manager.cpp.s
+.PHONY : src/core/pulse_manager.cpp.s
+
+src/core/quorum_pulse_manager.o: src/core/quorum_pulse_manager.cpp.o
+.PHONY : src/core/quorum_pulse_manager.o
+
+# target to build an object file
+src/core/quorum_pulse_manager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/quorum_pulse_manager.cpp.o
+.PHONY : src/core/quorum_pulse_manager.cpp.o
+
+src/core/quorum_pulse_manager.i: src/core/quorum_pulse_manager.cpp.i
+.PHONY : src/core/quorum_pulse_manager.i
+
+# target to preprocess a source file
+src/core/quorum_pulse_manager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/quorum_pulse_manager.cpp.i
+.PHONY : src/core/quorum_pulse_manager.cpp.i
+
+src/core/quorum_pulse_manager.s: src/core/quorum_pulse_manager.cpp.s
+.PHONY : src/core/quorum_pulse_manager.s
+
+# target to generate assembly for a file
+src/core/quorum_pulse_manager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/quorum_pulse_manager.cpp.s
+.PHONY : src/core/quorum_pulse_manager.cpp.s
+
+src/core/session.o: src/core/session.cpp.o
+.PHONY : src/core/session.o
+
+# target to build an object file
+src/core/session.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/session.cpp.o
+.PHONY : src/core/session.cpp.o
+
+src/core/session.i: src/core/session.cpp.i
+.PHONY : src/core/session.i
+
+# target to preprocess a source file
+src/core/session.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/session.cpp.i
+.PHONY : src/core/session.cpp.i
+
+src/core/session.s: src/core/session.cpp.s
+.PHONY : src/core/session.s
+
+# target to generate assembly for a file
+src/core/session.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/session.cpp.s
+.PHONY : src/core/session.cpp.s
+
+src/core/temporal_state.o: src/core/temporal_state.cpp.o
+.PHONY : src/core/temporal_state.o
+
+# target to build an object file
+src/core/temporal_state.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/temporal_state.cpp.o
+.PHONY : src/core/temporal_state.cpp.o
+
+src/core/temporal_state.i: src/core/temporal_state.cpp.i
+.PHONY : src/core/temporal_state.i
+
+# target to preprocess a source file
+src/core/temporal_state.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/temporal_state.cpp.i
+.PHONY : src/core/temporal_state.cpp.i
+
+src/core/temporal_state.s: src/core/temporal_state.cpp.s
+.PHONY : src/core/temporal_state.s
+
+# target to generate assembly for a file
+src/core/temporal_state.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/core/temporal_state.cpp.s
+.PHONY : src/core/temporal_state.cpp.s
 
 src/crypto/crypto_facade.o: src/crypto/crypto_facade.cpp.o
 .PHONY : src/crypto/crypto_facade.o
 
 # target to build an object file
 src/crypto/crypto_facade.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/crypto/crypto_facade.cpp.o
 .PHONY : src/crypto/crypto_facade.cpp.o
 
 src/crypto/crypto_facade.i: src/crypto/crypto_facade.cpp.i
@@ -325,7 +445,7 @@ src/crypto/crypto_facade.i: src/crypto/crypto_facade.cpp.i
 
 # target to preprocess a source file
 src/crypto/crypto_facade.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/crypto/crypto_facade.cpp.i
 .PHONY : src/crypto/crypto_facade.cpp.i
 
 src/crypto/crypto_facade.s: src/crypto/crypto_facade.cpp.s
@@ -333,7 +453,7 @@ src/crypto/crypto_facade.s: src/crypto/crypto_facade.cpp.s
 
 # target to generate assembly for a file
 src/crypto/crypto_facade.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/crypto/crypto_facade.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/crypto/crypto_facade.cpp.s
 .PHONY : src/crypto/crypto_facade.cpp.s
 
 src/crypto/crypto_utils.o: src/crypto/crypto_utils.cpp.o
@@ -341,7 +461,7 @@ src/crypto/crypto_utils.o: src/crypto/crypto_utils.cpp.o
 
 # target to build an object file
 src/crypto/crypto_utils.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/crypto/crypto_utils.cpp.o
 .PHONY : src/crypto/crypto_utils.cpp.o
 
 src/crypto/crypto_utils.i: src/crypto/crypto_utils.cpp.i
@@ -349,7 +469,7 @@ src/crypto/crypto_utils.i: src/crypto/crypto_utils.cpp.i
 
 # target to preprocess a source file
 src/crypto/crypto_utils.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/crypto/crypto_utils.cpp.i
 .PHONY : src/crypto/crypto_utils.cpp.i
 
 src/crypto/crypto_utils.s: src/crypto/crypto_utils.cpp.s
@@ -357,8 +477,56 @@ src/crypto/crypto_utils.s: src/crypto/crypto_utils.cpp.s
 
 # target to generate assembly for a file
 src/crypto/crypto_utils.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/crypto/crypto_utils.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/crypto/crypto_utils.cpp.s
 .PHONY : src/crypto/crypto_utils.cpp.s
+
+src/crypto/hash_provider.o: src/crypto/hash_provider.cpp.o
+.PHONY : src/crypto/hash_provider.o
+
+# target to build an object file
+src/crypto/hash_provider.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/crypto/hash_provider.cpp.o
+.PHONY : src/crypto/hash_provider.cpp.o
+
+src/crypto/hash_provider.i: src/crypto/hash_provider.cpp.i
+.PHONY : src/crypto/hash_provider.i
+
+# target to preprocess a source file
+src/crypto/hash_provider.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/crypto/hash_provider.cpp.i
+.PHONY : src/crypto/hash_provider.cpp.i
+
+src/crypto/hash_provider.s: src/crypto/hash_provider.cpp.s
+.PHONY : src/crypto/hash_provider.s
+
+# target to generate assembly for a file
+src/crypto/hash_provider.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/crypto/hash_provider.cpp.s
+.PHONY : src/crypto/hash_provider.cpp.s
+
+src/crypto/simple_hash_provider.o: src/crypto/simple_hash_provider.cpp.o
+.PHONY : src/crypto/simple_hash_provider.o
+
+# target to build an object file
+src/crypto/simple_hash_provider.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/crypto/simple_hash_provider.cpp.o
+.PHONY : src/crypto/simple_hash_provider.cpp.o
+
+src/crypto/simple_hash_provider.i: src/crypto/simple_hash_provider.cpp.i
+.PHONY : src/crypto/simple_hash_provider.i
+
+# target to preprocess a source file
+src/crypto/simple_hash_provider.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/crypto/simple_hash_provider.cpp.i
+.PHONY : src/crypto/simple_hash_provider.cpp.i
+
+src/crypto/simple_hash_provider.s: src/crypto/simple_hash_provider.cpp.s
+.PHONY : src/crypto/simple_hash_provider.s
+
+# target to generate assembly for a file
+src/crypto/simple_hash_provider.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/crypto/simple_hash_provider.cpp.s
+.PHONY : src/crypto/simple_hash_provider.cpp.s
 
 src/main_aegis_protocol.o: src/main_aegis_protocol.cpp.o
 .PHONY : src/main_aegis_protocol.o
@@ -389,7 +557,7 @@ src/providers/datadog_logger.o: src/providers/datadog_logger.cpp.o
 
 # target to build an object file
 src/providers/datadog_logger.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/providers/datadog_logger.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/providers/datadog_logger.cpp.o
 .PHONY : src/providers/datadog_logger.cpp.o
 
 src/providers/datadog_logger.i: src/providers/datadog_logger.cpp.i
@@ -397,7 +565,7 @@ src/providers/datadog_logger.i: src/providers/datadog_logger.cpp.i
 
 # target to preprocess a source file
 src/providers/datadog_logger.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/providers/datadog_logger.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/providers/datadog_logger.cpp.i
 .PHONY : src/providers/datadog_logger.cpp.i
 
 src/providers/datadog_logger.s: src/providers/datadog_logger.cpp.s
@@ -405,7 +573,7 @@ src/providers/datadog_logger.s: src/providers/datadog_logger.cpp.s
 
 # target to generate assembly for a file
 src/providers/datadog_logger.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/providers/datadog_logger.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/providers/datadog_logger.cpp.s
 .PHONY : src/providers/datadog_logger.cpp.s
 
 src/providers/memory_clock_store.o: src/providers/memory_clock_store.cpp.o
@@ -413,7 +581,7 @@ src/providers/memory_clock_store.o: src/providers/memory_clock_store.cpp.o
 
 # target to build an object file
 src/providers/memory_clock_store.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/providers/memory_clock_store.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/providers/memory_clock_store.cpp.o
 .PHONY : src/providers/memory_clock_store.cpp.o
 
 src/providers/memory_clock_store.i: src/providers/memory_clock_store.cpp.i
@@ -421,7 +589,7 @@ src/providers/memory_clock_store.i: src/providers/memory_clock_store.cpp.i
 
 # target to preprocess a source file
 src/providers/memory_clock_store.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/providers/memory_clock_store.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/providers/memory_clock_store.cpp.i
 .PHONY : src/providers/memory_clock_store.cpp.i
 
 src/providers/memory_clock_store.s: src/providers/memory_clock_store.cpp.s
@@ -429,7 +597,7 @@ src/providers/memory_clock_store.s: src/providers/memory_clock_store.cpp.s
 
 # target to generate assembly for a file
 src/providers/memory_clock_store.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/providers/memory_clock_store.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/providers/memory_clock_store.cpp.s
 .PHONY : src/providers/memory_clock_store.cpp.s
 
 src/security/key_manager.o: src/security/key_manager.cpp.o
@@ -437,7 +605,7 @@ src/security/key_manager.o: src/security/key_manager.cpp.o
 
 # target to build an object file
 src/security/key_manager.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/security/key_manager.cpp.o
 .PHONY : src/security/key_manager.cpp.o
 
 src/security/key_manager.i: src/security/key_manager.cpp.i
@@ -445,7 +613,7 @@ src/security/key_manager.i: src/security/key_manager.cpp.i
 
 # target to preprocess a source file
 src/security/key_manager.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/security/key_manager.cpp.i
 .PHONY : src/security/key_manager.cpp.i
 
 src/security/key_manager.s: src/security/key_manager.cpp.s
@@ -453,7 +621,7 @@ src/security/key_manager.s: src/security/key_manager.cpp.s
 
 # target to generate assembly for a file
 src/security/key_manager.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/security/key_manager.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/security/key_manager.cpp.s
 .PHONY : src/security/key_manager.cpp.s
 
 src/security/revocation.o: src/security/revocation.cpp.o
@@ -461,7 +629,7 @@ src/security/revocation.o: src/security/revocation.cpp.o
 
 # target to build an object file
 src/security/revocation.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/security/revocation.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/security/revocation.cpp.o
 .PHONY : src/security/revocation.cpp.o
 
 src/security/revocation.i: src/security/revocation.cpp.i
@@ -469,7 +637,7 @@ src/security/revocation.i: src/security/revocation.cpp.i
 
 # target to preprocess a source file
 src/security/revocation.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/security/revocation.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/security/revocation.cpp.i
 .PHONY : src/security/revocation.cpp.i
 
 src/security/revocation.s: src/security/revocation.cpp.s
@@ -477,7 +645,7 @@ src/security/revocation.s: src/security/revocation.cpp.s
 
 # target to generate assembly for a file
 src/security/revocation.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/security/revocation.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/security/revocation.cpp.s
 .PHONY : src/security/revocation.cpp.s
 
 src/security/transparency_log.o: src/security/transparency_log.cpp.o
@@ -485,7 +653,7 @@ src/security/transparency_log.o: src/security/transparency_log.cpp.o
 
 # target to build an object file
 src/security/transparency_log.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/security/transparency_log.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/security/transparency_log.cpp.o
 .PHONY : src/security/transparency_log.cpp.o
 
 src/security/transparency_log.i: src/security/transparency_log.cpp.i
@@ -493,7 +661,7 @@ src/security/transparency_log.i: src/security/transparency_log.cpp.i
 
 # target to preprocess a source file
 src/security/transparency_log.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/security/transparency_log.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/security/transparency_log.cpp.i
 .PHONY : src/security/transparency_log.cpp.i
 
 src/security/transparency_log.s: src/security/transparency_log.cpp.s
@@ -501,15 +669,39 @@ src/security/transparency_log.s: src/security/transparency_log.cpp.s
 
 # target to generate assembly for a file
 src/security/transparency_log.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/security/transparency_log.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/security/transparency_log.cpp.s
 .PHONY : src/security/transparency_log.cpp.s
+
+src/security/vault.o: src/security/vault.cpp.o
+.PHONY : src/security/vault.o
+
+# target to build an object file
+src/security/vault.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/security/vault.cpp.o
+.PHONY : src/security/vault.cpp.o
+
+src/security/vault.i: src/security/vault.cpp.i
+.PHONY : src/security/vault.i
+
+# target to preprocess a source file
+src/security/vault.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/security/vault.cpp.i
+.PHONY : src/security/vault.cpp.i
+
+src/security/vault.s: src/security/vault.cpp.s
+.PHONY : src/security/vault.s
+
+# target to generate assembly for a file
+src/security/vault.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/security/vault.cpp.s
+.PHONY : src/security/vault.cpp.s
 
 src/sidecar/aegis_guard.o: src/sidecar/aegis_guard.cpp.o
 .PHONY : src/sidecar/aegis_guard.o
 
 # target to build an object file
 src/sidecar/aegis_guard.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/sidecar/aegis_guard.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/sidecar/aegis_guard.cpp.o
 .PHONY : src/sidecar/aegis_guard.cpp.o
 
 src/sidecar/aegis_guard.i: src/sidecar/aegis_guard.cpp.i
@@ -517,7 +709,7 @@ src/sidecar/aegis_guard.i: src/sidecar/aegis_guard.cpp.i
 
 # target to preprocess a source file
 src/sidecar/aegis_guard.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/sidecar/aegis_guard.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/sidecar/aegis_guard.cpp.i
 .PHONY : src/sidecar/aegis_guard.cpp.i
 
 src/sidecar/aegis_guard.s: src/sidecar/aegis_guard.cpp.s
@@ -525,7 +717,7 @@ src/sidecar/aegis_guard.s: src/sidecar/aegis_guard.cpp.s
 
 # target to generate assembly for a file
 src/sidecar/aegis_guard.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/aegis_core.dir/build.make CMakeFiles/aegis_core.dir/src/sidecar/aegis_guard.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/uml001_core.dir/build.make CMakeFiles/uml001_core.dir/src/sidecar/aegis_guard.cpp.s
 .PHONY : src/sidecar/aegis_guard.cpp.s
 
 tests/test_passport_flow.o: tests/test_passport_flow.cpp.o
@@ -560,10 +752,10 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... aegis_core"
 	@echo "... aegis_daemon"
 	@echo "... clock_proto"
 	@echo "... test_passport_flow"
+	@echo "... uml001_core"
 	@echo "... clock_service.grpc.pb.o"
 	@echo "... clock_service.grpc.pb.i"
 	@echo "... clock_service.grpc.pb.s"
@@ -582,12 +774,33 @@ help:
 	@echo "... src/core/passport.o"
 	@echo "... src/core/passport.i"
 	@echo "... src/core/passport.s"
+	@echo "... src/core/policy.o"
+	@echo "... src/core/policy.i"
+	@echo "... src/core/policy.s"
+	@echo "... src/core/pulse_manager.o"
+	@echo "... src/core/pulse_manager.i"
+	@echo "... src/core/pulse_manager.s"
+	@echo "... src/core/quorum_pulse_manager.o"
+	@echo "... src/core/quorum_pulse_manager.i"
+	@echo "... src/core/quorum_pulse_manager.s"
+	@echo "... src/core/session.o"
+	@echo "... src/core/session.i"
+	@echo "... src/core/session.s"
+	@echo "... src/core/temporal_state.o"
+	@echo "... src/core/temporal_state.i"
+	@echo "... src/core/temporal_state.s"
 	@echo "... src/crypto/crypto_facade.o"
 	@echo "... src/crypto/crypto_facade.i"
 	@echo "... src/crypto/crypto_facade.s"
 	@echo "... src/crypto/crypto_utils.o"
 	@echo "... src/crypto/crypto_utils.i"
 	@echo "... src/crypto/crypto_utils.s"
+	@echo "... src/crypto/hash_provider.o"
+	@echo "... src/crypto/hash_provider.i"
+	@echo "... src/crypto/hash_provider.s"
+	@echo "... src/crypto/simple_hash_provider.o"
+	@echo "... src/crypto/simple_hash_provider.i"
+	@echo "... src/crypto/simple_hash_provider.s"
 	@echo "... src/main_aegis_protocol.o"
 	@echo "... src/main_aegis_protocol.i"
 	@echo "... src/main_aegis_protocol.s"
@@ -606,6 +819,9 @@ help:
 	@echo "... src/security/transparency_log.o"
 	@echo "... src/security/transparency_log.i"
 	@echo "... src/security/transparency_log.s"
+	@echo "... src/security/vault.o"
+	@echo "... src/security/vault.i"
+	@echo "... src/security/vault.s"
 	@echo "... src/sidecar/aegis_guard.o"
 	@echo "... src/sidecar/aegis_guard.i"
 	@echo "... src/sidecar/aegis_guard.s"

@@ -1,13 +1,30 @@
 /*
- * Copyright 2026 Aegis Protocol Authors
+ * Aegis Protocol (Semantic Passport System)
+ * Copyright 2026 Gary Gray (github.com/<your-github-handle>)
+ *
+ * The Aegis Protocol defines a distributed trust and identity framework
+ * based on cryptographically verifiable Semantic Passports, capability
+ * enforcement, and transparency logging for auditable system behavior.
+ *
+ * Core components include:
+ *   - Semantic Passports: verifiable identity and capability attestations
+ *   - Transparency Log: append-only cryptographic audit trail of system events
+ *   - Revocation System: deterministic invalidation of compromised or expired identities
+ *   - Passport Registry: issuance and verification authority for trusted entities
+ *
+ * This framework is designed for open standardization, interoperability,
+ * and production-grade use in distributed identity, AI systems, and
+ * verifiable authorization infrastructures.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  *
  * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This implementation is intended for research, verifiable systems design,
+ * and deployment in security-critical distributed environments.
  */
-
 #include "uml001/core/session.h"
 #include "uml001/crypto/crypto_utils.h"
 #include "uml001/crypto/simple_hash_provider.h"
@@ -93,9 +110,10 @@ bool Session::process_decision(const PolicyDecision& decision, uint64_t now_ms) 
     }
 
     // Log the event for audit/transparency
-    log_event({ now_ms, "POLICY_DECISION", decision.payload_hash,
-                action_str(decision.action) + " weight=" + std::to_string(delta) + 
-                " score=" + std::to_string(warp_score_) });
+    log_event("POLICY_DECISION", 
+          action_str(decision.action) + " weight=" + std::to_string(delta) + 
+          " score=" + std::to_string(warp_score_), 
+          now_ms);
 
     // 5. Entropy Flush Trigger
     // We flush on any DENY or when the entropy buffer is full to prevent probing
@@ -150,15 +168,11 @@ void Session::transition(SessionState next, const std::string& reason) {
                          " score=" + std::to_string(warp_score_);
     
     state_ = next;
-    log_event({ 0, "STATE_TRANSITION", "", detail });
+    log_event("STATE_TRANSITION", detail, 0);
 }
 
 void Session::close() {
     transition(SessionState::CLOSED, "session_terminated");
-}
-
-bool Session::is_active() const {
-    return (state_ == SessionState::ACTIVE || state_ == SessionState::SUSPECT);
 }
 
 void Session::require_state(SessionState expected, const std::string& op) const {

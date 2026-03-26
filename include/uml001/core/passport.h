@@ -1,13 +1,30 @@
 /*
- * Copyright 2026 Aegis Protocol Authors
+ * Aegis Protocol (Semantic Passport System)
+ * Copyright 2026 Gary Gray (github.com/<your-github-handle>)
+ *
+ * The Aegis Protocol defines a distributed trust and identity framework
+ * based on cryptographically verifiable Semantic Passports, capability
+ * enforcement, and transparency logging for auditable system behavior.
+ *
+ * Core components include:
+ *   - Semantic Passports: verifiable identity and capability attestations
+ *   - Transparency Log: append-only cryptographic audit trail of system events
+ *   - Revocation System: deterministic invalidation of compromised or expired identities
+ *   - Passport Registry: issuance and verification authority for trusted entities
+ *
+ * This framework is designed for open standardization, interoperability,
+ * and production-grade use in distributed identity, AI systems, and
+ * verifiable authorization infrastructures.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  *
  * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This implementation is intended for research, verifiable systems design,
+ * and deployment in security-critical distributed environments.
  */
-
 #pragma once
 
 #include "uml001/crypto/crypto_utils.h"
@@ -30,7 +47,6 @@ enum class PassportStatus {
     REVOKED
 };
 
-// VerifyResult: Contains information about passport verification
 enum class VerifyStatus {
     OK = 0,
     EXPIRED = 1,
@@ -44,11 +60,11 @@ struct VerifyResult {
     uint32_t verified_key_id = 0;
     bool recovered = false;
     float confidence = 0.0f;
-    
+
     bool ok() const {
         return status == VerifyStatus::OK;
     }
-    
+
     std::string status_str() const {
         switch (status) {
             case VerifyStatus::OK: return "OK";
@@ -56,8 +72,8 @@ struct VerifyResult {
             case VerifyStatus::REVOKED: return "REVOKED";
             case VerifyStatus::INVALID_SIGNATURE: return "INVALID_SIGNATURE";
             case VerifyStatus::INCOMPATIBLE: return "INCOMPATIBLE";
+            default: return "UNKNOWN";
         }
-        return "UNKNOWN";
     }
 };
 
@@ -68,10 +84,10 @@ struct Capabilities {
     bool entropy_flush = false;
 
     std::string serialize() const {
-        return (classifier_authority ? "1" : "0") +
+        return std::string(classifier_authority ? "1" : "0") +
                std::string(classifier_sensitivity ? "1" : "0") +
-               (bft_consensus ? "1" : "0") +
-               (entropy_flush ? "1" : "0");
+               std::string(bft_consensus ? "1" : "0") +
+               std::string(entropy_flush ? "1" : "0");
     }
 };
 
@@ -80,57 +96,44 @@ struct Passport {
     std::string model_version;
     Capabilities capabilities;
     std::string policy_hash;
-    
-    // Core timing and status fields
-    uint64_t issued_at = 0; 
+
+    uint64_t issued_at = 0;
     uint64_t expires_at = 0;
-    PassportStatus status = PassportStatus::INACTIVE; 
+    PassportStatus status = PassportStatus::INACTIVE;
 
     uint32_t signing_key_id = 0;
     std::string signature;
     std::optional<std::string> recovery_token;
-    
-    // Cryptographic material for HMAC operations
+
     std::string signing_key_material;
-    
-    // Registry version this passport was issued under
     std::string registry_version;
-    
-    // Check if this passport has been recovered
+
     bool is_recovered() const {
         return recovery_token.has_value();
     }
-    
-    // Check if this passport is still valid at the given time
+
     bool is_valid(uint64_t now) const {
-        return status == PassportStatus::ACTIVE && 
-               now >= issued_at && 
+        return status == PassportStatus::ACTIVE &&
+               now >= issued_at &&
                now < expires_at;
     }
-    
-    // Compute a canonical representation for signing/HMAC operations
+
     std::string canonical_body() const {
-        return model_id + "|" + model_version + "|" + 
-               capabilities.serialize() + "|" + 
-               policy_hash + "|" + 
-               std::to_string(issued_at) + "|" + 
-               std::to_string(expires_at) + "|" + 
+        return model_id + "|" + model_version + "|" +
+               capabilities.serialize() + "|" +
+               policy_hash + "|" +
+               std::to_string(issued_at) + "|" +
+               std::to_string(expires_at) + "|" +
                registry_version;
     }
 
-    /**
-     * @brief Transitions passport to ACTIVE and sets timing bounds.
-     */
     void issue(std::shared_ptr<IClock> clock, uint64_t duration_sec = 3600);
 
-    /**
-     * @brief Generates a unique hash of the passport metadata for signing/verification.
-     */
     std::string content_hash() const {
-        std::string raw = model_id + "|" + model_version + "|" + 
-                          capabilities.serialize() + "|" + 
-                          policy_hash + "|" + 
-                          std::to_string(issued_at) + "|" + 
+        std::string raw = model_id + "|" + model_version + "|" +
+                          capabilities.serialize() + "|" +
+                          policy_hash + "|" +
+                          std::to_string(issued_at) + "|" +
                           std::to_string(expires_at);
         return sha256_hex(raw);
     }
@@ -138,7 +141,9 @@ struct Passport {
 
 class PassportRegistry {
 public:
-    PassportRegistry(TransparencyLog& log, RevocationList& list, IClock& clock)
+    PassportRegistry(TransparencyLog& log,
+                     RevocationList& list,
+                     IClock& clock)
         : log_(log), revocation_list_(list), clock_(clock) {}
 
     Passport issue_model_passport(
@@ -148,8 +153,8 @@ public:
         const std::string& policy_hash,
         uint32_t key_id
     );
-    
-    bool verify(const Passport& passport);
+
+    VerifyResult verify(const Passport& passport) const;
 
 private:
     TransparencyLog& log_;

@@ -1,42 +1,48 @@
-#include "aegis/integration/datadog_logger.h"
+/*
+ * Aegis Protocol (Semantic Passport System)
+ * Copyright 2026 Gary Gray (github.com/<your-github-handle>)
+ *
+ * The Aegis Protocol defines a distributed trust and identity framework
+ * based on cryptographically verifiable Semantic Passports, capability
+ * enforcement, and transparency logging for auditable system behavior.
+ *
+ * Core components include:
+ *   - Semantic Passports: verifiable identity and capability attestations
+ *   - Transparency Log: append-only cryptographic audit trail of system events
+ *   - Revocation System: deterministic invalidation of compromised or expired identities
+ *   - Passport Registry: issuance and verification authority for trusted entities
+ *
+ * This framework is designed for open standardization, interoperability,
+ * and production-grade use in distributed identity, AI systems, and
+ * verifiable authorization infrastructures.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This implementation is intended for research, verifiable systems design,
+ * and deployment in security-critical distributed environments.
+ */
+#include "uml001/integration/datadog_logger.h"
 #include <iostream>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
 
-namespace aegis {
-namespace integration {
+namespace uml001::integration {
 
-DatadogLogger::DatadogLogger(const std::string& agent_host, int agent_port)
-    : host_(agent_host), port_(agent_port) {}
+DatadogLogger::DatadogLogger(const std::string& host, int port)
+    : host_(host), port_(port) {}
 
-void DatadogLogger::log_event(const std::string& event_type, const std::string& message) {
-    // Log to stdout for development
-    std::cout << "[DATADOG-LOG] " << event_type << ": " << message << std::endl;
-    
-    // Send to Datadog agent if configured
-    if (!host_.empty() && port_ > 0) {
-        // Wrap message in Datadog-friendly DogStatsD format
-        std::string payload = "aegis.event:" + event_type + "|" + message;
-        send_udp(payload);
+void DatadogLogger::log_event(uml001::LogDestination dest,
+                             const std::string& message) {
+    // In a production scenario, this would format a JSON payload 
+    // and send via UDP/TCP to the Datadog agent at host_:port_
+    std::string prefix = "[Datadog] ";
+    if (dest == uml001::LogDestination::TRANSPARENCY_LOG) {
+        prefix += "(Audit) ";
     }
+    
+    std::cout << prefix << message << std::endl;
 }
 
-void DatadogLogger::send_udp(const std::string& payload) {
-    // Basic UDP implementation for Datadog Agent communication
-    int sock = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sock < 0) return;
-
-    struct sockaddr_in servaddr;
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(port_);
-    servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
-
-    sendto(sock, payload.c_str(), payload.size(), 0,
-           (const struct sockaddr*)&servaddr, sizeof(servaddr));
-    close(sock);
-}
-
-} // namespace integration
-} // namespace aegis
+} // namespace uml001::integration

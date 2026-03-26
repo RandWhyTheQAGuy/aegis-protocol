@@ -1,4 +1,8 @@
 """
+Aegis Protocol (Semantic Passport System)
+=========================================
+Copyright 2026 Gary Gray (github.com/<your-github-handle>)
+
 aegis_langgraph_integration.py
 ================================
 Aegis Protocol security layer for LangGraph agent workflows.
@@ -65,6 +69,30 @@ NOTE: LangGraph stubs are provided below so the integration runs without
         from langgraph.graph.state import CompiledGraph
         from langgraph.checkpoint.memory import InMemorySaver
         from langgraph.checkpoint.base import BaseCheckpointSaver
+INTENDED USE
+-----------
+- Open standardization candidate for distributed identity systems
+- Interoperable trust infrastructure across frameworks and agents
+- AI system authorization and governance enforcement layer
+- Security-critical distributed execution environments
+
+SECURITY MODEL
+-------------
+All external entities are untrusted by default.
+All actions MUST be validated through:
+    1. Semantic Passport verification
+    2. Capability enforcement checks
+    3. Revocation status validation
+    4. Registry authenticity confirmation
+    5. Audit logging for traceability
+
+LICENSE
+-------
+Apache License 2.0
+http://www.apache.org/licenses/LICENSE-2.0
+
+This software is provided for research and production-grade
+distributed trust system development.
 """
 
 import functools

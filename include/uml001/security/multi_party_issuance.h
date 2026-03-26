@@ -1,3 +1,30 @@
+/*
+ * Aegis Protocol (Semantic Passport System)
+ * Copyright 2026 Gary Gray (github.com/<your-github-handle>)
+ *
+ * The Aegis Protocol defines a distributed trust and identity framework
+ * based on cryptographically verifiable Semantic Passports, capability
+ * enforcement, and transparency logging for auditable system behavior.
+ *
+ * Core components include:
+ *   - Semantic Passports: verifiable identity and capability attestations
+ *   - Transparency Log: append-only cryptographic audit trail of system events
+ *   - Revocation System: deterministic invalidation of compromised or expired identities
+ *   - Passport Registry: issuance and verification authority for trusted entities
+ *
+ * This framework is designed for open standardization, interoperability,
+ * and production-grade use in distributed identity, AI systems, and
+ * verifiable authorization infrastructures.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This implementation is intended for research, verifiable systems design,
+ * and deployment in security-critical distributed environments.
+ */
 #pragma once
 // multi_party_issuance.h  -- UML-001 Multi-Party Passport Issuance
 //
@@ -41,7 +68,7 @@ inline std::string quorum_state_str(QuorumState s) {
 
 struct QuorumRecord {
     std::string              proposal_id;
-    SemanticPassport         proposed_passport;
+    Passport         proposed_passport;
     std::map<std::string, std::string> partial_sigs; 
     std::set<std::string>    rejections;
     QuorumState              state      = QuorumState::PENDING;
@@ -85,7 +112,7 @@ public:
         std::lock_guard<std::mutex> lk(mu_);
         ensure_signer_authorized(proposer_id);
 
-        SemanticPassport p;
+        Passport p;
         p.model_id         = model_id;
         p.model_version    = model_version;
         p.registry_version = registry_version_;
@@ -109,7 +136,7 @@ public:
 
         proposals_[proposal_id] = std::move(rec);
 
-        log_.append(TransparencyEntry::PASSPORT_ISSUED, proposer_id, model_id, 0,
+        log_.append(TransparencyEntry::Type::PASSPORT_ISSUED, proposer_id, model_id, 0,
                     "PROPOSED id=" + proposal_id, now);
 
         if (threshold_ == 1) finalize_locked(proposal_id, now);
@@ -140,7 +167,7 @@ public:
 
     // ... (reject, expire_stale_proposals, get_finalized_passport remain same) ...
 
-    bool verify_quorum_passport(const SemanticPassport& p, uint64_t now) const {
+    bool verify_quorum_passport(const Passport& p, uint64_t now) const {
         std::lock_guard<std::mutex> lk(mu_);
         if (!p.is_valid(now)) return false;
 
@@ -195,7 +222,7 @@ private:
         auto& rec = proposals_.at(proposal_id);
         rec.proposed_passport.signature = build_composite(rec.partial_sigs, rec.proposed_passport.canonical_body());
         rec.state = QuorumState::FINALIZED;
-        log_.append(TransparencyEntry::PASSPORT_ISSUED, "quorum", rec.proposed_passport.model_id, 0, "FINALIZED", now);
+        log_.append(TransparencyEntry::Type::PASSPORT_ISSUED, "quorum", rec.proposed_passport.model_id, 0, "FINALIZED", now);
     }
 
     // Helper stubs for brevity

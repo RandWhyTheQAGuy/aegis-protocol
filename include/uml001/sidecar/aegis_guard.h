@@ -25,30 +25,26 @@
  * This implementation is intended for research, verifiable systems design,
  * and deployment in security-critical distributed environments.
  */
-syntax = "proto3";
+#pragma once
 
-package quorumtime;
+#include "uml001/core/passport.h"
+#include "uml001/security/vault.h"
+#include <memory>
+#include <string>
 
-message TimeRequest {
-  string client_id = 1;
-  string request_id = 2;
-  int64 client_unix_time_ms = 3;
-}
+namespace uml001::sidecar {
 
-message TimeResponse {
-  int64 unix_time_ms = 1;
+class AegisGuard {
+public:
+    AegisGuard(const std::string& agent_id,
+               std::shared_ptr<uml001::ColdVault> vault);
 
-  double confidence_interval_ms = 2;
-  int32 active_nodes = 3;
-  double projected_drift_ppm = 4;
+    bool validate_request(const std::string& request_payload,
+                         const uml001::Passport& passport);
 
-  string node_id = 5;
-  bytes signature = 6;
-  string request_id = 7;
+private:
+    std::string agent_id_;
+    std::shared_ptr<uml001::ColdVault> vault_;
+};
 
-  uint32 protocol_version = 8;
-}
-
-service ClockService {
-  rpc GetQuorumTime(TimeRequest) returns (TimeResponse);
-}
+} // namespace uml001::sidecar

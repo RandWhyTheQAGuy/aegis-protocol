@@ -1,4 +1,8 @@
 """
+Aegis Protocol (Semantic Passport System)
+=========================================
+Copyright 2026 Gary Gray (github.com/<your-github-handle>)
+
 aegis_crewai_integration.py
 =============================
 Aegis Protocol security layer for CrewAI role-based agent orchestration.
@@ -49,6 +53,30 @@ NOTE: CrewAI stubs are provided so the integration runs without an LLM.
       Replace stub classes with real CrewAI imports:
         from crewai import Agent, Task, Crew, Process
         from crewai.tools import BaseTool
+INTENDED USE
+-----------
+- Open standardization candidate for distributed identity systems
+- Interoperable trust infrastructure across frameworks and agents
+- AI system authorization and governance enforcement layer
+- Security-critical distributed execution environments
+
+SECURITY MODEL
+-------------
+All external entities are untrusted by default.
+All actions MUST be validated through:
+    1. Semantic Passport verification
+    2. Capability enforcement checks
+    3. Revocation status validation
+    4. Registry authenticity confirmation
+    5. Audit logging for traceability
+
+LICENSE
+-------
+Apache License 2.0
+http://www.apache.org/licenses/LICENSE-2.0
+
+This software is provided for research and production-grade
+distributed trust system development.
 """
 
 import hashlib

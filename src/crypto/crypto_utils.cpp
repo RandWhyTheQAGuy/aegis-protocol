@@ -1,34 +1,37 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> fe79fa5 (Remove e2e-example references and resolve all merge conflicts for production-ready main branch)
 /*
- * Copyright 2026 Aegis Protocol Authors
+ * Aegis Protocol (Semantic Passport System)
+ * Copyright 2026 Gary Gray (github.com/<your-github-handle>)
+ *
+ * The Aegis Protocol defines a distributed trust and identity framework
+ * based on cryptographically verifiable Semantic Passports, capability
+ * enforcement, and transparency logging for auditable system behavior.
+ *
+ * Core components include:
+ *   - Semantic Passports: verifiable identity and capability attestations
+ *   - Transparency Log: append-only cryptographic audit trail of system events
+ *   - Revocation System: deterministic invalidation of compromised or expired identities
+ *   - Passport Registry: issuance and verification authority for trusted entities
+ *
+ * This framework is designed for open standardization, interoperability,
+ * and production-grade use in distributed identity, AI systems, and
+ * verifiable authorization infrastructures.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain a copy of the License at:
  *
  * http://www.apache.org/licenses/LICENSE-2.0
-<<<<<<< HEAD
+ *
+ * This implementation is intended for research, verifiable systems design,
+ * and deployment in security-critical distributed environments.
  */
-
 #include "uml001/crypto/crypto_utils.h"
-#include <vector>
-#include <cstdint>
-#include <string>
-#include <sstream>
-#include <iomanip>
-#include <stdexcept>
-#include <algorithm>
-
 #include <openssl/evp.h>
 #include <openssl/rand.h>
-#include <openssl/hmac.h>
 #include <openssl/bio.h>
 #include <openssl/buffer.h>
-
+#include <openssl/params.h>
+#include <openssl/core_names.h>
 #include <iomanip>
 #include <sstream>
 #include <vector>
@@ -206,26 +209,33 @@ std::vector<uint8_t> ed25519_sign(const std::vector<uint8_t>& private_key,
 }
 
 std::string hmac_sha256_hex(const std::string& key, const std::string& data) {
+    EVP_MAC* mac = EVP_MAC_fetch(nullptr, "HMAC", nullptr);
+    EVP_MAC_CTX* ctx = EVP_MAC_CTX_new(mac);
+    
     unsigned char hash[EVP_MAX_MD_SIZE];
-    unsigned int lengthOfHash = 0;
-    
-    HMAC_CTX* hmac = HMAC_CTX_new();
-    
-    if(!HMAC_Init_ex(hmac, key.c_str(), key.size(), EVP_sha256(), nullptr) ||
-       !HMAC_Update(hmac, (unsigned char*)data.c_str(), data.size()) ||
-       !HMAC_Final(hmac, hash, &lengthOfHash)) {
+    size_t lengthOfHash = 0;
+
+    OSSL_PARAM params[2];
+    params[0] = OSSL_PARAM_construct_utf8_string(OSSL_MAC_PARAM_DIGEST, (char*)"SHA256", 0);
+    params[1] = OSSL_PARAM_construct_end();
+
+    if (!ctx || 
+        EVP_MAC_init(ctx, (const unsigned char*)key.c_str(), key.size(), params) != 1 ||
+        EVP_MAC_update(ctx, (const unsigned char*)data.c_str(), data.size()) != 1 ||
+        EVP_MAC_final(ctx, hash, &lengthOfHash, sizeof(hash)) != 1) {
         
-        HMAC_CTX_free(hmac);
+        if (ctx) EVP_MAC_CTX_free(ctx);
+        if (mac) EVP_MAC_free(mac);
         return "";
     }
-    
-    HMAC_CTX_free(hmac);
-    
+
+    EVP_MAC_CTX_free(ctx);
+    EVP_MAC_free(mac);
+
     std::stringstream ss;
-    for(unsigned int i = 0; i < lengthOfHash; ++i) {
+    for (size_t i = 0; i < lengthOfHash; ++i) {
         ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];
     }
-    
     return ss.str();
 }
 

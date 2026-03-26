@@ -156,7 +156,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/clock_proto.dir/DependInfo.cmake"
-  "CMakeFiles/aegis_core.dir/DependInfo.cmake"
+  "CMakeFiles/uml001_core.dir/DependInfo.cmake"
   "CMakeFiles/aegis_daemon.dir/DependInfo.cmake"
   "CMakeFiles/test_passport_flow.dir/DependInfo.cmake"
   )

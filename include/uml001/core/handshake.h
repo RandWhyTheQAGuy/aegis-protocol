@@ -1,29 +1,31 @@
-// handshake.h  (UML-001 rev 1.4)
-//
-// Changes from rev 1.3:
-//   FIX-01  derive_shared_secret(): EVP_PKEY X25519 DH replaces XOR stub;
-//           shared_secret correctly fed into HKDF (was discarded).
-//   FIX-02  generate_ephemeral_keypair(): generates a real X25519 keypair via
-//           EVP_PKEY; HKDF-of-private-key stub removed.
-//   FIX-03  EphemeralKeyPair: holds EVP_PKEY* with RAII destructor; copy
-//           disabled, move defined.
-//   FIX-04  destroy_private_key(): uses OPENSSL_cleanse; frees EVP_PKEY.
-//   FIX-05  hkdf_sha256(): RAII cleanup on both success and exception paths.
-//   FIX-06  validate_hello(): accepted_schema set; schema mismatch rejected.
-//   FIX-07  validate_hello(): ephemeral key bound to passport signature to
-//           close unauthenticated-ephemeral MITM window.
-//   FIX-08  validate_confirm() added (Message 3 — was entirely absent).
-//   FIX-09  HandshakeValidator: require_strong and reject_recovered params
-//           restored; enforced in validate_hello().
-//   FIX-10  process_ack(): double-call guard on destroyed ephemeral key.
-//   FIX-11  NonceCache: windowed TTL expiry prevents unbounded growth.
-//   FIX-12  NonceCache: namespace prefix uses full SHA-256 of (role||nonce)
-//           to eliminate prefix-collision attack surface.
-//   FIX-13  build_hello(): schema parameter restored.
-//   FIX-14  TransportIdentity::binding_token(): NONE type returns distinct token.
-//   FIX-15  pending_session_.forward_secrecy set in validate_hello() so
-//           validate_confirm() can propagate it correctly.
-//
+/*
+ * Aegis Protocol (Semantic Passport System)
+ * Copyright 2026 Gary Gray (github.com/<your-github-handle>)
+ *
+ * The Aegis Protocol defines a distributed trust and identity framework
+ * based on cryptographically verifiable Semantic Passports, capability
+ * enforcement, and transparency logging for auditable system behavior.
+ *
+ * Core components include:
+ *   - Semantic Passports: verifiable identity and capability attestations
+ *   - Transparency Log: append-only cryptographic audit trail of system events
+ *   - Revocation System: deterministic invalidation of compromised or expired identities
+ *   - Passport Registry: issuance and verification authority for trusted entities
+ *
+ * This framework is designed for open standardization, interoperability,
+ * and production-grade use in distributed identity, AI systems, and
+ * verifiable authorization infrastructures.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at:
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * This implementation is intended for research, verifiable systems design,
+ * and deployment in security-critical distributed environments.
+ */
+
 #pragma once
 #include "passport.h"
 #include <string>

@@ -1,4 +1,8 @@
 """
+Aegis Protocol (Semantic Passport System)
+=========================================
+Copyright 2026 Gary Gray (github.com/<your-github-handle>)
+
 aegis_protocol_memory_integration.py
 ======================================
 Integration example: Aegis Protocol + Aegis Framework (FixingPixels)
@@ -47,6 +51,31 @@ DEPENDENCIES
 
 NOTE: Aegis Protocol SDK and Aegis Framework are represented by stubs below.
       Replace with real SDK imports and implementations in production.
+
+      INTENDED USE
+-----------
+- Open standardization candidate for distributed identity systems
+- Interoperable trust infrastructure across frameworks and agents
+- AI system authorization and governance enforcement layer
+- Security-critical distributed execution environments
+
+SECURITY MODEL
+-------------
+All external entities are untrusted by default.
+All actions MUST be validated through:
+    1. Semantic Passport verification
+    2. Capability enforcement checks
+    3. Revocation status validation
+    4. Registry authenticity confirmation
+    5. Audit logging for traceability
+
+LICENSE
+-------
+Apache License 2.0
+http://www.apache.org/licenses/LICENSE-2.0
+
+This software is provided for research and production-grade
+distributed trust system development.
 """
 
 import hashlib
