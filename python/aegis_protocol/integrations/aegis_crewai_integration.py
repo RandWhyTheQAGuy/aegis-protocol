@@ -1,7 +1,8 @@
 """
 Aegis Protocol (Semantic Passport System)
 =========================================
-Copyright 2026 Gary Gray (github.com/<your-github-handle>)
+Copyright 2026 Randy Spickler (github.com/RandWhyTheQAGuy)
+SPDX-License-Identifier: Apache-2.0
 
 aegis_crewai_integration.py
 =============================
