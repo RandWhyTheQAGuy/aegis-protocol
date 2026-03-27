@@ -29,39 +29,63 @@
 #pragma once
 
 #include "uml001/crypto/crypto_utils.h"
+<<<<<<< fix/vault-csp-impl
+=======
 #include "uml001/vault.h"
+>>>>>>> main
 #include <string>
 #include <vector>
-#include <optional>
-#include <cstdint>
+#include <map>
 #include <memory>
 
 namespace uml001 {
 
 class IClock;
-class TransparencyLog;
-class RevocationList;
+
+// --------------------
+// Supporting Types
+// --------------------
+
+struct Capabilities {
+    bool classifier_authority = false;
+    bool classifier_sensitivity = false;
+    bool bft_consensus = false;
+    bool entropy_flush = false;
+};
 
 enum class PassportStatus {
-    INACTIVE,
+    IDLE,
     ACTIVE,
-    REVOKED
+    REVOKED,
+    EXPIRED
 };
 
 enum class VerifyStatus {
+<<<<<<< fix/vault-csp-impl
+    OK,
+    EXPIRED,
+    REVOKED,
+    INVALID_SIGNATURE,
+    LOG_MISMATCH,
+    INSUFFICIENT_QUORUM,
+    INCOMPATIBLE
+=======
     OK = 0,
     EXPIRED = 1,
     REVOKED = 2,
     INVALID_SIGNATURE = 3,
     INCOMPATIBLE = 4,
     LOG_MISMATCH = 5  // Added for Step 3
+>>>>>>> main
 };
 
 struct VerifyResult {
-    VerifyStatus status = VerifyStatus::OK;
+    VerifyStatus status = VerifyStatus::INCOMPATIBLE;
     uint32_t verified_key_id = 0;
     bool recovered = false;
     float confidence = 0.0f;
+<<<<<<< fix/vault-csp-impl
+=======
 
     bool ok() const { return status == VerifyStatus::OK; }
 
@@ -76,37 +100,61 @@ struct VerifyResult {
             default: return "UNKNOWN";
         }
     }
+>>>>>>> main
 };
 
-struct Capabilities {
-    bool classifier_authority = false;
-    bool classifier_sensitivity = false;
-    bool bft_consensus = false;
-    bool entropy_flush = false;
+struct QuorumProof {
+    uint32_t threshold = 0;
+    std::vector<uint32_t> signer_ids;
+    std::vector<std::string> signatures;
+    std::string root_signature;
 
-    std::string serialize() const {
-        return std::string(classifier_authority ? "1" : "0") +
-               std::string(classifier_sensitivity ? "1" : "0") +
-               std::string(bft_consensus ? "1" : "0") +
-               std::string(entropy_flush ? "1" : "0");
+    bool is_complete() const {
+        return signatures.size() >= threshold && threshold > 0;
     }
 };
+
+// --------------------
+// Passport Struct
+// --------------------
 
 struct Passport {
     std::string model_id;
     std::string model_version;
+<<<<<<< fix/vault-csp-impl
+    std::string registry_version;
+    
+=======
     Capabilities capabilities;
     std::string policy_hash;
     
     // 🛠 STEP 3: The Cryptographic Anchor (Merkle Root of Transparency Log)
     std::string log_root_hash; 
 
+>>>>>>> main
     uint64_t issued_at = 0;
     uint64_t expires_at = 0;
-    PassportStatus status = PassportStatus::INACTIVE;
-
+    
+    Capabilities capabilities;
+    std::string policy_hash;
+    std::string log_root_hash;
+    
+    PassportStatus status = PassportStatus::IDLE;
     uint32_t signing_key_id = 0;
+    std::string signing_key_material; // For HMAC-based legacy flows
     std::string signature;
+<<<<<<< fix/vault-csp-impl
+    
+    QuorumProof proof;
+
+    void issue(std::shared_ptr<IClock> clock, uint64_t duration_sec);
+    
+    std::string content_hash() const {
+        return sha256_hex(model_id + "|" + model_version + "|" + std::to_string(issued_at) + "|" + policy_hash);
+    }
+
+    bool is_recovered() const { return false; } // Placeholder for state recovery logic
+=======
     std::optional<std::string> recovery_token;
 
     // Internal metadata
@@ -155,6 +203,7 @@ private:
     RevocationList&  revocation_list_;
     IClock&          clock_;
     Vault&           vault_;
+>>>>>>> main
 };
 
 } // namespace uml001

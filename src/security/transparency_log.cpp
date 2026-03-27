@@ -41,6 +41,12 @@ namespace uml001 {
 TransparencyLog::TransparencyLog(std::shared_ptr<IClock> clock, TransparencyMode mode)
     : clock_(clock), mode_(mode), current_state_(LogState::IDLE), root_(nullptr) {}
 
+bool TransparencyLog::verify_anchor(const std::string& root_hash) const {
+    std::lock_guard<std::mutex> guard(log_mutex_);
+    if (root_hash.empty() && leaves_.empty()) return true;
+    return root_ && root_->hash == root_hash;
+}
+
 bool TransparencyLog::append(TransparencyEntry::Type type,
                              const std::string& event_type_str,
                              const std::string& payload_hash,

@@ -28,21 +28,51 @@
  */
 #pragma once
 
-#include "uml001/core/event_logger.h"
+#include "uml001/core/passport.h"
 #include <string>
+#include <vector>
+#include <memory>
 
-namespace uml001::integration {
+namespace uml001 {
 
-class DatadogLogger : public uml001::IEventLogger {
+class TransparencyLog;
+class RevocationList;
+class IClock;
+class Vault;
+
+/**
+ * @brief The Aegis Passport Registry (The Consensus Authority)
+ */
+class PassportRegistry {
 public:
-    DatadogLogger(const std::string& host, int port);
+    PassportRegistry(TransparencyLog& log,
+                     RevocationList& list,
+                     IClock& clock,
+                     Vault& vault)
+        : log_(log), revocation_list_(list), clock_(clock), vault_(vault) {}
 
-    void log_event(uml001::LogDestination dest,
-                   const std::string& message) override;
+    /**
+     * @brief Issues a new model passport with optional quorum requirements.
+     */
+    Passport issue_model_passport(
+        const std::string& model_id,
+        const std::string& version,
+        const Capabilities& caps,
+        const std::string& policy_hash,
+        const std::vector<uint32_t>& key_ids,
+        uint32_t threshold = 1
+    );
+
+    /**
+     * @brief Verifies a passport's signature, anchor, and revocation status.
+     */
+    VerifyResult verify(const Passport& passport) const;
 
 private:
-    std::string host_;
-    int port_;
+    TransparencyLog& log_;
+    RevocationList&  revocation_list_;
+    IClock&          clock_;
+    Vault&           vault_;
 };
 
-} // namespace uml001::integration
+} // namespace uml001

@@ -28,7 +28,9 @@
  */
 #include "uml001/security/vault.h"
 #include "uml001/crypto/crypto_utils.h"
+
 #include <iostream>
+#include <stdexcept>
 
 namespace uml001 {
 
@@ -70,6 +72,52 @@ void ColdVault::append(const std::string& type,
               << " | actor=" << actor_id 
               << " | hash=" << payload_hash.substr(0, 8) << "..."
               << " | meta=" << metadata << "\n";
+}
+
+// -----------------------------
+// V1.3 CSP Operations
+// -----------------------------
+
+// Signing key material is expected to be stored under:
+//   "csp:key:<key_id>"
+// The message_hash is assumed to be a hex-encoded digest of the payload.
+// We derive a signature as: sha256_hex(secret || "|" || message_hash)
+std::string ColdVault::sign(uint32_t key_id, const std::string& message_hash) {
+    const std::string key_name = "csp:key:" + std::to_string(key_id);
+    auto it = secure_storage_.find(key_name);
+    if (it == secure_storage_.end()) {
+        throw std::runtime_error("ColdVault::sign: signing key not found for id=" + std::to_string(key_id));
+    }
+
+    const std::vector<uint8_t>& secret_bytes = it->second;
+    std::string secret_str(secret_bytes.begin(), secret_bytes.end());
+
+    // Derive a deterministic signature from stored secret and message hash
+    std::string material = secret_str + "|" + message_hash;
+    return sha256_hex(material);
+}
+
+// Public key material is expected to be stored under:
+//   "csp:pub:" + key_id
+// If not present, an empty vector is returned.
+std::vector<uint8_t> ColdVault::retrieve_public_key(uint32_t key_id) {
+    const std::string key_name = "csp:pub:" + std::to_string(key_id);
+    auto it = secure_storage_.find(key_name);
+    if (it == secure_storage_.end()) {
+        return {};
+    }
+    return it->second;
+}
+
+// Peer verification is based on membership in the known_peers_ set.
+// This allows higher-level systems to manage the trust boundary explicitly.
+bool ColdVault::verify_peer(const std::string& node_id) const {
+    return known_peers_.find(node_id) != known_peers_.end();
+}
+
+// Management of the Trust Boundary
+void ColdVault::add_known_peer(const std::string& node_id) {
+    known_peers_.insert(node_id);
 }
 
 } // namespace uml001

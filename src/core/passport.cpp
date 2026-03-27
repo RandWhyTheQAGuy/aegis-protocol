@@ -27,16 +27,9 @@
  * and deployment in security-critical distributed environments.
  */
 #include "uml001/core/passport.h"
-#include "uml001/security/transparency_log.h"
-#include "uml001/security/revocation.h"
 #include "uml001/core/clock.h"
-#include "uml001/crypto/crypto_utils.h"
-#include "uml001/vault.h" 
-
 #include <iostream>
 #include <stdexcept>
-
-using uml001::hmac_sha256_hex;
 
 namespace uml001 {
 

@@ -29,6 +29,7 @@
 #include "uml001/core/bft_clock_client.h"
 #include "uml001/core/clock.h"
 #include "uml001/core/passport.h"
+#include "uml001/core/registry.h"
 #include "uml001/security/revocation.h"
 #include "uml001/security/transparency_log.h"
 #include "uml001/security/vault.h"
@@ -37,6 +38,7 @@
 #include <iostream>
 #include <memory>
 #include <cstdlib>
+#include <vector>
 
 namespace uml001 {
 
@@ -86,6 +88,19 @@ static void vault_log_event(ColdVault& vault,
                  get_clock()->now_unix());
 }
 
+static const char* verify_status_to_string(VerifyStatus s) {
+    switch (s) {
+        case VerifyStatus::OK:                  return "OK";
+        case VerifyStatus::EXPIRED:             return "EXPIRED";
+        case VerifyStatus::REVOKED:             return "REVOKED";
+        case VerifyStatus::INVALID_SIGNATURE:   return "INVALID_SIGNATURE";
+        case VerifyStatus::LOG_MISMATCH:        return "LOG_MISMATCH";
+        case VerifyStatus::INSUFFICIENT_QUORUM: return "INSUFFICIENT_QUORUM";
+        case VerifyStatus::INCOMPATIBLE:        return "INCOMPATIBLE";
+        default:                                return "UNKNOWN";
+    }
+}
+
 } // namespace uml001
 
 // ==============================
@@ -124,7 +139,7 @@ int main(int argc, char** argv) {
         init_clock(active_clock);
 
         // ==============================
-        // 🔥 CRITICAL FIX: ORDER MATTERS
+        // CRITICAL FIX: ORDER MATTERS
         // ==============================
 
         // 1. Create Transparency Log FIRST
@@ -142,17 +157,20 @@ int main(int argc, char** argv) {
         Capabilities caps;
         caps.classifier_authority = true;
 
+        // Minimal demo: single key id 1, threshold 1
+        std::vector<uint32_t> key_ids = {1};
+
         auto passport = registry.issue_model_passport(
             "agent-alpha",
             "1.0.0",
             caps,
             sha256_hex("policy"),
+            key_ids,
             1
         );
 
-        std::cout << "[VERIFY] "
-                  << registry.verify(passport).status_str()
-                  << "\n";
+        auto result = registry.verify(passport);
+        std::cout << "[VERIFY] " << verify_status_to_string(result.status) << "\n";
 
         vault_log_event(
             vault,
