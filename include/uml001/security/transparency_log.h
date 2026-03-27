@@ -29,27 +29,13 @@
 #pragma once
 
 #include "uml001/core/clock.h"
-#include "uml001/crypto/crypto_utils.h"
+#include "uml001/core/passport.h" // For QuorumProof
 #include <string>
 #include <vector>
 #include <memory>
 #include <mutex>
 
 namespace uml001 {
-
-enum class LogDestination { LOCAL_CONSOLE, TRANSPARENCY_LOG, EXTERNAL_MONITORING };
-
-class IEventLogger {
-public:
-    virtual ~IEventLogger() = default;
-    virtual void log_event(LogDestination dest, const std::string& message) = 0;
-};
-
-struct QuorumProof {
-    std::vector<std::string> signatures;
-    uint32_t quorum_size = 0;
-    std::string root_signature;
-};
 
 enum class LogState { IDLE, APPENDING, SYNCHRONIZING, SEALED, FAULT };
 enum class TransparencyMode { IMMEDIATE, PERIODIC_SEALING };
@@ -66,7 +52,7 @@ struct TransparencyEntry {
     uint64_t timestamp = 0;
     std::string payload_hash;
     std::string signer_id;
-    std::string metadata; // Added to support extra context
+    std::string metadata;
     QuorumProof quorum;
 
     std::string serialize_for_hash() const {
@@ -86,7 +72,6 @@ public:
     explicit TransparencyLog(std::shared_ptr<IClock> clock,
                              TransparencyMode mode = TransparencyMode::IMMEDIATE);
 
-    // Updated to 6 arguments to match multi_party_issuance.h calls
     bool append(TransparencyEntry::Type type,
                 const std::string& event_type_str,
                 const std::string& payload_hash,
@@ -94,6 +79,7 @@ public:
                 const std::string& metadata = "",
                 uint64_t custom_timestamp = 0);
 
+    bool verify_anchor(const std::string& root_hash) const;
     std::vector<TransparencyEntry> history() const;
     bool verify_chain() const;
     std::string get_root_hash() const;

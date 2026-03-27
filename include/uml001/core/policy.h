@@ -35,6 +35,7 @@
 #include <cstdint>
 #include <optional>
 #include "uml001/security/zk_proofs.h"  // Provides ZkProofType and ZkProofFactory
+#include "uml001/core/temporal_state.h"
 
 namespace uml001 {
 
@@ -54,6 +55,17 @@ inline std::string action_str(PolicyAction a) {
         default:                         return "UNKNOWN";
     }
 }
+
+/**
+ * @brief Contextual data for policy evaluation and ZK proofs.
+ * Defined once to avoid redefinition errors.
+ */
+struct EvaluationContext {
+    std::string actor_id;
+    std::string resource_id;
+    std::string action;
+    std::map<std::string, std::string> environment;
+};
 
 struct PolicyDecision {
     PolicyAction action = PolicyAction::DENY;
@@ -85,5 +97,24 @@ struct Policy {
 
     std::string compute_hash() const;
 };
+
+// --- Evaluation Logic ---
+
+/**
+ * @brief Logic for write-access based on BFT Quorum/Clock state.
+ */
+bool allow_write(TemporalState state);
+
+/**
+ * @brief Logic for read-access based on BFT Quorum/Clock state.
+ */
+bool allow_read(TemporalState state);
+
+/**
+ * @brief Evaluate a policy using a zero-knowledge proof.
+ */
+bool evaluate_policy_with_zk(const Policy& policy, 
+                             const PolicyDecision& decision,
+                             const EvaluationContext& context);
 
 } // namespace uml001

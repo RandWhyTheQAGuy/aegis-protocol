@@ -51,13 +51,17 @@ bool constant_time_equals(const std::vector<uint8_t>& a, const std::vector<uint8
 std::string base64_encode(const std::vector<uint8_t>& data);
 std::vector<uint8_t> base64_decode(const std::string& input);
 
+// --- Hex utilities required for registry verification ---
+std::string hex_encode(const std::vector<uint8_t>& data);
+std::vector<uint8_t> hex_decode(const std::string& hex);
+
 // --- Signing (Ed25519) ---
 std::vector<uint8_t> ed25519_sign(const std::vector<uint8_t>& priv, const std::vector<uint8_t>& msg);
 bool ed25519_verify(const std::vector<uint8_t>& pub, const std::vector<uint8_t>& msg, const std::vector<uint8_t>& sig);
 
 // --- Authenticated Encryption ---
 struct EncryptionResult {
-    bool ok = false; // 🔐 Crucial for the facade logic
+    bool ok = false; // Crucial for the facade logic
     std::vector<uint8_t> ciphertext;
     std::vector<uint8_t> nonce;
     std::vector<uint8_t> tag;

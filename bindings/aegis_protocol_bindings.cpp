@@ -27,38 +27,44 @@
  * and deployment in security-critical distributed environments.
  */
 
+/*
+ * Aegis Protocol (Semantic Passport System)
+ * Python Bindings (Production-Ready)
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
-#include <pybind11/functional.h> // Required for FlushCallback
+#include <pybind11/functional.h>
 
-// Updated paths based on Reorg
 #include "uml001/core/clock.h"
-#include "uml001/security/vault.h"
-#include "uml001/crypto/crypto_utils.h"
-#include "uml001/crypto/crypto_facade.h"
+#include "uml001/core/passport.h"
+#include "uml001/core/registry.h"
 #include "uml001/core/session.h"
 #include "uml001/core/policy.h"
-#include "uml001/core/passport.h"
 #include "uml001/core/handshake.h"
-#include "uml001/security/multi_party_issuance.h"
+
+#include "uml001/security/vault.h"
 #include "uml001/security/transparency_log.h"
-#include "uml001/security/key_rotation.h"
 #include "uml001/security/revocation.h"
+#include "uml001/security/multi_party_issuance.h"
+#include "uml001/security/key_rotation.h"
 #include "uml001/security/key_manager.h"
+
+#include "uml001/crypto/crypto_utils.h"
+#include "uml001/crypto/crypto_facade.h"
 
 namespace py = pybind11;
 using namespace uml001;
 
 PYBIND11_MODULE(aegis_protocol, m) {
-    m.doc() = "Python bindings for UML-001 Aegis Protocol v2.0";
+    m.doc() = "Python bindings for Aegis Protocol (UML-001)";
 
     // =========================================================================
-    // NEW v2.0 FEATURES (Crypto Facade & Key Management)
+    // CRYPTO V2 (Facade)
     // =========================================================================
-    
-    // Crypto Facade Submodule
-    py::module_ crypto_m = m.def_submodule("crypto_v2", "Production-grade Crypto Facade");
-    
+    py::module_ crypto_m = m.def_submodule("crypto_v2", "Production crypto facade");
+
     py::class_<crypto::Envelope>(crypto_m, "Envelope")
         .def(py::init<>())
         .def_readwrite("ciphertext", &crypto::Envelope::ciphertext)
@@ -74,7 +80,9 @@ PYBIND11_MODULE(aegis_protocol, m) {
     crypto_m.def("to_base64", &crypto::to_base64);
     crypto_m.def("from_base64", &crypto::from_base64);
 
-    // Key Manager
+    // =========================================================================
+    // KEY MANAGEMENT
+    // =========================================================================
     py::class_<security::KeyManager>(m, "KeyManager")
         .def(py::init<>())
         .def("create_aes_key", &security::KeyManager::create_aes_key)
@@ -82,17 +90,18 @@ PYBIND11_MODULE(aegis_protocol, m) {
         .def("revoke_key", &security::KeyManager::revoke_key);
 
     // =========================================================================
-    // LEGACY & CORE FEATURES (Preserved & Verified)
+    // CLOCK
     // =========================================================================
-
-    // 1. Clock / global NOW
     py::class_<IClock, std::shared_ptr<IClock>>(m, "IClock");
+
     m.def("init_clock", &init_clock);
     m.def("get_clock", &get_clock);
     m.def("now_unix", &now_unix);
     m.def("validate_timestamp", &validate_timestamp);
 
-    // 2. Vault
+    // =========================================================================
+    // VAULT
+    // =========================================================================
     py::class_<VaultConfig>(m, "VaultConfig")
         .def(py::init<>())
         .def_readwrite("vault_path", &VaultConfig::vault_path)
@@ -104,18 +113,44 @@ PYBIND11_MODULE(aegis_protocol, m) {
     py::class_<ColdVault>(m, "ColdVault")
         .def(py::init<const VaultConfig &>())
         .def("append",
-             [](ColdVault &v, const std::string &et, const std::string &sid, 
-                const std::string &aid, const std::string &ph, const std::string &md, uint64_t ts) {
+             [](ColdVault &v,
+                const std::string &et,
+                const std::string &sid,
+                const std::string &aid,
+                const std::string &ph,
+                const std::string &md,
+                uint64_t ts) {
                  v.append(et, sid, aid, ph, md, ts);
              })
         .def("entry_count", &ColdVault::entry_count);
 
-    // 3. Crypto Helpers (Legacy)
-    m.def("sha256_hex", &sha256_hex);
-    m.def("hmac_sha256_hex", &hmac_sha256_hex);
-    m.def("generate_random_bytes_hex", &generate_random_bytes_hex);
+    // =========================================================================
+    // TRANSPARENCY LOG (MUST COME BEFORE REGISTRY)
+    // =========================================================================
+    py::enum_<TransparencyMode>(m, "TransparencyMode")
+        .value("IMMEDIATE", TransparencyMode::IMMEDIATE)
+        .value("BATCHED", TransparencyMode::BATCHED)
+        .export_values();
 
-    // 4. Passport / Identity
+    py::class_<TransparencyLog>(m, "TransparencyLog")
+        .def(py::init<IClock*, TransparencyMode>(),
+             py::arg("clock"),
+             py::arg("mode"))
+        .def("append", &TransparencyLog::append)
+        .def("verify_chain", &TransparencyLog::verify_chain)
+        .def("entries_for_model", &TransparencyLog::entries_for_model);
+
+    // =========================================================================
+    // REVOCATION (DEPENDS ON TLOG)
+    // =========================================================================
+    py::class_<RevocationList>(m, "RevocationList")
+        .def(py::init<TransparencyLog &>())
+        .def("revoke", &RevocationList::revoke)
+        .def("is_revoked", &RevocationList::is_revoked);
+
+    // =========================================================================
+    // PASSPORT + CAPABILITIES
+    // =========================================================================
     py::class_<Capabilities>(m, "Capabilities")
         .def(py::init<>())
         .def_readwrite("classifier_authority", &Capabilities::classifier_authority)
@@ -147,16 +182,31 @@ PYBIND11_MODULE(aegis_protocol, m) {
         .def("ok", &VerifyResult::ok)
         .def("status_str", &VerifyResult::status_str);
 
+    // =========================================================================
+    // PASSPORT REGISTRY (CORE)
+    // =========================================================================
     py::class_<PassportRegistry>(m, "PassportRegistry")
-        .def(py::init<const std::string &, const std::string &, std::shared_ptr<IClock>>())
-        .def("issue", [](PassportRegistry &r, const std::string &mid, const std::string &v, 
-                         const Capabilities &c, const std::string &ph, uint64_t ttl) {
-                 return r.issue(mid, v, c, ph, ttl);
-             })
+        .def(py::init<TransparencyLog &,
+                      RevocationList &,
+                      IClock &,
+                      ColdVault &>(),
+             py::arg("tlog"),
+             py::arg("revocation_list"),
+             py::arg("clock"),
+             py::arg("vault"))
+        .def("issue_model_passport",
+             &PassportRegistry::issue_model_passport,
+             py::arg("model_id"),
+             py::arg("version"),
+             py::arg("caps"),
+             py::arg("policy_hash"),
+             py::arg("ttl_s"))
         .def("verify", &PassportRegistry::verify)
         .def("issue_recovery_token", &PassportRegistry::issue_recovery_token);
 
-    // 5. Policy Engine
+    // =========================================================================
+    // POLICY ENGINE
+    // =========================================================================
     py::enum_<PolicyAction>(m, "PolicyAction")
         .value("ALLOW", PolicyAction::ALLOW)
         .value("FLAG", PolicyAction::FLAG)
@@ -164,53 +214,20 @@ PYBIND11_MODULE(aegis_protocol, m) {
         .value("DENY_CONF", PolicyAction::DENY_CONF)
         .export_values();
 
-    py::class_<TrustCriteria>(m, "TrustCriteria")
-        .def(py::init<>())
-        .def_readwrite("min_authority_confidence", &TrustCriteria::min_authority_confidence)
-        .def_readwrite("min_sensitivity_confidence", &TrustCriteria::min_sensitivity_confidence);
-
-    py::class_<ScopeCriteria>(m, "ScopeCriteria")
-        .def(py::init<>())
-        .def_readwrite("authority_min", &ScopeCriteria::authority_min)
-        .def_readwrite("sensitivity_max", &ScopeCriteria::sensitivity_max);
-
-    py::class_<PolicyRule>(m, "PolicyRule")
-        .def(py::init<>())
-        .def_readwrite("rule_id", &PolicyRule::rule_id)
-        .def_readwrite("trust", &PolicyRule::trust)
-        .def_readwrite("scope", &PolicyRule::scope)
-        .def_readwrite("action", &PolicyRule::action);
-
-    py::class_<CompatibilityManifest>(m, "CompatibilityManifest")
-        .def(py::init<>())
-        .def_readwrite("expected_registry_version", &CompatibilityManifest::expected_registry_version)
-        .def_readwrite("policy_hash", &CompatibilityManifest::policy_hash);
-
     py::class_<PolicyEngine>(m, "PolicyEngine")
-        .def(py::init<const CompatibilityManifest &, const std::vector<PolicyRule> &, PolicyAction>())
+        .def(py::init<const CompatibilityManifest &,
+                      const std::vector<PolicyRule> &,
+                      PolicyAction>())
         .def("evaluate", &PolicyEngine::evaluate);
 
-    // 6. Session
-    py::enum_<SessionState>(m, "SessionState")
-        .value("INIT", SessionState::INIT)
-        .value("ACTIVE", SessionState::ACTIVE)
-        .value("SUSPECT", SessionState::SUSPECT)
-        .value("QUARANTINE", SessionState::QUARANTINE)
-        .value("FLUSHING", SessionState::FLUSHING)
-        .value("RESYNC", SessionState::RESYNC)
-        .value("CLOSED", SessionState::CLOSED)
-        .export_values();
-
-    py::class_<SessionConfig>(m, "SessionConfig")
-        .def(py::init<>())
-        .def_readwrite("warp_weight_allow", &SessionConfig::warp_weight_allow)
-        .def_readwrite("warp_weight_flag", &SessionConfig::warp_weight_flag)
-        .def_readwrite("warp_weight_deny", &SessionConfig::warp_weight_deny)
-        .def_readwrite("warp_suspect_thresh", &SessionConfig::warp_suspect_thresh)
-        .def_readwrite("warp_quarantine_thresh", &SessionConfig::warp_quarantine_thresh);
-
+    // =========================================================================
+    // SESSION
+    // =========================================================================
     py::class_<Session>(m, "Session")
-        .def(py::init<const std::string &, const std::string &, const FlushCallback &, const SessionConfig &>())
+        .def(py::init<const std::string &,
+                      const std::string &,
+                      const FlushCallback &,
+                      const SessionConfig &>())
         .def("activate", &Session::activate)
         .def("state", &Session::state)
         .def("process_decision", &Session::process_decision)
@@ -219,28 +236,26 @@ PYBIND11_MODULE(aegis_protocol, m) {
         .def("reactivate", &Session::reactivate)
         .def("close", &Session::close);
 
-    // 7. Handshake
-    py::class_<NonceCache>(m, "NonceCache")
-        .def(py::init<uint64_t, size_t>());
-
-    py::class_<SessionContext>(m, "SessionContext")
-        .def_readonly("session_id", &SessionContext::session_id)
-        .def_readonly("session_key_hex", &SessionContext::session_key_hex)
-        .def_readonly("forward_secrecy", &SessionContext::forward_secrecy)
-        .def_readonly("transport_id", &SessionContext::transport_id)
-        .def_readonly("established_at", &SessionContext::established_at)
-        .def("derive_direction_key", &SessionContext::derive_direction_key)
-        .def("authenticate_payload", &SessionContext::authenticate_payload);
-
+    // =========================================================================
+    // HANDSHAKE
+    // =========================================================================
     py::class_<HandshakeValidator>(m, "HandshakeValidator")
-        .def(py::init<PassportRegistry &, const SemanticPassport &, const std::string &, 
-                      const std::string &, NonceCache &, uint64_t, bool, bool>())
+        .def(py::init<PassportRegistry &,
+                      const SemanticPassport &,
+                      const std::string &,
+                      const std::string &,
+                      NonceCache &,
+                      uint64_t,
+                      bool,
+                      bool>())
         .def("build_hello", &HandshakeValidator::build_hello)
         .def("handle_hello", &HandshakeValidator::handle_hello)
         .def("handle_challenge", &HandshakeValidator::handle_challenge)
         .def("handle_confirm", &HandshakeValidator::handle_confirm);
 
-    // 8. Multi-party Issuance
+    // =========================================================================
+    // MULTI-PARTY ISSUANCE
+    // =========================================================================
     py::class_<MultiPartyIssuer>(m, "MultiPartyIssuer")
         .def(py::init<PassportRegistry &, uint32_t>())
         .def("propose", &MultiPartyIssuer::propose)
@@ -248,25 +263,4 @@ PYBIND11_MODULE(aegis_protocol, m) {
         .def("reject", &MultiPartyIssuer::reject)
         .def("get_finalized_passport", &MultiPartyIssuer::get_finalized_passport)
         .def("expire_stale_proposals", &MultiPartyIssuer::expire_stale_proposals);
-
-    // 9. Revocation & Key Rotation
-    py::class_<RevocationList>(m, "RevocationList")
-        .def(py::init<>())
-        .def("revoke", &RevocationList::revoke)
-        .def("is_revoked", &RevocationList::is_revoked);
-
-    py::class_<KeyStore>(m, "KeyStore")
-        .def(py::init<const std::string &>())
-        .def("active_key_id", &KeyStore::active_key_id)
-        .def("begin_rotation", &KeyStore::begin_rotation)
-        .def("complete_rotation", &KeyStore::complete_rotation)
-        .def("purge_expired_keys", &KeyStore::purge_expired_keys)
-        .def("key_metadata", &KeyStore::key_metadata);
-
-    // 10. Transparency Log
-    py::class_<TransparencyLog>(m, "TransparencyLog")
-        .def(py::init<>())
-        .def("append", &TransparencyLog::append)
-        .def("verify_chain", &TransparencyLog::verify_chain)
-        .def("entries_for_model", &TransparencyLog::entries_for_model);
 }

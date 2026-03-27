@@ -31,14 +31,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 #include <optional>
 #include <cstdint>
 
 namespace uml001 {
 
-/**
- * @brief Configuration for ColdVault storage
- */
 struct VaultConfig {
     std::string vault_path = "var/uml001/audit.vault";
     std::string archive_dir = "var/uml001/archive";
@@ -47,9 +45,6 @@ struct VaultConfig {
     bool compress_on_archive = true;
 };
 
-/**
- * @brief Audit vault entry record
- */
 struct VaultEntry {
     std::string type;
     std::string session_id;
@@ -59,17 +54,21 @@ struct VaultEntry {
     uint64_t timestamp;
 };
 
+/**
+ * @brief High-security storage and Cryptographic Service Provider (CSP).
+ */
 class Vault {
 public:
     virtual ~Vault() = default;
     virtual bool store(const std::string& key, const std::vector<uint8_t>& data) = 0;
     virtual std::optional<std::vector<uint8_t>> retrieve(const std::string& key) = 0;
+    
+    // V1.3 Distributed Trust Operations
+    virtual std::string sign(uint32_t key_id, const std::string& message_hash) = 0;
+    virtual bool verify_peer(const std::string& node_id) const = 0;
+    virtual std::vector<uint8_t> retrieve_public_key(uint32_t key_id) = 0;
 };
 
-/**
- * @brief High-security storage for audit events and long-term keys
- * [E-7] Provenance logging with BFT quality metrics
- */
 class ColdVault : public Vault {
 public:
     explicit ColdVault(const VaultConfig& cfg = VaultConfig());
@@ -78,15 +77,14 @@ public:
     bool store(const std::string& key, const std::vector<uint8_t>& data) override;
     std::optional<std::vector<uint8_t>> retrieve(const std::string& key) override;
 
-    /**
-     * @brief Appends an audit event to the vault
-     * @param type Event type (e.g., "SESSION_START", "ENTROPY_FLUSH", "SESSION_QUARANTINE")
-     * @param session_id Session identifier
-     * @param actor_id Actor/peer identifier
-     * @param payload_hash Hash of the associated payload
-     * @param metadata Machine-readable metadata (e.g., "unc_ms=50|status=BFT_SYNC")
-     * @param timestamp Unix timestamp in seconds
-     */
+    // Implementation of V1.3 CSP logic
+    std::string sign(uint32_t key_id, const std::string& message_hash) override;
+    bool verify_peer(const std::string& node_id) const override;
+    std::vector<uint8_t> retrieve_public_key(uint32_t key_id) override;
+    
+    // Management of the Trust Boundary
+    void add_known_peer(const std::string& node_id);
+
     void append(const std::string& type, 
                 const std::string& session_id, 
                 const std::string& actor_id,
@@ -100,6 +98,7 @@ private:
     VaultConfig cfg_;
     std::map<std::string, std::vector<uint8_t>> secure_storage_;
     std::vector<VaultEntry> entries_;
+    std::set<std::string> known_peers_;
 };
 
 } // namespace uml001

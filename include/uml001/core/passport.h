@@ -29,123 +29,91 @@
 #pragma once
 
 #include "uml001/crypto/crypto_utils.h"
-#include "uml001/vault.h" // 🛠 Fix: Required for Vault member definition
 #include <string>
 #include <vector>
-#include <optional>
-#include <cstdint>
+#include <map>
 #include <memory>
 
 namespace uml001 {
 
 class IClock;
-class TransparencyLog;
-class RevocationList;
 
-enum class PassportStatus {
-    INACTIVE,
-    ACTIVE,
-    REVOKED
-};
-
-enum class VerifyStatus {
-    OK = 0,
-    EXPIRED = 1,
-    REVOKED = 2,
-    INVALID_SIGNATURE = 3,
-    INCOMPATIBLE = 4
-};
-
-struct VerifyResult {
-    VerifyStatus status = VerifyStatus::OK;
-    uint32_t verified_key_id = 0;
-    bool recovered = false;
-    float confidence = 0.0f;
-
-    bool ok() const { return status == VerifyStatus::OK; }
-
-    std::string status_str() const {
-        switch (status) {
-            case VerifyStatus::OK: return "OK";
-            case VerifyStatus::EXPIRED: return "EXPIRED";
-            case VerifyStatus::REVOKED: return "REVOKED";
-            case VerifyStatus::INVALID_SIGNATURE: return "INVALID_SIGNATURE";
-            case VerifyStatus::INCOMPATIBLE: return "INCOMPATIBLE";
-            default: return "UNKNOWN";
-        }
-    }
-};
+// --------------------
+// Supporting Types
+// --------------------
 
 struct Capabilities {
     bool classifier_authority = false;
     bool classifier_sensitivity = false;
     bool bft_consensus = false;
     bool entropy_flush = false;
+};
 
-    std::string serialize() const {
-        return std::string(classifier_authority ? "1" : "0") +
-               std::string(classifier_sensitivity ? "1" : "0") +
-               std::string(bft_consensus ? "1" : "0") +
-               std::string(entropy_flush ? "1" : "0");
+enum class PassportStatus {
+    IDLE,
+    ACTIVE,
+    REVOKED,
+    EXPIRED
+};
+
+enum class VerifyStatus {
+    OK,
+    EXPIRED,
+    REVOKED,
+    INVALID_SIGNATURE,
+    LOG_MISMATCH,
+    INSUFFICIENT_QUORUM,
+    INCOMPATIBLE
+};
+
+struct VerifyResult {
+    VerifyStatus status = VerifyStatus::INCOMPATIBLE;
+    uint32_t verified_key_id = 0;
+    bool recovered = false;
+    float confidence = 0.0f;
+};
+
+struct QuorumProof {
+    uint32_t threshold = 0;
+    std::vector<uint32_t> signer_ids;
+    std::vector<std::string> signatures;
+    std::string root_signature;
+
+    bool is_complete() const {
+        return signatures.size() >= threshold && threshold > 0;
     }
 };
+
+// --------------------
+// Passport Struct
+// --------------------
 
 struct Passport {
     std::string model_id;
     std::string model_version;
-    Capabilities capabilities;
-    std::string policy_hash;
-
+    std::string registry_version;
+    
     uint64_t issued_at = 0;
     uint64_t expires_at = 0;
-    PassportStatus status = PassportStatus::INACTIVE;
-
+    
+    Capabilities capabilities;
+    std::string policy_hash;
+    std::string log_root_hash;
+    
+    PassportStatus status = PassportStatus::IDLE;
     uint32_t signing_key_id = 0;
+    std::string signing_key_material; // For HMAC-based legacy flows
     std::string signature;
-    std::optional<std::string> recovery_token;
+    
+    QuorumProof proof;
 
-    // Redundant but kept for v1.2 compatibility/caching
-    std::string signing_key_material; 
-    std::string registry_version;
-
-    bool is_recovered() const { return recovery_token.has_value(); }
-
-    void issue(std::shared_ptr<IClock> clock, uint64_t duration_sec = 86400);
-
+    void issue(std::shared_ptr<IClock> clock, uint64_t duration_sec);
+    
     std::string content_hash() const {
-        std::string raw = model_id + "|" + model_version + "|" +
-                          capabilities.serialize() + "|" +
-                          policy_hash + "|" +
-                          std::to_string(issued_at) + "|" +
-                          std::to_string(expires_at);
-        return sha256_hex(raw);
+        return sha256_hex(model_id + "|" + model_version + "|" + std::to_string(issued_at) + "|" + policy_hash);
     }
-};
 
-class PassportRegistry {
-public:
-    // 🛠 Updated constructor to inject the Vault
-    PassportRegistry(TransparencyLog& log,
-                     RevocationList& list,
-                     IClock& clock,
-                     Vault& vault)
-        : log_(log), revocation_list_(list), clock_(clock), vault_(vault) {}
-
-    Passport issue_model_passport(
-        const std::string& model_id,
-        const std::string& version,
-        const Capabilities& caps,
-        const std::string& policy_hash,
-        uint32_t key_id
-    );
-
-    VerifyResult verify(const Passport& passport) const;
-
-private:
-    TransparencyLog& log_;
-    RevocationList&  revocation_list_;
-    IClock&          clock_;
-    Vault&           vault_; // Reference to the shared security vault
+    bool is_recovered() const { return false; } // Placeholder for state recovery logic
 };
 
 } // namespace uml001

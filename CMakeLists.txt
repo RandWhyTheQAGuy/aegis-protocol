@@ -63,6 +63,7 @@ set(UML001_CORE_SOURCES
     src/core/temporal_state.cpp
     src/core/pulse_manager.cpp
     src/core/quorum_pulse_manager.cpp
+    src/core/registry.cpp
     src/security/transparency_log.cpp
     src/security/revocation.cpp
     src/security/key_manager.cpp
