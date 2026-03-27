@@ -29,10 +29,6 @@
 #pragma once
 
 #include "uml001/crypto/crypto_utils.h"
-<<<<<<< fix/vault-csp-impl
-=======
-#include "uml001/vault.h"
->>>>>>> main
 #include <string>
 #include <vector>
 #include <map>
@@ -47,10 +43,10 @@ class IClock;
 // --------------------
 
 struct Capabilities {
-    bool classifier_authority = false;
+    bool classifier_authority   = false;
     bool classifier_sensitivity = false;
-    bool bft_consensus = false;
-    bool entropy_flush = false;
+    bool bft_consensus          = false;
+    bool entropy_flush          = false;
 };
 
 enum class PassportStatus {
@@ -61,7 +57,6 @@ enum class PassportStatus {
 };
 
 enum class VerifyStatus {
-<<<<<<< fix/vault-csp-impl
     OK,
     EXPIRED,
     REVOKED,
@@ -69,45 +64,35 @@ enum class VerifyStatus {
     LOG_MISMATCH,
     INSUFFICIENT_QUORUM,
     INCOMPATIBLE
-=======
-    OK = 0,
-    EXPIRED = 1,
-    REVOKED = 2,
-    INVALID_SIGNATURE = 3,
-    INCOMPATIBLE = 4,
-    LOG_MISMATCH = 5  // Added for Step 3
->>>>>>> main
 };
 
 struct VerifyResult {
-    VerifyStatus status = VerifyStatus::INCOMPATIBLE;
-    uint32_t verified_key_id = 0;
-    bool recovered = false;
-    float confidence = 0.0f;
-<<<<<<< fix/vault-csp-impl
-=======
+    VerifyStatus status        = VerifyStatus::INCOMPATIBLE;
+    uint32_t     verified_key_id = 0;
+    bool         recovered     = false;
+    float        confidence    = 0.0f;
 
     bool ok() const { return status == VerifyStatus::OK; }
 
     std::string status_str() const {
         switch (status) {
-            case VerifyStatus::OK: return "OK";
-            case VerifyStatus::EXPIRED: return "EXPIRED";
-            case VerifyStatus::REVOKED: return "REVOKED";
-            case VerifyStatus::INVALID_SIGNATURE: return "INVALID_SIGNATURE";
-            case VerifyStatus::INCOMPATIBLE: return "INCOMPATIBLE";
-            case VerifyStatus::LOG_MISMATCH: return "LOG_MISMATCH";
-            default: return "UNKNOWN";
+            case VerifyStatus::OK:                 return "OK";
+            case VerifyStatus::EXPIRED:            return "EXPIRED";
+            case VerifyStatus::REVOKED:            return "REVOKED";
+            case VerifyStatus::INVALID_SIGNATURE:  return "INVALID_SIGNATURE";
+            case VerifyStatus::LOG_MISMATCH:       return "LOG_MISMATCH";
+            case VerifyStatus::INSUFFICIENT_QUORUM:return "INSUFFICIENT_QUORUM";
+            case VerifyStatus::INCOMPATIBLE:       return "INCOMPATIBLE";
+            default:                               return "UNKNOWN";
         }
     }
->>>>>>> main
 };
 
 struct QuorumProof {
-    uint32_t threshold = 0;
-    std::vector<uint32_t> signer_ids;
+    uint32_t                 threshold = 0;
+    std::vector<uint32_t>    signer_ids;
     std::vector<std::string> signatures;
-    std::string root_signature;
+    std::string              root_signature;
 
     bool is_complete() const {
         return signatures.size() >= threshold && threshold > 0;
@@ -121,89 +106,34 @@ struct QuorumProof {
 struct Passport {
     std::string model_id;
     std::string model_version;
-<<<<<<< fix/vault-csp-impl
     std::string registry_version;
-    
-=======
-    Capabilities capabilities;
-    std::string policy_hash;
-    
-    // 🛠 STEP 3: The Cryptographic Anchor (Merkle Root of Transparency Log)
-    std::string log_root_hash; 
 
->>>>>>> main
-    uint64_t issued_at = 0;
+    uint64_t issued_at  = 0;
     uint64_t expires_at = 0;
-    
+
     Capabilities capabilities;
-    std::string policy_hash;
-    std::string log_root_hash;
-    
-    PassportStatus status = PassportStatus::IDLE;
-    uint32_t signing_key_id = 0;
-    std::string signing_key_material; // For HMAC-based legacy flows
-    std::string signature;
-<<<<<<< fix/vault-csp-impl
-    
+    std::string  policy_hash;
+    std::string  log_root_hash;
+
+    PassportStatus status          = PassportStatus::IDLE;
+    uint32_t       signing_key_id  = 0;
+    std::string    signing_key_material; // For HMAC-based legacy flows
+    std::string    signature;
+
     QuorumProof proof;
 
     void issue(std::shared_ptr<IClock> clock, uint64_t duration_sec);
-    
+
     std::string content_hash() const {
-        return sha256_hex(model_id + "|" + model_version + "|" + std::to_string(issued_at) + "|" + policy_hash);
+        return sha256_hex(
+            model_id + "|" +
+            model_version + "|" +
+            std::to_string(issued_at) + "|" +
+            policy_hash
+        );
     }
 
     bool is_recovered() const { return false; } // Placeholder for state recovery logic
-=======
-    std::optional<std::string> recovery_token;
-
-    // Internal metadata
-    std::string signing_key_material; 
-    std::string registry_version;
-
-    bool is_recovered() const { return recovery_token.has_value(); }
-
-    void issue(std::shared_ptr<IClock> clock, uint64_t duration_sec = 86400);
-
-    /**
-     * @brief Generates the canonical hash of the passport content.
-     * Includes the log_root_hash to ensure the passport is anchored to the ledger.
-     */
-    std::string content_hash() const {
-        std::string raw = model_id + "|" + model_version + "|" +
-                          capabilities.serialize() + "|" +
-                          policy_hash + "|" +
-                          log_root_hash + "|" + // 🛠 Bound to Log
-                          std::to_string(issued_at) + "|" +
-                          std::to_string(expires_at);
-        return sha256_hex(raw);
-    }
-};
-
-class PassportRegistry {
-public:
-    PassportRegistry(TransparencyLog& log,
-                     RevocationList& list,
-                     IClock& clock,
-                     Vault& vault)
-        : log_(log), revocation_list_(list), clock_(clock), vault_(vault) {}
-
-    Passport issue_model_passport(
-        const std::string& model_id,
-        const std::string& version,
-        const Capabilities& caps,
-        const std::string& policy_hash,
-        uint32_t key_id
-    );
-
-    VerifyResult verify(const Passport& passport) const;
-
-private:
-    TransparencyLog& log_;
-    RevocationList&  revocation_list_;
-    IClock&          clock_;
-    Vault&           vault_;
->>>>>>> main
 };
 
 } // namespace uml001
